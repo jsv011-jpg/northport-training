@@ -16,7 +16,13 @@
 </head>
 <body>
 <div id="root"></div>
-<script>// ============ DATA ============
+<script>
+(function waitForReact() {
+  if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
+    setTimeout(waitForReact, 50);
+    return;
+  }
+// ============ DATA ============
 
 const cocktails = [{
   name: "Old Fashioned",
@@ -1327,6 +1333,8 @@ function App() {
     onNavigate: navigate
   }), section === 'forbes' && /*#__PURE__*/React.createElement(ForbesStandardsView, null), section === 'cocktails' && /*#__PURE__*/React.createElement(CocktailGuide, null), section === 'terminology' && /*#__PURE__*/React.createElement(TerminologyView, null), section === 'menus' && /*#__PURE__*/React.createElement(MenuGuide, null), section === 'quiz' && /*#__PURE__*/React.createElement(Quiz, null)));
 }
-ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));</script>
+ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
+})();
+</script>
 </body>
 </html>
