@@ -8,7 +8,6 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <style>
   .scrollbar-none::-webkit-scrollbar { display: none; }
   .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
@@ -17,135 +16,640 @@
 </head>
 <body>
 <div id="root"></div>
-<script type="text/babel">
-// ============ DATA ============
+<script>// ============ DATA ============
 
-const cocktails = [
-  { name: "Old Fashioned", category: "classic", ingredients: "Bourbon or Rye, sugar, bitters", glassware: "Rocks glass", ice: "Large cube", garnish: "Orange peel (sometimes cherry)", guestDescription: "Spirit-forward, lightly sweetened, bitters-forward whiskey cocktail.", runnerNotes: "Always confirm bourbon or rye. Serve gently — large cube presentation matters." },
-  { name: "Margarita", category: "classic", ingredients: "Tequila, lime, orange liqueur", glassware: "Rocks or Coupe (confirm style)", ice: "Rocks or Up", garnish: "Lime wheel", guestDescription: "Citrus-forward tequila cocktail with lime and orange liqueur.", runnerNotes: "Always check salted or no salt, half rim or full. If served up, no ice in glass.", rim: "Salt (confirm full or half rim)" },
-  { name: "Classic Martini", category: "classic", ingredients: "Gin or Vodka, dry vermouth", glassware: "Martini glass", ice: "Served up (no ice)", garnish: "Olive or lemon twist", guestDescription: "Spirit-forward, chilled, minimal dilution cocktail.", runnerNotes: "Confirm garnish — olives or twist. Count olives (usually 3). Do not tilt glass — martinis spill easily." },
-  { name: "Dirty Martini", category: "classic", ingredients: "Gin or Vodka, dry vermouth, olive brine", glassware: "Martini glass", ice: "Up", garnish: "Olives", guestDescription: "Martini with olive brine added for salinity.", runnerNotes: "Glass may appear slightly cloudy — that is correct. Confirm if extra dirty." },
-  { name: "Manhattan", category: "classic", ingredients: "Bourbon or Rye, sweet vermouth, bitters", glassware: "Coupe or Martini glass", ice: "Up", garnish: "Cherry", guestDescription: "Whiskey stirred with sweet vermouth and bitters.", runnerNotes: "Always confirm bourbon vs rye. Cherry should be in the glass, not on rim." },
-  { name: "Lemon Drop", category: "classic", ingredients: "Vodka, lemon, sugar", glassware: "Martini glass", ice: "Up", garnish: "Lemon twist or sugared rim", guestDescription: "Bright and citrusy vodka cocktail.", runnerNotes: "Check for sugared rim. Ensure rim is clean and not dripping." },
-  { name: "Gimlet", category: "classic", ingredients: "Gin or Vodka, lime, simple syrup", glassware: "Coupe or Martini", ice: "Up", garnish: "Lime wheel", guestDescription: "Simple lime-forward cocktail, slightly sweet.", runnerNotes: "Clarify spirit if not specified. Similar look to martini — double check ticket." },
-  { name: "Whiskey Sour", category: "classic", ingredients: "Bourbon, lemon, simple syrup (may contain egg white)", glassware: "Rocks or Coupe", ice: "Rocks or Up", garnish: "Cherry and/or orange", guestDescription: "Balanced whiskey, lemon, and sugar cocktail.", runnerNotes: "If foam on top, handle gently. Confirm rocks vs up." },
-  { name: "Cosmopolitan", category: "classic", ingredients: "Vodka, cranberry, lime, orange liqueur", glassware: "Martini", ice: "Up", garnish: "Orange peel or lime", guestDescription: "Classic vodka cocktail with cranberry and lime.", runnerNotes: "Pale pink color is correct. Present confidently — this is a recognizable drink." },
-  { name: "Moscow Mule", category: "classic", ingredients: "Vodka, lime, ginger beer", glassware: "Copper mug", ice: "Crushed or regular ice", garnish: "Lime wedge", guestDescription: "Refreshing vodka cocktail with ginger and lime.", runnerNotes: "Always served in copper mug. Mug handle faces guest right." },
-  { name: "Negroni", category: "classic", ingredients: "Gin, Campari, sweet vermouth", glassware: "Rocks glass", ice: "Large cube", garnish: "Orange peel", guestDescription: "Equal parts gin, Campari, sweet vermouth — bitter, aromatic.", runnerNotes: "Deep red color is correct. Large cube is part of presentation." },
-  { name: "Paloma", category: "classic", ingredients: "Tequila, grapefruit, lime, soda", glassware: "Highball", ice: "Regular ice", garnish: "Lime", guestDescription: "Tequila with grapefruit and lime.", runnerNotes: "Confirm salted rim if requested. Tall, refreshing presentation.", rim: "Salt (optional)" },
-  { name: "Yuzu Royale", category: "signature", ingredients: "Empress Gin, housemade lychee simple, fresh lime, yuzu soda", glassware: "Wine glass", ice: "", garnish: "Dried lavender & dehydrated lime", guestDescription: "Bright, floral, and lightly sparkling. A refreshing gin cocktail with soft lychee sweetness and crisp citrus — clean, aromatic, and effortless.", runnerNotes: "Beautiful purple hue from Empress Gin. Handle garnish gently." },
-  { name: "Golden Negroni", category: "signature", ingredients: "Drumshanbo Citrus Gin, Italicus Bergamot Liqueur, Amaro Montenegro", glassware: "Rocks glass", ice: "Large cube", garnish: "Orange peel", guestDescription: "A softer, golden take on the classic Negroni — bright bergamot citrus, gentle bitterness, and a smooth, elegant finish.", runnerNotes: "Golden color distinguishes this from classic Negroni. Large cube presentation." },
-  { name: "The Bloom", category: "signature", ingredients: "Your choice of premium vodka, white cranberry, fresh lemon", glassware: "Martini glass", ice: "", garnish: "Dehydrated lemon", guestDescription: "Light, crisp, and refreshing. A clean vodka cocktail with subtle fruit and bright citrus — easy to love, easy to drink.", runnerNotes: "Ask guest for vodka preference. Clean, elegant presentation." },
-  { name: "Rosa Picante", category: "signature", ingredients: "Jalapeño-infused tequila, grapefruit, lime, ginger agave, rose petal salt", glassware: "Rocks glass", ice: "Regular ice", garnish: "Rose petal salt rim", guestDescription: "Spicy, citrusy, and aromatic. A bold yet balanced cocktail with heat up front and a soft floral finish.", runnerNotes: "Rose petal salt rim is signature. Warn guests about spice level if asked.", rim: "Rose petal salt" },
-  { name: "Northport Nightcap", category: "signature", ingredients: "Yellowstone Toasted Bourbon, B&B, house bitters", glassware: "Rocks glass", ice: "Large cube", garnish: "Maraschino cherry", guestDescription: "Rich, smooth, and comforting. A refined bourbon nightcap with subtle herbal sweetness and warming depth.", runnerNotes: "Great end-of-evening suggestion. Rich and warming." },
-  { name: "Smoke & Sound", category: "signature", ingredients: "Mezcal, maraschino liqueur, pineapple, Tajín", glassware: "Martini glass", ice: "", garnish: "Tajín half rim", guestDescription: "Smoky, tropical, and savory-sweet. Mezcal depth meets bright pineapple with a subtle chili-lime edge.", runnerNotes: "Tajín half rim is signature. Smoky aroma is expected.", rim: "Tajín (half rim)" },
-  { name: "Triple Espresso Martini", category: "signature", ingredients: "Cuban espresso & vanilla-infused vodka, Italian espresso liqueur, Fever-Tree espresso", glassware: "Martini glass", ice: "", garnish: "Three coffee beans", guestDescription: "Bold, smooth, and energizing. Rich espresso flavor with a silky vanilla finish — dessert and cocktail in one.", runnerNotes: "Three coffee beans on top is standard. Serve quickly — foam settles." }
-];
-
-const terminology = [
-  { term: "Neat", definition: "No ice, room temperature spirit in a rocks glass. No chilling, no dilution.", example: "\"I'll have a Macallan 12, neat.\"" },
-  { term: "On the Rocks", definition: "Served over ice in a rocks glass.", example: "\"Maker's Mark on the rocks, please.\"" },
-  { term: "Up / Straight Up", definition: "Shaken or stirred with ice, then strained into a chilled glass — no ice in the glass.", example: "\"Martini, up.\" — Chilled but served without ice." },
-  { term: "Twist", definition: "A lemon or orange peel expressed (squeezed) over the drink to release oils, then placed in or on the glass.", example: "\"Martini with a twist\" = lemon peel garnish." },
-  { term: "Olives", definition: "Used in martinis. Always verify the number if the guest specifies.", example: "Standard is usually 1 or 3 olives." },
-  { term: "With a Splash", definition: "A very small amount of a mixer added — soda, juice, etc.", example: "\"Bourbon with a splash of water.\"" },
-  { term: "Dry", definition: "Less vermouth in a martini. The drier the martini, the less vermouth.", example: "\"Extra dry martini\" = very little or no vermouth." },
-  { term: "Dirty", definition: "Olive brine added to a martini for salinity.", example: "\"Dirty martini\" = olive brine added. Glass may appear slightly cloudy." },
-  { term: "Extra Dirty", definition: "More olive brine than a standard dirty martini.", example: "\"Extra dirty\" = noticeably salty and cloudy." },
-  { term: "Tall", definition: "More mixer, served in a larger (highball) glass. Same amount of spirit.", example: "\"Vodka soda, tall\" = more soda, taller glass." },
-  { term: "Back", definition: "A separate small glass served alongside the main drink.", example: "\"Whiskey with a water back\" = whiskey + a separate glass of water." },
-  { term: "Float", definition: "A spirit or liqueur poured gently on top of a drink so it sits on the surface.", example: "\"Float of Grand Marnier\" on a margarita." },
-  { term: "Muddled", definition: "Ingredients pressed/crushed in the glass to release flavors.", example: "Mint in a mojito, sugar and bitters in an Old Fashioned." },
-  { term: "Shaken vs Stirred", definition: "Shaken: vigorous mixing with ice, creates aeration and dilution. Stirred: gentle mixing, maintains clarity. Spirit-forward drinks are typically stirred; citrus/juice drinks are shaken.", example: "Martini = stirred. Margarita = shaken." }
-];
-
-const brunchMenu = [
-  { name: "Blue Claw Crab Bisque", description: "Jumbo Lump Crabmeat + Vermouth + Thyme + Grissini", allergens: "Gluten (grissini), dairy (cream/butter), shellfish", section: "Appetizers" },
-  { name: "Late Season Tomato & Artichoke Tart", description: "Lemon Infused EVO + Herbed Chevre + Shaved Truffle", allergens: "Gluten (tart shell), dairy (chèvre)", section: "Appetizers" },
-  { name: "Fresh Fruit Parfait", description: "Mango Sauce + Coconut Yogurt + Candied Macadamias + Toasted Coconut", allergens: "Tree nuts (macadamia); coconut; may contain dairy", section: "Appetizers" },
-  { name: "Fresh Baked Cheddar & Chive Biscuit", description: "Tasso Gravy + Tomato Aioli", allergens: "Gluten (biscuit), dairy (cheddar/gravy), egg (aioli)", section: "Appetizers" },
-  { name: "Fried Artichokes", description: "Jumbo Lump Crab Beurre Blanc", allergens: "Gluten (fry batter), dairy (beurre blanc), shellfish (crab)", section: "Appetizers" },
-  { name: "Giant Shrimp Cocktail", description: "Cocktail Sauce + Lemon", allergens: "Shellfish", section: "Appetizers" },
-  { name: "Eggs & Bacon Deviled Eggs", description: "Andouille-Scallion Filling + Baby Spinach + House Bacon Vinaigrette + Soy Syrup", allergens: "Egg, soy; soy syrup may contain gluten", section: "Appetizers" },
-  { name: "Beet Salad", description: "Bibb Lettuce + Goat Cheese + Pistachios + Orange + Citrus Vinaigrette", allergens: "Dairy (goat cheese), tree nuts (pistachios)", section: "Appetizers" },
-  { name: "Classic Caesar Salad", description: "Romaine + Shaved Pecorino + Caesar Dressing + Croutons. Optional: White Anchovies", allergens: "Gluten (croutons), dairy (pecorino), egg (dressing), fish (anchovy)", section: "Appetizers" },
-  { name: "Classic Eggs Benedict", description: "English Muffin + Canadian Bacon + Poached Eggs + Hollandaise", allergens: "Gluten, dairy, egg", section: "Entrées", notes: "Served with Roasted Yukon Gold Duck Fat Potatoes" },
-  { name: "Eggs Royale", description: "Poached Eggs + Tasso Ham + English Muffin + Madeira Sauce + Sauce Charon", allergens: "Gluten, dairy, egg", section: "Entrées" },
-  { name: "Crab Cake Benedict", description: "English Muffin + Poached Eggs + Creole Mustard + Sauce Maltaise", allergens: "Gluten, dairy, egg, shellfish (crab)", section: "Entrées" },
-  { name: "Northport Hotel Omelette", description: "Mushroom + Asparagus + Gruyere Cheese + Fingerling Potatoes", allergens: "Egg, dairy (Gruyere)", section: "Entrées" },
-  { name: "Garden Vegetable Omelette", description: "Tomatoes + Peas + Asparagus + Spinach + Brussels + Herbs + Feta Cheese + EVO", allergens: "Egg, dairy (feta)", section: "Entrées" },
-  { name: "Steak & Eggs", description: "Skirt Steak + Mushroom Sauce + Sunnyside Eggs", allergens: "Egg; mushroom sauce may contain dairy", section: "Entrées" },
-  { name: "Roasted Shrimp", description: "White Cheddar Grits + Andouille Sausage + Tomatoes + Chili Butter + Sunnyside Eggs", allergens: "Shellfish, dairy, egg", section: "Entrées" },
-  { name: "Duck Confit & Crabmeat Pancakes", description: "Short Stack + Crispy Duck Skin + Charred Scallion Butter + Herbal Aioli + Sunnyside Eggs", allergens: "Gluten, dairy, egg, shellfish (crab)", section: "Entrées" },
-  { name: "Pan Blackened Swordfish", description: "Basmati Rice Pilaf + Crawfish & Shrimp Cream Sauce", allergens: "Shellfish, dairy", section: "Entrées" },
-  { name: "Belgian Waffle", description: "Bananas Foster + Whipped Cream + Dark Rum Syrup", allergens: "Gluten, dairy, egg", section: "Entrées" },
-  { name: "Orange-Vanilla Scented French Toast", description: "Fresh Berries + Gran Marnier Syrup", allergens: "Gluten, dairy, egg", section: "Entrées" },
-  { name: "Avocado Toast", description: "Tomatoes + Goat Cheese + Baby Arugula + EVO + Sea Salt + Scrambled Eggs", allergens: "Gluten, dairy, egg", section: "Entrées" },
-  { name: "White Cheddar Grits", description: "", allergens: "Dairy", section: "Sides" },
-  { name: "House Bacon", description: "", allergens: "No major allergens", section: "Sides" },
-  { name: "Grilled Andouille Sausage", description: "", allergens: "May contain soy", section: "Sides" },
-  { name: "Artisanal Whole Grain Toast", description: "", allergens: "Gluten", section: "Sides" },
-  { name: "Real Truffle Fries", description: "", allergens: "Possible gluten cross-contact; may contain dairy", section: "Sides" }
-];
-
-const dinnerMenu = [
-  { name: "Blue Claw Crab Bisque", description: "Jumbo Lump Crabmeat + Vermouth + Thyme + Grissini", allergens: "Gluten, dairy, shellfish", section: "Appetizers" },
-  { name: "Classic Italian Meatballs", description: "Ricotta + EVO + Herbs", allergens: "Gluten, dairy, egg", section: "Appetizers" },
-  { name: "Duck Confit & Crab Pancake", description: "Short Stack + Crispy Duck Skin + Charred Scallion Butter + Herbal Aioli", allergens: "Gluten, dairy, egg, shellfish", section: "Appetizers" },
-  { name: "Burrata", description: "Smoked Mediterranean White Bean & Roasted Tomato Dip + Olives + Sweet Peppers + Parsley + Almonds + Pomegranate + Flat Bread", allergens: "Gluten, dairy, tree nuts", section: "Appetizers" },
-  { name: "Tuna Tartare", description: "Scallion + Chives + Sesame Seeds + Cucumber + Lemon-Truffle Dressing + Dashi Aioli + Chips", allergens: "Gluten, egg, soy, sesame; raw fish", section: "Appetizers" },
-  { name: "Eggs & Bacon Deviled Eggs", description: "Andouille-Scallion Filling + Baby Spinach + House Bacon Vinaigrette + Soy Syrup", allergens: "Egg, soy", section: "Appetizers" },
-  { name: "Braised Octopus", description: "Flash Finished + Chickpeas + Olives + Red Pepper Hummus + Sweet Peppers + Tomatoes + Herbs", allergens: "Shellfish; hummus may contain sesame", section: "Appetizers" },
-  { name: "Crispy Brussels Sprouts", description: "Shallots + Dried Cranberries + Pumpkin Seeds + Apples + Maple-Cider Dressing", allergens: "Possible gluten cross-contact", section: "Appetizers" },
-  { name: "Mussels", description: "Green Thai Curry Sauce + Cilantro + Lime + Charred Bread", allergens: "Shellfish, gluten; curry may contain dairy", section: "Appetizers" },
-  { name: "Salt & Pepper Calamari", description: "Gigante Beans + Cherry Peppers + Spicy Japanese Mayo", allergens: "Gluten, egg, shellfish", section: "Appetizers" },
-  { name: "Local Littleneck Clams", description: "Cocktail Sauce + Lemon", allergens: "Shellfish; served raw", section: "Raw Bar" },
-  { name: "Oysters", description: "Today's Local & East Coast Selections — Mignonette + Cocktail Sauce + Lemon", allergens: "Shellfish; served raw", section: "Raw Bar" },
-  { name: "Giant Shrimp Cocktail", description: "Cocktail Sauce + Lemon", allergens: "Shellfish", section: "Raw Bar" },
-  { name: "Chilled Lobster Cocktail", description: "Cocktail Sauce + Lemon", allergens: "Shellfish", section: "Raw Bar" },
-  { name: "Cauliflower Salad", description: "Frisée + Arugula + Honey-Dijon Dressing + Cauliflower Yogurt Puree + Golden Raisins + Pine Nuts + EVO", allergens: "Dairy, tree nuts", section: "Salads" },
-  { name: "Baby Iceberg Wedge Salad", description: "Tomatoes + Red Onion + Pt. Reyes Blue Cheese + House Bacon + Red Wine Ranch", allergens: "Dairy", section: "Salads" },
-  { name: "Beet Salad", description: "Bibb Lettuce + Goat Cheese + Pistachios + Orange + Citrus Vinaigrette", allergens: "Dairy, tree nuts", section: "Salads" },
-  { name: "Classic Caesar Salad", description: "Romaine + Shaved Pecorino + Caesar Dressing + Croutons — Optional: White Anchovies", allergens: "Gluten, dairy, egg, fish", section: "Salads" },
-  { name: "Figs Flatbread", description: "Fig Preserves + Goat Cheese + Arugula + EVO + Sea Salt", allergens: "Gluten, dairy", section: "Flatbreads" },
-  { name: "Spicy Sausage Flatbread", description: "Mozzarella + Tomato Sauce + EVO + Herbs", allergens: "Gluten, dairy", section: "Flatbreads" },
-  { name: "Wild Mushroom Flatbread", description: "Ricotta + Truffle Essence + EVO + Fresh Basil", allergens: "Gluten, dairy", section: "Flatbreads" },
-  { name: "Mezzi Rigatoni", description: "Spicy Italian Sausage + Peas + Tomatoes + Pecorino + Tomato-Cream Sauce", allergens: "Gluten, dairy", section: "Pasta" },
-  { name: "Mafaldine", description: "Lobster + Crabmeat + Spinach + Tomatoes + Lemon Butter Sauce", allergens: "Gluten, dairy, shellfish", section: "Pasta" },
-  { name: "Burrata Ravioli", description: "Pistachio Butter + Reggiano + Candied Pistachios + Pistachio Oil", allergens: "Gluten, dairy, tree nuts", section: "Pasta" },
-  { name: "Mardi Gras Pasta", description: "Tagliatelle + Shrimp + Crawfish + Andouille + Tasso + Smoked Chicken + Trinity + Cajun Spiced Cream Sauce", allergens: "Gluten, dairy, shellfish", section: "Pasta" },
-  { name: "Seafood Stew", description: "Shrimp + Clams + Mussels + Calamari + Lobster + Saffron Ginger-Butter + Charred Bread", allergens: "Shellfish, dairy, gluten", section: "Entrées" },
-  { name: "Butter Poached Lobster", description: "Lobster Risotto + Intense Lobster Sauce + Truffle Essence", allergens: "Shellfish, dairy", section: "Entrées" },
-  { name: "Roasted Gulf Shrimp", description: "White Cheddar Grits + Andouille Sausage + Tomatoes + Chili Butter", allergens: "Shellfish, dairy", section: "Entrées" },
-  { name: "Roasted Hudson Valley Farms Chicken", description: "Wild Mushrooms + Asparagus + Cipollini Onions + Bacon + Dijon Chicken Jus", allergens: "May contain dairy", section: "Entrées" },
-  { name: "Grilled Lamb Chops", description: "Mini Greek Salad + Flatbread + Greek Yogurt", allergens: "Gluten, dairy", section: "Entrées" },
-  { name: "Grilled Pork Chop", description: "Cipollini Onions + Hot Cherry Peppers + Fingerling Potatoes + Balsamic Glaze", allergens: "No major allergens", section: "Entrées" },
-  { name: "Pan Roasted Wild Salmon", description: "Coconut-Cilantro Rice + Asparagus + Mango Salsa + Passionfruit Puree", allergens: "No major allergens", section: "Entrées" },
-  { name: "Pan Blackened Swordfish", description: "Basmati Rice + Crawfish & Shrimp Cream Sauce", allergens: "Shellfish, dairy", section: "Entrées" },
-  { name: "Pan Seared Northern Monkfish", description: "\"Francaise Style\" — Lemon Mussel Broth + Spinach + Carrots", allergens: "Gluten, egg, dairy, shellfish", section: "Entrées" },
-  { name: "Pan Roasted Halibut", description: "Wild Mushrooms + Leeks + Shallots + Shrimp + Fingerling Potatoes + Lobster Glaze", allergens: "Shellfish, dairy", section: "Entrées" },
-  { name: "Roasted Honeynut Squash", description: "Lentil \"Pilaf\" + Sweet Potato Puree + Pomegranate + Pumpkinseeds", allergens: "No major allergens", section: "Entrées" },
-  { name: "Prime 28 Day Dry Aged Bone In Cowboy Ribeye", description: "24 OZ — Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce", allergens: "May contain dairy/gluten (steak sauce)", section: "Prime Steaks" },
-  { name: "Filet Mignon", description: "10 OZ — Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce", allergens: "May contain dairy/gluten (steak sauce)", section: "Prime Steaks" },
-  { name: "Prime NY Strip Boneless", description: "14 OZ — Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce", allergens: "May contain dairy/gluten (steak sauce)", section: "Prime Steaks" },
-  { name: "Marinated Skirt Steak", description: "12 OZ — Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce", allergens: "May contain soy, gluten, or dairy", section: "Prime Steaks" },
-  { name: "Baby Carrots", description: "Butter + Sea Salt", allergens: "Dairy", section: "Sides" },
-  { name: "Roasted Domestic & Wild Mushrooms", description: "", allergens: "No major allergens", section: "Sides" },
-  { name: "Sautéed Asparagus", description: "Butter + Sea Salt", allergens: "Dairy", section: "Sides" },
-  { name: "Roasted Yukon Gold Duck Fat Potatoes", description: "", allergens: "No major allergens", section: "Sides" },
-  { name: "French Fries", description: "Add Real Truffle", allergens: "Possible gluten cross-contact", section: "Sides" }
-];
-
-const forbesStandards = [
-  { title: "Anticipatory Service", icon: "🔮", principles: ["Recognize guest needs before they ask", "Read body language and table cues constantly", "A guest should never have to flag you down"], keyBehaviors: ["Water glasses refilled before empty — when they reach 1/3 full", "Offer dessert menus or after-dinner drinks proactively", "Notice when a guest looks around — approach immediately", "Pre-set for the next course before it arrives", "Clear finished plates within 2 minutes of the last guest finishing"] },
-  { title: "Seamless & Invisible Execution", icon: "🪄", principles: ["Service should feel effortless to the guest", "Coordination between team members should be invisible", "The guest's experience is never interrupted"], keyBehaviors: ["Serve from the left, clear from the right", "All guests at a table receive courses simultaneously", "Crumb the table between courses when needed", "Never auction food — know your seat numbers", "Carry trays with confidence; never rush across the dining room"] },
-  { title: "Genuine Warmth & Confidence", icon: "🤝", principles: ["Greet every guest with eye contact and a warm smile", "Be confident, not scripted — speak naturally", "Make every guest feel like the most important person in the room"], keyBehaviors: ["Greet guests within 30 seconds of seating", "Use the guest's name when known — but never overuse it", "Introduce yourself naturally: \"Good evening, I'm [name]. Welcome to The Northport Hotel.\"", "Stand tall, make eye contact, speak clearly", "Smile genuinely — it's the most powerful tool you have"] },
-  { title: "Product Knowledge Mastery", icon: "📚", principles: ["Know every dish, cocktail, and wine on the menu", "Speak about food and drink with passion and accuracy", "Guide the guest — don't just take orders"], keyBehaviors: ["Describe dishes from memory with ingredients and allergens", "Recommend cocktails confidently based on guest preferences", "Know which wines pair with which dishes", "If you don't know something, say \"Great question — let me find out\" and follow up quickly", "Taste and understand every menu item during pre-shift"] },
-  { title: "Attention to Detail", icon: "🔍", principles: ["Every detail matters — from glassware placement to garnish", "Consistency is the hallmark of five-star service", "The small things are the big things"], keyBehaviors: ["Glassware is always polished and spotless", "Silverware is aligned and properly placed before each course", "Check every plate before it leaves the kitchen", "Napkins are refolded when a guest leaves the table", "Candles, flowers, and table settings are perfect before service"] },
-  { title: "Graceful Problem Resolution", icon: "💫", principles: ["Problems are opportunities to create memorable experiences", "Own the issue — never deflect blame", "Speed and empathy are everything"], keyBehaviors: ["Acknowledge the issue immediately with genuine concern", "\"I'm sorry about that. Let me take care of it right away.\"", "Resolve within 2 minutes or provide a clear update", "Follow up after resolution to ensure satisfaction", "Empower yourself to make it right — don't wait for a manager"] },
-  { title: "Professional Presence", icon: "👔", principles: ["You represent The Northport Hotel at all times", "Your appearance and demeanor set the tone for the guest experience", "Professionalism is confidence without arrogance"], keyBehaviors: ["Uniform is pressed, clean, and properly fitted", "Hair is neat and pulled back when required", "No phone visible on the floor — ever", "Walk with purpose but never rush", "Maintain composure during high-volume service"] },
-  { title: "Farewell & Follow-Through", icon: "🌟", principles: ["The last impression is as important as the first", "A proper farewell invites the guest back", "Every interaction should end on a high note"], keyBehaviors: ["Thank every guest sincerely as they leave", "\"Thank you for dining with us. We look forward to seeing you again.\"", "Ensure the check is presented promptly and processed quickly", "Offer to call a car or provide directions if needed", "Reset the table to perfection within 3 minutes of departure"] }
-];
+const cocktails = [{
+  name: "Old Fashioned",
+  category: "classic",
+  ingredients: "Bourbon or Rye, sugar, bitters",
+  glassware: "Rocks glass",
+  ice: "Large cube",
+  garnish: "Orange peel (sometimes cherry)",
+  guestDescription: "Spirit-forward, lightly sweetened, bitters-forward whiskey cocktail.",
+  runnerNotes: "Always confirm bourbon or rye. Serve gently — large cube presentation matters."
+}, {
+  name: "Margarita",
+  category: "classic",
+  ingredients: "Tequila, lime, orange liqueur",
+  glassware: "Rocks or Coupe (confirm style)",
+  ice: "Rocks or Up",
+  garnish: "Lime wheel",
+  guestDescription: "Citrus-forward tequila cocktail with lime and orange liqueur.",
+  runnerNotes: "Always check salted or no salt, half rim or full. If served up, no ice in glass.",
+  rim: "Salt (confirm full or half rim)"
+}, {
+  name: "Classic Martini",
+  category: "classic",
+  ingredients: "Gin or Vodka, dry vermouth",
+  glassware: "Martini glass",
+  ice: "Served up (no ice)",
+  garnish: "Olive or lemon twist",
+  guestDescription: "Spirit-forward, chilled, minimal dilution cocktail.",
+  runnerNotes: "Confirm garnish — olives or twist. Count olives (usually 3). Do not tilt glass — martinis spill easily."
+}, {
+  name: "Dirty Martini",
+  category: "classic",
+  ingredients: "Gin or Vodka, dry vermouth, olive brine",
+  glassware: "Martini glass",
+  ice: "Up",
+  garnish: "Olives",
+  guestDescription: "Martini with olive brine added for salinity.",
+  runnerNotes: "Glass may appear slightly cloudy — that is correct. Confirm if extra dirty."
+}, {
+  name: "Manhattan",
+  category: "classic",
+  ingredients: "Bourbon or Rye, sweet vermouth, bitters",
+  glassware: "Coupe or Martini glass",
+  ice: "Up",
+  garnish: "Cherry",
+  guestDescription: "Whiskey stirred with sweet vermouth and bitters.",
+  runnerNotes: "Always confirm bourbon vs rye. Cherry should be in the glass, not on rim."
+}, {
+  name: "Lemon Drop",
+  category: "classic",
+  ingredients: "Vodka, lemon, sugar",
+  glassware: "Martini glass",
+  ice: "Up",
+  garnish: "Lemon twist or sugared rim",
+  guestDescription: "Bright and citrusy vodka cocktail.",
+  runnerNotes: "Check for sugared rim. Ensure rim is clean and not dripping."
+}, {
+  name: "Gimlet",
+  category: "classic",
+  ingredients: "Gin or Vodka, lime, simple syrup",
+  glassware: "Coupe or Martini",
+  ice: "Up",
+  garnish: "Lime wheel",
+  guestDescription: "Simple lime-forward cocktail, slightly sweet.",
+  runnerNotes: "Clarify spirit if not specified. Similar look to martini — double check ticket."
+}, {
+  name: "Whiskey Sour",
+  category: "classic",
+  ingredients: "Bourbon, lemon, simple syrup (may contain egg white)",
+  glassware: "Rocks or Coupe",
+  ice: "Rocks or Up",
+  garnish: "Cherry and/or orange",
+  guestDescription: "Balanced whiskey, lemon, and sugar cocktail.",
+  runnerNotes: "If foam on top, handle gently. Confirm rocks vs up."
+}, {
+  name: "Cosmopolitan",
+  category: "classic",
+  ingredients: "Vodka, cranberry, lime, orange liqueur",
+  glassware: "Martini",
+  ice: "Up",
+  garnish: "Orange peel or lime",
+  guestDescription: "Classic vodka cocktail with cranberry and lime.",
+  runnerNotes: "Pale pink color is correct. Present confidently — this is a recognizable drink."
+}, {
+  name: "Moscow Mule",
+  category: "classic",
+  ingredients: "Vodka, lime, ginger beer",
+  glassware: "Copper mug",
+  ice: "Crushed or regular ice",
+  garnish: "Lime wedge",
+  guestDescription: "Refreshing vodka cocktail with ginger and lime.",
+  runnerNotes: "Always served in copper mug. Mug handle faces guest right."
+}, {
+  name: "Negroni",
+  category: "classic",
+  ingredients: "Gin, Campari, sweet vermouth",
+  glassware: "Rocks glass",
+  ice: "Large cube",
+  garnish: "Orange peel",
+  guestDescription: "Equal parts gin, Campari, sweet vermouth — bitter, aromatic.",
+  runnerNotes: "Deep red color is correct. Large cube is part of presentation."
+}, {
+  name: "Paloma",
+  category: "classic",
+  ingredients: "Tequila, grapefruit, lime, soda",
+  glassware: "Highball",
+  ice: "Regular ice",
+  garnish: "Lime",
+  guestDescription: "Tequila with grapefruit and lime.",
+  runnerNotes: "Confirm salted rim if requested. Tall, refreshing presentation.",
+  rim: "Salt (optional)"
+}, {
+  name: "Yuzu Royale",
+  category: "signature",
+  ingredients: "Empress Gin, housemade lychee simple, fresh lime, yuzu soda",
+  glassware: "Wine glass",
+  ice: "",
+  garnish: "Dried lavender & dehydrated lime",
+  guestDescription: "Bright, floral, and lightly sparkling. A refreshing gin cocktail with soft lychee sweetness and crisp citrus — clean, aromatic, and effortless.",
+  runnerNotes: "Beautiful purple hue from Empress Gin. Handle garnish gently."
+}, {
+  name: "Golden Negroni",
+  category: "signature",
+  ingredients: "Drumshanbo Citrus Gin, Italicus Bergamot Liqueur, Amaro Montenegro",
+  glassware: "Rocks glass",
+  ice: "Large cube",
+  garnish: "Orange peel",
+  guestDescription: "A softer, golden take on the classic Negroni — bright bergamot citrus, gentle bitterness, and a smooth, elegant finish.",
+  runnerNotes: "Golden color distinguishes this from classic Negroni. Large cube presentation."
+}, {
+  name: "The Bloom",
+  category: "signature",
+  ingredients: "Your choice of premium vodka, white cranberry, fresh lemon",
+  glassware: "Martini glass",
+  ice: "",
+  garnish: "Dehydrated lemon",
+  guestDescription: "Light, crisp, and refreshing. A clean vodka cocktail with subtle fruit and bright citrus — easy to love, easy to drink.",
+  runnerNotes: "Ask guest for vodka preference. Clean, elegant presentation."
+}, {
+  name: "Rosa Picante",
+  category: "signature",
+  ingredients: "Jalapeño-infused tequila, grapefruit, lime, ginger agave, rose petal salt",
+  glassware: "Rocks glass",
+  ice: "Regular ice",
+  garnish: "Rose petal salt rim",
+  guestDescription: "Spicy, citrusy, and aromatic. A bold yet balanced cocktail with heat up front and a soft floral finish.",
+  runnerNotes: "Rose petal salt rim is signature. Warn guests about spice level if asked.",
+  rim: "Rose petal salt"
+}, {
+  name: "Northport Nightcap",
+  category: "signature",
+  ingredients: "Yellowstone Toasted Bourbon, B&B, house bitters",
+  glassware: "Rocks glass",
+  ice: "Large cube",
+  garnish: "Maraschino cherry",
+  guestDescription: "Rich, smooth, and comforting. A refined bourbon nightcap with subtle herbal sweetness and warming depth.",
+  runnerNotes: "Great end-of-evening suggestion. Rich and warming."
+}, {
+  name: "Smoke & Sound",
+  category: "signature",
+  ingredients: "Mezcal, maraschino liqueur, pineapple, Tajín",
+  glassware: "Martini glass",
+  ice: "",
+  garnish: "Tajín half rim",
+  guestDescription: "Smoky, tropical, and savory-sweet. Mezcal depth meets bright pineapple with a subtle chili-lime edge.",
+  runnerNotes: "Tajín half rim is signature. Smoky aroma is expected.",
+  rim: "Tajín (half rim)"
+}, {
+  name: "Triple Espresso Martini",
+  category: "signature",
+  ingredients: "Cuban espresso & vanilla-infused vodka, Italian espresso liqueur, Fever-Tree espresso",
+  glassware: "Martini glass",
+  ice: "",
+  garnish: "Three coffee beans",
+  guestDescription: "Bold, smooth, and energizing. Rich espresso flavor with a silky vanilla finish — dessert and cocktail in one.",
+  runnerNotes: "Three coffee beans on top is standard. Serve quickly — foam settles."
+}];
+const terminology = [{
+  term: "Neat",
+  definition: "No ice, room temperature spirit in a rocks glass. No chilling, no dilution.",
+  example: "\"I'll have a Macallan 12, neat.\""
+}, {
+  term: "On the Rocks",
+  definition: "Served over ice in a rocks glass.",
+  example: "\"Maker's Mark on the rocks, please.\""
+}, {
+  term: "Up / Straight Up",
+  definition: "Shaken or stirred with ice, then strained into a chilled glass — no ice in the glass.",
+  example: "\"Martini, up.\" — Chilled but served without ice."
+}, {
+  term: "Twist",
+  definition: "A lemon or orange peel expressed (squeezed) over the drink to release oils, then placed in or on the glass.",
+  example: "\"Martini with a twist\" = lemon peel garnish."
+}, {
+  term: "Olives",
+  definition: "Used in martinis. Always verify the number if the guest specifies.",
+  example: "Standard is usually 1 or 3 olives."
+}, {
+  term: "With a Splash",
+  definition: "A very small amount of a mixer added — soda, juice, etc.",
+  example: "\"Bourbon with a splash of water.\""
+}, {
+  term: "Dry",
+  definition: "Less vermouth in a martini. The drier the martini, the less vermouth.",
+  example: "\"Extra dry martini\" = very little or no vermouth."
+}, {
+  term: "Dirty",
+  definition: "Olive brine added to a martini for salinity.",
+  example: "\"Dirty martini\" = olive brine added. Glass may appear slightly cloudy."
+}, {
+  term: "Extra Dirty",
+  definition: "More olive brine than a standard dirty martini.",
+  example: "\"Extra dirty\" = noticeably salty and cloudy."
+}, {
+  term: "Tall",
+  definition: "More mixer, served in a larger (highball) glass. Same amount of spirit.",
+  example: "\"Vodka soda, tall\" = more soda, taller glass."
+}, {
+  term: "Back",
+  definition: "A separate small glass served alongside the main drink.",
+  example: "\"Whiskey with a water back\" = whiskey + a separate glass of water."
+}, {
+  term: "Float",
+  definition: "A spirit or liqueur poured gently on top of a drink so it sits on the surface.",
+  example: "\"Float of Grand Marnier\" on a margarita."
+}, {
+  term: "Muddled",
+  definition: "Ingredients pressed/crushed in the glass to release flavors.",
+  example: "Mint in a mojito, sugar and bitters in an Old Fashioned."
+}, {
+  term: "Shaken vs Stirred",
+  definition: "Shaken: vigorous mixing with ice, creates aeration and dilution. Stirred: gentle mixing, maintains clarity. Spirit-forward drinks are typically stirred; citrus/juice drinks are shaken.",
+  example: "Martini = stirred. Margarita = shaken."
+}];
+const brunchMenu = [{
+  name: "Blue Claw Crab Bisque",
+  description: "Jumbo Lump Crabmeat + Vermouth + Thyme + Grissini",
+  allergens: "Gluten (grissini), dairy (cream/butter), shellfish",
+  section: "Appetizers"
+}, {
+  name: "Late Season Tomato & Artichoke Tart",
+  description: "Lemon Infused EVO + Herbed Chevre + Shaved Truffle",
+  allergens: "Gluten (tart shell), dairy (chèvre)",
+  section: "Appetizers"
+}, {
+  name: "Fresh Fruit Parfait",
+  description: "Mango Sauce + Coconut Yogurt + Candied Macadamias + Toasted Coconut",
+  allergens: "Tree nuts (macadamia); coconut; may contain dairy",
+  section: "Appetizers"
+}, {
+  name: "Fresh Baked Cheddar & Chive Biscuit",
+  description: "Tasso Gravy + Tomato Aioli",
+  allergens: "Gluten (biscuit), dairy (cheddar/gravy), egg (aioli)",
+  section: "Appetizers"
+}, {
+  name: "Fried Artichokes",
+  description: "Jumbo Lump Crab Beurre Blanc",
+  allergens: "Gluten (fry batter), dairy (beurre blanc), shellfish (crab)",
+  section: "Appetizers"
+}, {
+  name: "Giant Shrimp Cocktail",
+  description: "Cocktail Sauce + Lemon",
+  allergens: "Shellfish",
+  section: "Appetizers"
+}, {
+  name: "Eggs & Bacon Deviled Eggs",
+  description: "Andouille-Scallion Filling + Baby Spinach + House Bacon Vinaigrette + Soy Syrup",
+  allergens: "Egg, soy; soy syrup may contain gluten",
+  section: "Appetizers"
+}, {
+  name: "Beet Salad",
+  description: "Bibb Lettuce + Goat Cheese + Pistachios + Orange + Citrus Vinaigrette",
+  allergens: "Dairy (goat cheese), tree nuts (pistachios)",
+  section: "Appetizers"
+}, {
+  name: "Classic Caesar Salad",
+  description: "Romaine + Shaved Pecorino + Caesar Dressing + Croutons. Optional: White Anchovies",
+  allergens: "Gluten (croutons), dairy (pecorino), egg (dressing), fish (anchovy)",
+  section: "Appetizers"
+}, {
+  name: "Classic Eggs Benedict",
+  description: "English Muffin + Canadian Bacon + Poached Eggs + Hollandaise",
+  allergens: "Gluten, dairy, egg",
+  section: "Entrées",
+  notes: "Served with Roasted Yukon Gold Duck Fat Potatoes"
+}, {
+  name: "Eggs Royale",
+  description: "Poached Eggs + Tasso Ham + English Muffin + Madeira Sauce + Sauce Charon",
+  allergens: "Gluten, dairy, egg",
+  section: "Entrées"
+}, {
+  name: "Crab Cake Benedict",
+  description: "English Muffin + Poached Eggs + Creole Mustard + Sauce Maltaise",
+  allergens: "Gluten, dairy, egg, shellfish (crab)",
+  section: "Entrées"
+}, {
+  name: "Northport Hotel Omelette",
+  description: "Mushroom + Asparagus + Gruyere Cheese + Fingerling Potatoes",
+  allergens: "Egg, dairy (Gruyere)",
+  section: "Entrées"
+}, {
+  name: "Garden Vegetable Omelette",
+  description: "Tomatoes + Peas + Asparagus + Spinach + Brussels + Herbs + Feta Cheese + EVO",
+  allergens: "Egg, dairy (feta)",
+  section: "Entrées"
+}, {
+  name: "Steak & Eggs",
+  description: "Skirt Steak + Mushroom Sauce + Sunnyside Eggs",
+  allergens: "Egg; mushroom sauce may contain dairy",
+  section: "Entrées"
+}, {
+  name: "Roasted Shrimp",
+  description: "White Cheddar Grits + Andouille Sausage + Tomatoes + Chili Butter + Sunnyside Eggs",
+  allergens: "Shellfish, dairy, egg",
+  section: "Entrées"
+}, {
+  name: "Duck Confit & Crabmeat Pancakes",
+  description: "Short Stack + Crispy Duck Skin + Charred Scallion Butter + Herbal Aioli + Sunnyside Eggs",
+  allergens: "Gluten, dairy, egg, shellfish (crab)",
+  section: "Entrées"
+}, {
+  name: "Pan Blackened Swordfish",
+  description: "Basmati Rice Pilaf + Crawfish & Shrimp Cream Sauce",
+  allergens: "Shellfish, dairy",
+  section: "Entrées"
+}, {
+  name: "Belgian Waffle",
+  description: "Bananas Foster + Whipped Cream + Dark Rum Syrup",
+  allergens: "Gluten, dairy, egg",
+  section: "Entrées"
+}, {
+  name: "Orange-Vanilla Scented French Toast",
+  description: "Fresh Berries + Gran Marnier Syrup",
+  allergens: "Gluten, dairy, egg",
+  section: "Entrées"
+}, {
+  name: "Avocado Toast",
+  description: "Tomatoes + Goat Cheese + Baby Arugula + EVO + Sea Salt + Scrambled Eggs",
+  allergens: "Gluten, dairy, egg",
+  section: "Entrées"
+}, {
+  name: "White Cheddar Grits",
+  description: "",
+  allergens: "Dairy",
+  section: "Sides"
+}, {
+  name: "House Bacon",
+  description: "",
+  allergens: "No major allergens",
+  section: "Sides"
+}, {
+  name: "Grilled Andouille Sausage",
+  description: "",
+  allergens: "May contain soy",
+  section: "Sides"
+}, {
+  name: "Artisanal Whole Grain Toast",
+  description: "",
+  allergens: "Gluten",
+  section: "Sides"
+}, {
+  name: "Real Truffle Fries",
+  description: "",
+  allergens: "Possible gluten cross-contact; may contain dairy",
+  section: "Sides"
+}];
+const dinnerMenu = [{
+  name: "Blue Claw Crab Bisque",
+  description: "Jumbo Lump Crabmeat + Vermouth + Thyme + Grissini",
+  allergens: "Gluten, dairy, shellfish",
+  section: "Appetizers"
+}, {
+  name: "Classic Italian Meatballs",
+  description: "Ricotta + EVO + Herbs",
+  allergens: "Gluten, dairy, egg",
+  section: "Appetizers"
+}, {
+  name: "Duck Confit & Crab Pancake",
+  description: "Short Stack + Crispy Duck Skin + Charred Scallion Butter + Herbal Aioli",
+  allergens: "Gluten, dairy, egg, shellfish",
+  section: "Appetizers"
+}, {
+  name: "Burrata",
+  description: "Smoked Mediterranean White Bean & Roasted Tomato Dip + Olives + Sweet Peppers + Parsley + Almonds + Pomegranate + Flat Bread",
+  allergens: "Gluten, dairy, tree nuts",
+  section: "Appetizers"
+}, {
+  name: "Tuna Tartare",
+  description: "Scallion + Chives + Sesame Seeds + Cucumber + Lemon-Truffle Dressing + Dashi Aioli + Chips",
+  allergens: "Gluten, egg, soy, sesame; raw fish",
+  section: "Appetizers"
+}, {
+  name: "Eggs & Bacon Deviled Eggs",
+  description: "Andouille-Scallion Filling + Baby Spinach + House Bacon Vinaigrette + Soy Syrup",
+  allergens: "Egg, soy",
+  section: "Appetizers"
+}, {
+  name: "Braised Octopus",
+  description: "Flash Finished + Chickpeas + Olives + Red Pepper Hummus + Sweet Peppers + Tomatoes + Herbs",
+  allergens: "Shellfish; hummus may contain sesame",
+  section: "Appetizers"
+}, {
+  name: "Crispy Brussels Sprouts",
+  description: "Shallots + Dried Cranberries + Pumpkin Seeds + Apples + Maple-Cider Dressing",
+  allergens: "Possible gluten cross-contact",
+  section: "Appetizers"
+}, {
+  name: "Mussels",
+  description: "Green Thai Curry Sauce + Cilantro + Lime + Charred Bread",
+  allergens: "Shellfish, gluten; curry may contain dairy",
+  section: "Appetizers"
+}, {
+  name: "Salt & Pepper Calamari",
+  description: "Gigante Beans + Cherry Peppers + Spicy Japanese Mayo",
+  allergens: "Gluten, egg, shellfish",
+  section: "Appetizers"
+}, {
+  name: "Local Littleneck Clams",
+  description: "Cocktail Sauce + Lemon",
+  allergens: "Shellfish; served raw",
+  section: "Raw Bar"
+}, {
+  name: "Oysters",
+  description: "Today's Local & East Coast Selections — Mignonette + Cocktail Sauce + Lemon",
+  allergens: "Shellfish; served raw",
+  section: "Raw Bar"
+}, {
+  name: "Giant Shrimp Cocktail",
+  description: "Cocktail Sauce + Lemon",
+  allergens: "Shellfish",
+  section: "Raw Bar"
+}, {
+  name: "Chilled Lobster Cocktail",
+  description: "Cocktail Sauce + Lemon",
+  allergens: "Shellfish",
+  section: "Raw Bar"
+}, {
+  name: "Cauliflower Salad",
+  description: "Frisée + Arugula + Honey-Dijon Dressing + Cauliflower Yogurt Puree + Golden Raisins + Pine Nuts + EVO",
+  allergens: "Dairy, tree nuts",
+  section: "Salads"
+}, {
+  name: "Baby Iceberg Wedge Salad",
+  description: "Tomatoes + Red Onion + Pt. Reyes Blue Cheese + House Bacon + Red Wine Ranch",
+  allergens: "Dairy",
+  section: "Salads"
+}, {
+  name: "Beet Salad",
+  description: "Bibb Lettuce + Goat Cheese + Pistachios + Orange + Citrus Vinaigrette",
+  allergens: "Dairy, tree nuts",
+  section: "Salads"
+}, {
+  name: "Classic Caesar Salad",
+  description: "Romaine + Shaved Pecorino + Caesar Dressing + Croutons — Optional: White Anchovies",
+  allergens: "Gluten, dairy, egg, fish",
+  section: "Salads"
+}, {
+  name: "Figs Flatbread",
+  description: "Fig Preserves + Goat Cheese + Arugula + EVO + Sea Salt",
+  allergens: "Gluten, dairy",
+  section: "Flatbreads"
+}, {
+  name: "Spicy Sausage Flatbread",
+  description: "Mozzarella + Tomato Sauce + EVO + Herbs",
+  allergens: "Gluten, dairy",
+  section: "Flatbreads"
+}, {
+  name: "Wild Mushroom Flatbread",
+  description: "Ricotta + Truffle Essence + EVO + Fresh Basil",
+  allergens: "Gluten, dairy",
+  section: "Flatbreads"
+}, {
+  name: "Mezzi Rigatoni",
+  description: "Spicy Italian Sausage + Peas + Tomatoes + Pecorino + Tomato-Cream Sauce",
+  allergens: "Gluten, dairy",
+  section: "Pasta"
+}, {
+  name: "Mafaldine",
+  description: "Lobster + Crabmeat + Spinach + Tomatoes + Lemon Butter Sauce",
+  allergens: "Gluten, dairy, shellfish",
+  section: "Pasta"
+}, {
+  name: "Burrata Ravioli",
+  description: "Pistachio Butter + Reggiano + Candied Pistachios + Pistachio Oil",
+  allergens: "Gluten, dairy, tree nuts",
+  section: "Pasta"
+}, {
+  name: "Mardi Gras Pasta",
+  description: "Tagliatelle + Shrimp + Crawfish + Andouille + Tasso + Smoked Chicken + Trinity + Cajun Spiced Cream Sauce",
+  allergens: "Gluten, dairy, shellfish",
+  section: "Pasta"
+}, {
+  name: "Seafood Stew",
+  description: "Shrimp + Clams + Mussels + Calamari + Lobster + Saffron Ginger-Butter + Charred Bread",
+  allergens: "Shellfish, dairy, gluten",
+  section: "Entrées"
+}, {
+  name: "Butter Poached Lobster",
+  description: "Lobster Risotto + Intense Lobster Sauce + Truffle Essence",
+  allergens: "Shellfish, dairy",
+  section: "Entrées"
+}, {
+  name: "Roasted Gulf Shrimp",
+  description: "White Cheddar Grits + Andouille Sausage + Tomatoes + Chili Butter",
+  allergens: "Shellfish, dairy",
+  section: "Entrées"
+}, {
+  name: "Roasted Hudson Valley Farms Chicken",
+  description: "Wild Mushrooms + Asparagus + Cipollini Onions + Bacon + Dijon Chicken Jus",
+  allergens: "May contain dairy",
+  section: "Entrées"
+}, {
+  name: "Grilled Lamb Chops",
+  description: "Mini Greek Salad + Flatbread + Greek Yogurt",
+  allergens: "Gluten, dairy",
+  section: "Entrées"
+}, {
+  name: "Grilled Pork Chop",
+  description: "Cipollini Onions + Hot Cherry Peppers + Fingerling Potatoes + Balsamic Glaze",
+  allergens: "No major allergens",
+  section: "Entrées"
+}, {
+  name: "Pan Roasted Wild Salmon",
+  description: "Coconut-Cilantro Rice + Asparagus + Mango Salsa + Passionfruit Puree",
+  allergens: "No major allergens",
+  section: "Entrées"
+}, {
+  name: "Pan Blackened Swordfish",
+  description: "Basmati Rice + Crawfish & Shrimp Cream Sauce",
+  allergens: "Shellfish, dairy",
+  section: "Entrées"
+}, {
+  name: "Pan Seared Northern Monkfish",
+  description: "\"Francaise Style\" — Lemon Mussel Broth + Spinach + Carrots",
+  allergens: "Gluten, egg, dairy, shellfish",
+  section: "Entrées"
+}, {
+  name: "Pan Roasted Halibut",
+  description: "Wild Mushrooms + Leeks + Shallots + Shrimp + Fingerling Potatoes + Lobster Glaze",
+  allergens: "Shellfish, dairy",
+  section: "Entrées"
+}, {
+  name: "Roasted Honeynut Squash",
+  description: "Lentil \"Pilaf\" + Sweet Potato Puree + Pomegranate + Pumpkinseeds",
+  allergens: "No major allergens",
+  section: "Entrées"
+}, {
+  name: "Prime 28 Day Dry Aged Bone In Cowboy Ribeye",
+  description: "24 OZ — Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce",
+  allergens: "May contain dairy/gluten (steak sauce)",
+  section: "Prime Steaks"
+}, {
+  name: "Filet Mignon",
+  description: "10 OZ — Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce",
+  allergens: "May contain dairy/gluten (steak sauce)",
+  section: "Prime Steaks"
+}, {
+  name: "Prime NY Strip Boneless",
+  description: "14 OZ — Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce",
+  allergens: "May contain dairy/gluten (steak sauce)",
+  section: "Prime Steaks"
+}, {
+  name: "Marinated Skirt Steak",
+  description: "12 OZ — Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce",
+  allergens: "May contain soy, gluten, or dairy",
+  section: "Prime Steaks"
+}, {
+  name: "Baby Carrots",
+  description: "Butter + Sea Salt",
+  allergens: "Dairy",
+  section: "Sides"
+}, {
+  name: "Roasted Domestic & Wild Mushrooms",
+  description: "",
+  allergens: "No major allergens",
+  section: "Sides"
+}, {
+  name: "Sautéed Asparagus",
+  description: "Butter + Sea Salt",
+  allergens: "Dairy",
+  section: "Sides"
+}, {
+  name: "Roasted Yukon Gold Duck Fat Potatoes",
+  description: "",
+  allergens: "No major allergens",
+  section: "Sides"
+}, {
+  name: "French Fries",
+  description: "Add Real Truffle",
+  allergens: "Possible gluten cross-contact",
+  section: "Sides"
+}];
+const forbesStandards = [{
+  title: "Anticipatory Service",
+  icon: "🔮",
+  principles: ["Recognize guest needs before they ask", "Read body language and table cues constantly", "A guest should never have to flag you down"],
+  keyBehaviors: ["Water glasses refilled before empty — when they reach 1/3 full", "Offer dessert menus or after-dinner drinks proactively", "Notice when a guest looks around — approach immediately", "Pre-set for the next course before it arrives", "Clear finished plates within 2 minutes of the last guest finishing"]
+}, {
+  title: "Seamless & Invisible Execution",
+  icon: "🪄",
+  principles: ["Service should feel effortless to the guest", "Coordination between team members should be invisible", "The guest's experience is never interrupted"],
+  keyBehaviors: ["Serve from the left, clear from the right", "All guests at a table receive courses simultaneously", "Crumb the table between courses when needed", "Never auction food — know your seat numbers", "Carry trays with confidence; never rush across the dining room"]
+}, {
+  title: "Genuine Warmth & Confidence",
+  icon: "🤝",
+  principles: ["Greet every guest with eye contact and a warm smile", "Be confident, not scripted — speak naturally", "Make every guest feel like the most important person in the room"],
+  keyBehaviors: ["Greet guests within 30 seconds of seating", "Use the guest's name when known — but never overuse it", "Introduce yourself naturally: \"Good evening, I'm [name]. Welcome to The Northport Hotel.\"", "Stand tall, make eye contact, speak clearly", "Smile genuinely — it's the most powerful tool you have"]
+}, {
+  title: "Product Knowledge Mastery",
+  icon: "📚",
+  principles: ["Know every dish, cocktail, and wine on the menu", "Speak about food and drink with passion and accuracy", "Guide the guest — don't just take orders"],
+  keyBehaviors: ["Describe dishes from memory with ingredients and allergens", "Recommend cocktails confidently based on guest preferences", "Know which wines pair with which dishes", "If you don't know something, say \"Great question — let me find out\" and follow up quickly", "Taste and understand every menu item during pre-shift"]
+}, {
+  title: "Attention to Detail",
+  icon: "🔍",
+  principles: ["Every detail matters — from glassware placement to garnish", "Consistency is the hallmark of five-star service", "The small things are the big things"],
+  keyBehaviors: ["Glassware is always polished and spotless", "Silverware is aligned and properly placed before each course", "Check every plate before it leaves the kitchen", "Napkins are refolded when a guest leaves the table", "Candles, flowers, and table settings are perfect before service"]
+}, {
+  title: "Graceful Problem Resolution",
+  icon: "💫",
+  principles: ["Problems are opportunities to create memorable experiences", "Own the issue — never deflect blame", "Speed and empathy are everything"],
+  keyBehaviors: ["Acknowledge the issue immediately with genuine concern", "\"I'm sorry about that. Let me take care of it right away.\"", "Resolve within 2 minutes or provide a clear update", "Follow up after resolution to ensure satisfaction", "Empower yourself to make it right — don't wait for a manager"]
+}, {
+  title: "Professional Presence",
+  icon: "👔",
+  principles: ["You represent The Northport Hotel at all times", "Your appearance and demeanor set the tone for the guest experience", "Professionalism is confidence without arrogance"],
+  keyBehaviors: ["Uniform is pressed, clean, and properly fitted", "Hair is neat and pulled back when required", "No phone visible on the floor — ever", "Walk with purpose but never rush", "Maintain composure during high-volume service"]
+}, {
+  title: "Farewell & Follow-Through",
+  icon: "🌟",
+  principles: ["The last impression is as important as the first", "A proper farewell invites the guest back", "Every interaction should end on a high note"],
+  keyBehaviors: ["Thank every guest sincerely as they leave", "\"Thank you for dining with us. We look forward to seeing you again.\"", "Ensure the check is presented promptly and processed quickly", "Offer to call a car or provide directions if needed", "Reset the table to perfection within 3 minutes of departure"]
+}];
 
 // ============ HELPERS ============
 
@@ -160,220 +664,262 @@ function shuffle(arr) {
 
 // ============ COMPONENTS ============
 
-const { useState, useMemo } = React;
-
-function Welcome({ onNavigate }) {
-  const modules = [
-    { id: 'forbes', icon: '⭐', title: 'Northport Standards', desc: 'The foundation of everything we do', color: 'bg-amber-500' },
-    { id: 'cocktails', icon: '🍸', title: 'Cocktail Program', desc: '18 cocktails — classics & signatures', color: 'bg-purple-500' },
-    { id: 'terminology', icon: '📖', title: 'Bar Terminology', desc: 'Neat, up, dirty, tall & more', color: 'bg-blue-500' },
-    { id: 'menus', icon: '🍽️', title: 'Menu Knowledge', desc: 'Brunch & dinner menus with allergens', color: 'bg-green-500' },
-    { id: 'quiz', icon: '✅', title: 'Test Your Knowledge', desc: 'Interactive quizzes across all modules', color: 'bg-red-500' },
-  ];
-
-  return (
-    <div className="max-w-2xl mx-auto">
-      <div className="text-center mb-8">
-        <div className="mb-3"><img src="data:image/jpeg;base64,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" alt="The Northport Hotel" style={width:'120px',height:'120px',borderRadius:'16px',objectFit:'cover',margin:'0 auto'} /></div>
-        <h1 className="text-3xl font-bold text-base-content mb-2">Welcome to The Northport Hotel</h1>
-        <p className="text-base-content/60 text-lg">New Hire Training Program</p>
-        <div className="divider"></div>
-        <div className="bg-base-200 rounded-xl p-5 text-left">
-          <p className="text-base-content/80 leading-relaxed">
-            At The Northport Hotel, we don't just serve food and drinks — we create <strong>memorable experiences</strong>. 
-            Our service is guided by <strong>Northport Standards</strong>, which means every detail matters: 
-            from the way you greet a guest to how you describe a cocktail to the precision of your table setting.
-          </p>
-          <p className="text-base-content/80 leading-relaxed mt-3">
-            This training will give you the knowledge and confidence to deliver <strong>world-class hospitality</strong> from day one. 
-            Work through each module at your own pace, then test yourself with the quiz.
-          </p>
-        </div>
-      </div>
-      <h2 className="text-lg font-semibold mb-4 text-base-content/70">Training Modules</h2>
-      <div className="flex flex-col gap-3">
-        {modules.map((mod) => (
-          <button
-            key={mod.id}
-            onClick={() => onNavigate(mod.id)}
-            className="btn btn-ghost bg-base-200 hover:bg-base-300 h-auto py-4 px-5 justify-start text-left gap-4 rounded-xl"
-          >
-            <div className={`${mod.color} text-white w-12 h-12 rounded-lg flex items-center justify-center text-2xl shrink-0`}>
-              {mod.icon}
-            </div>
-            <div>
-              <div className="font-semibold text-base">{mod.title}</div>
-              <div className="text-sm text-base-content/50 font-normal">{mod.desc}</div>
-            </div>
-            <div className="ml-auto text-base-content/30">→</div>
-          </button>
-        ))}
-      </div>
-      <div className="text-center mt-8 text-base-content/40 text-sm">
-        Executive Chef Michael Ross · The Northport Hotel
-      </div>
-    </div>
-  );
+const {
+  useState,
+  useMemo
+} = React;
+function Welcome({
+  onNavigate
+}) {
+  const modules = [{
+    id: 'forbes',
+    icon: '⭐',
+    title: 'Northport Standards',
+    desc: 'The foundation of everything we do',
+    color: 'bg-amber-500'
+  }, {
+    id: 'cocktails',
+    icon: '🍸',
+    title: 'Cocktail Program',
+    desc: '18 cocktails — classics & signatures',
+    color: 'bg-purple-500'
+  }, {
+    id: 'terminology',
+    icon: '📖',
+    title: 'Bar Terminology',
+    desc: 'Neat, up, dirty, tall & more',
+    color: 'bg-blue-500'
+  }, {
+    id: 'menus',
+    icon: '🍽️',
+    title: 'Menu Knowledge',
+    desc: 'Brunch & dinner menus with allergens',
+    color: 'bg-green-500'
+  }, {
+    id: 'quiz',
+    icon: '✅',
+    title: 'Test Your Knowledge',
+    desc: 'Interactive quizzes across all modules',
+    color: 'bg-red-500'
+  }];
+  return /*#__PURE__*/React.createElement("div", {
+    className: "max-w-2xl mx-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-center mb-8"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "mb-3"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "data:image/jpeg;base64,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",
+    alt: "The Northport Hotel",
+    style: {
+      width: '120px',
+      height: '120px',
+      borderRadius: '16px',
+      objectFit: 'cover',
+      margin: '0 auto'
+    }
+  })), /*#__PURE__*/React.createElement("h1", {
+    className: "text-3xl font-bold text-base-content mb-2"
+  }, "Welcome to The Northport Hotel"), /*#__PURE__*/React.createElement("p", {
+    className: "text-base-content/60 text-lg"
+  }, "New Hire Training Program"), /*#__PURE__*/React.createElement("div", {
+    className: "divider"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "bg-base-200 rounded-xl p-5 text-left"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-base-content/80 leading-relaxed"
+  }, "At The Northport Hotel, we don't just serve food and drinks \u2014 we create ", /*#__PURE__*/React.createElement("strong", null, "memorable experiences"), ". Our service is guided by ", /*#__PURE__*/React.createElement("strong", null, "Northport Standards"), ", which means every detail matters: from the way you greet a guest to how you describe a cocktail to the precision of your table setting."), /*#__PURE__*/React.createElement("p", {
+    className: "text-base-content/80 leading-relaxed mt-3"
+  }, "This training will give you the knowledge and confidence to deliver ", /*#__PURE__*/React.createElement("strong", null, "world-class hospitality"), " from day one. Work through each module at your own pace, then test yourself with the quiz."))), /*#__PURE__*/React.createElement("h2", {
+    className: "text-lg font-semibold mb-4 text-base-content/70"
+  }, "Training Modules"), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col gap-3"
+  }, modules.map(mod => /*#__PURE__*/React.createElement("button", {
+    key: mod.id,
+    onClick: () => onNavigate(mod.id),
+    className: "btn btn-ghost bg-base-200 hover:bg-base-300 h-auto py-4 px-5 justify-start text-left gap-4 rounded-xl"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: `${mod.color} text-white w-12 h-12 rounded-lg flex items-center justify-center text-2xl shrink-0`
+  }, mod.icon), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "font-semibold text-base"
+  }, mod.title), /*#__PURE__*/React.createElement("div", {
+    className: "text-sm text-base-content/50 font-normal"
+  }, mod.desc)), /*#__PURE__*/React.createElement("div", {
+    className: "ml-auto text-base-content/30"
+  }, "\u2192")))), /*#__PURE__*/React.createElement("div", {
+    className: "text-center mt-8 text-base-content/40 text-sm"
+  }, "Executive Chef Michael Ross \xB7 The Northport Hotel"));
 }
-
 function ForbesStandardsView() {
   const [expanded, setExpanded] = useState(0);
-
-  return (
-    <div className="max-w-2xl mx-auto">
-      <div className="text-center mb-6">
-        <div className="text-4xl mb-2">⭐</div>
-        <h1 className="text-2xl font-bold">Northport Service Standards</h1>
-        <p className="text-base-content/60 mt-1">The 8 pillars that define world-class hospitality</p>
-      </div>
-      <div className="bg-base-200 rounded-xl p-4 mb-6">
-        <p className="text-sm text-base-content/70 leading-relaxed">
-          The Northport Hotel holds itself to the <strong>highest standards</strong> in hospitality. 
-          It's not about luxury — it's about <strong>how you make people feel</strong>. 
-          These standards should become second nature. Click each to explore.
-        </p>
-      </div>
-      <div className="flex flex-col gap-3">
-        {forbesStandards.map((standard, idx) => {
-          const isOpen = expanded === idx;
-          return (
-            <div key={idx} className="bg-base-200 rounded-xl overflow-hidden">
-              <button
-                onClick={() => setExpanded(isOpen ? null : idx)}
-                className="w-full flex items-center gap-3 p-4 text-left hover:bg-base-300 transition-colors"
-              >
-                <span className="text-2xl">{standard.icon}</span>
-                <div className="flex-1">
-                  <div className="font-semibold">{standard.title}</div>
-                  <div className="text-xs text-base-content/50">
-                    {standard.principles.length} principles · {standard.keyBehaviors.length} key behaviors
-                  </div>
-                </div>
-                <span className={`text-base-content/30 transition-transform ${isOpen ? 'rotate-90' : ''}`}>▶</span>
-              </button>
-              {isOpen && (
-                <div className="px-4 pb-4">
-                  <div className="mb-3">
-                    <div className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-2">Core Principles</div>
-                    {standard.principles.map((p, i) => (
-                      <div key={i} className="flex items-start gap-2 mb-1.5">
-                        <span className="text-amber-500 mt-0.5 shrink-0">✦</span>
-                        <span className="text-sm text-base-content/80">{p}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="divider my-2"></div>
-                  <div>
-                    <div className="text-xs font-semibold text-base-content/50 uppercase tracking-wider mb-2">Key Behaviors</div>
-                    {standard.keyBehaviors.map((b, i) => (
-                      <div key={i} className="flex items-start gap-2 mb-1.5">
-                        <span className="text-green-500 mt-0.5 shrink-0">✓</span>
-                        <span className="text-sm text-base-content/70">{b}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+  return /*#__PURE__*/React.createElement("div", {
+    className: "max-w-2xl mx-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-center mb-6"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-4xl mb-2"
+  }, "\u2B50"), /*#__PURE__*/React.createElement("h1", {
+    className: "text-2xl font-bold"
+  }, "Northport Service Standards"), /*#__PURE__*/React.createElement("p", {
+    className: "text-base-content/60 mt-1"
+  }, "The 8 pillars that define world-class hospitality")), /*#__PURE__*/React.createElement("div", {
+    className: "bg-base-200 rounded-xl p-4 mb-6"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-sm text-base-content/70 leading-relaxed"
+  }, "The Northport Hotel holds itself to the ", /*#__PURE__*/React.createElement("strong", null, "highest standards"), " in hospitality. It's not about luxury \u2014 it's about ", /*#__PURE__*/React.createElement("strong", null, "how you make people feel"), ". These standards should become second nature. Click each to explore.")), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col gap-3"
+  }, forbesStandards.map((standard, idx) => {
+    const isOpen = expanded === idx;
+    return /*#__PURE__*/React.createElement("div", {
+      key: idx,
+      className: "bg-base-200 rounded-xl overflow-hidden"
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: () => setExpanded(isOpen ? null : idx),
+      className: "w-full flex items-center gap-3 p-4 text-left hover:bg-base-300 transition-colors"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-2xl"
+    }, standard.icon), /*#__PURE__*/React.createElement("div", {
+      className: "flex-1"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "font-semibold"
+    }, standard.title), /*#__PURE__*/React.createElement("div", {
+      className: "text-xs text-base-content/50"
+    }, standard.principles.length, " principles \xB7 ", standard.keyBehaviors.length, " key behaviors")), /*#__PURE__*/React.createElement("span", {
+      className: `text-base-content/30 transition-transform ${isOpen ? 'rotate-90' : ''}`
+    }, "\u25B6")), isOpen && /*#__PURE__*/React.createElement("div", {
+      className: "px-4 pb-4"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "mb-3"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "text-xs font-semibold text-amber-600 uppercase tracking-wider mb-2"
+    }, "Core Principles"), standard.principles.map((p, i) => /*#__PURE__*/React.createElement("div", {
+      key: i,
+      className: "flex items-start gap-2 mb-1.5"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-amber-500 mt-0.5 shrink-0"
+    }, "\u2726"), /*#__PURE__*/React.createElement("span", {
+      className: "text-sm text-base-content/80"
+    }, p)))), /*#__PURE__*/React.createElement("div", {
+      className: "divider my-2"
+    }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      className: "text-xs font-semibold text-base-content/50 uppercase tracking-wider mb-2"
+    }, "Key Behaviors"), standard.keyBehaviors.map((b, i) => /*#__PURE__*/React.createElement("div", {
+      key: i,
+      className: "flex items-start gap-2 mb-1.5"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-green-500 mt-0.5 shrink-0"
+    }, "\u2713"), /*#__PURE__*/React.createElement("span", {
+      className: "text-sm text-base-content/70"
+    }, b))))));
+  })));
 }
-
-function Detail({ label, value }) {
-  return (
-    <div className="flex gap-2">
-      <span className="font-semibold text-base-content/50 w-24 shrink-0">{label}:</span>
-      <span className="text-base-content/80">{value}</span>
-    </div>
-  );
+function Detail({
+  label,
+  value
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-2"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "font-semibold text-base-content/50 w-24 shrink-0"
+  }, label, ":"), /*#__PURE__*/React.createElement("span", {
+    className: "text-base-content/80"
+  }, value));
 }
-
-function CocktailCard({ cocktail, flipped, onFlip }) {
-  return (
-    <div onClick={onFlip} className="cursor-pointer bg-base-200 rounded-xl p-5 hover:bg-base-300 transition-all border-2 border-transparent hover:border-primary/20">
-      {!flipped ? (
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-bold text-lg">{cocktail.name}</h3>
-            <span className={`badge badge-sm ${cocktail.category === 'signature' ? 'badge-primary' : 'badge-ghost'}`}>
-              {cocktail.category === 'signature' ? '✨ Signature' : 'Classic'}
-            </span>
-          </div>
-          <p className="text-sm text-base-content/60 italic mb-3">{cocktail.guestDescription}</p>
-          <p className="text-xs text-primary/60">Tap to see details →</p>
-        </div>
-      ) : (
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-bold text-lg">{cocktail.name}</h3>
-            <span className="text-xs text-base-content/40">Tap to close</span>
-          </div>
-          <div className="grid grid-cols-1 gap-2 text-sm">
-            <Detail label="Ingredients" value={cocktail.ingredients} />
-            <Detail label="Glassware" value={cocktail.glassware} />
-            {cocktail.ice && <Detail label="Ice" value={cocktail.ice} />}
-            <Detail label="Garnish" value={cocktail.garnish} />
-            {cocktail.rim && <Detail label="Rim" value={cocktail.rim} />}
-          </div>
-          <div className="mt-3 bg-warning/10 border border-warning/20 rounded-lg p-3">
-            <div className="text-xs font-semibold text-warning uppercase tracking-wider mb-1">🏃 Runner Notes</div>
-            <p className="text-sm text-base-content/70">{cocktail.runnerNotes}</p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+function CocktailCard({
+  cocktail,
+  flipped,
+  onFlip
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    onClick: onFlip,
+    className: "cursor-pointer bg-base-200 rounded-xl p-5 hover:bg-base-300 transition-all border-2 border-transparent hover:border-primary/20"
+  }, !flipped ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-between mb-2"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "font-bold text-lg"
+  }, cocktail.name), /*#__PURE__*/React.createElement("span", {
+    className: `badge badge-sm ${cocktail.category === 'signature' ? 'badge-primary' : 'badge-ghost'}`
+  }, cocktail.category === 'signature' ? '✨ Signature' : 'Classic')), /*#__PURE__*/React.createElement("p", {
+    className: "text-sm text-base-content/60 italic mb-3"
+  }, cocktail.guestDescription), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-primary/60"
+  }, "Tap to see details \u2192")) : /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-between mb-3"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "font-bold text-lg"
+  }, cocktail.name), /*#__PURE__*/React.createElement("span", {
+    className: "text-xs text-base-content/40"
+  }, "Tap to close")), /*#__PURE__*/React.createElement("div", {
+    className: "grid grid-cols-1 gap-2 text-sm"
+  }, /*#__PURE__*/React.createElement(Detail, {
+    label: "Ingredients",
+    value: cocktail.ingredients
+  }), /*#__PURE__*/React.createElement(Detail, {
+    label: "Glassware",
+    value: cocktail.glassware
+  }), cocktail.ice && /*#__PURE__*/React.createElement(Detail, {
+    label: "Ice",
+    value: cocktail.ice
+  }), /*#__PURE__*/React.createElement(Detail, {
+    label: "Garnish",
+    value: cocktail.garnish
+  }), cocktail.rim && /*#__PURE__*/React.createElement(Detail, {
+    label: "Rim",
+    value: cocktail.rim
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "mt-3 bg-warning/10 border border-warning/20 rounded-lg p-3"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-xs font-semibold text-warning uppercase tracking-wider mb-1"
+  }, "\uD83C\uDFC3 Runner Notes"), /*#__PURE__*/React.createElement("p", {
+    className: "text-sm text-base-content/70"
+  }, cocktail.runnerNotes))));
 }
-
 function CocktailGuide() {
   const [filter, setFilter] = useState('all');
   const [flipped, setFlipped] = useState(null);
   const filtered = cocktails.filter(c => filter === 'all' || c.category === filter);
   const classics = cocktails.filter(c => c.category === 'classic');
   const signatures = cocktails.filter(c => c.category === 'signature');
-
-  return (
-    <div className="max-w-2xl mx-auto">
-      <div className="text-center mb-6">
-        <div className="text-4xl mb-2">🍸</div>
-        <h1 className="text-2xl font-bold">Cocktail Program</h1>
-        <p className="text-base-content/60 mt-1">{cocktails.length} cocktails — tap any card to study</p>
-      </div>
-      <div className="flex gap-2 mb-5 justify-center">
-        <button onClick={() => setFilter('all')} className={`btn btn-sm ${filter === 'all' ? 'btn-primary' : 'btn-ghost'}`}>All ({cocktails.length})</button>
-        <button onClick={() => setFilter('classic')} className={`btn btn-sm ${filter === 'classic' ? 'btn-primary' : 'btn-ghost'}`}>Classics ({classics.length})</button>
-        <button onClick={() => setFilter('signature')} className={`btn btn-sm ${filter === 'signature' ? 'btn-primary' : 'btn-ghost'}`}>Signatures ({signatures.length})</button>
-      </div>
-      <div className="flex flex-col gap-3">
-        {filtered.map((cocktail) => (
-          <CocktailCard
-            key={cocktail.name}
-            cocktail={cocktail}
-            flipped={flipped === cocktail.name}
-            onFlip={() => setFlipped(flipped === cocktail.name ? null : cocktail.name)}
-          />
-        ))}
-      </div>
-    </div>
-  );
+  return /*#__PURE__*/React.createElement("div", {
+    className: "max-w-2xl mx-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-center mb-6"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-4xl mb-2"
+  }, "\uD83C\uDF78"), /*#__PURE__*/React.createElement("h1", {
+    className: "text-2xl font-bold"
+  }, "Cocktail Program"), /*#__PURE__*/React.createElement("p", {
+    className: "text-base-content/60 mt-1"
+  }, cocktails.length, " cocktails \u2014 tap any card to study")), /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-2 mb-5 justify-center"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setFilter('all'),
+    className: `btn btn-sm ${filter === 'all' ? 'btn-primary' : 'btn-ghost'}`
+  }, "All (", cocktails.length, ")"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setFilter('classic'),
+    className: `btn btn-sm ${filter === 'classic' ? 'btn-primary' : 'btn-ghost'}`
+  }, "Classics (", classics.length, ")"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setFilter('signature'),
+    className: `btn btn-sm ${filter === 'signature' ? 'btn-primary' : 'btn-ghost'}`
+  }, "Signatures (", signatures.length, ")")), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col gap-3"
+  }, filtered.map(cocktail => /*#__PURE__*/React.createElement(CocktailCard, {
+    key: cocktail.name,
+    cocktail: cocktail,
+    flipped: flipped === cocktail.name,
+    onFlip: () => setFlipped(flipped === cocktail.name ? null : cocktail.name)
+  }))));
 }
-
 function TerminologyView() {
   const [revealed, setRevealed] = useState(new Set());
   const [showAll, setShowAll] = useState(false);
-
-  const toggleReveal = (idx) => {
+  const toggleReveal = idx => {
     setRevealed(prev => {
       const next = new Set(prev);
-      if (next.has(idx)) next.delete(idx);
-      else next.add(idx);
+      if (next.has(idx)) next.delete(idx);else next.add(idx);
       return next;
     });
   };
-
   const toggleAll = () => {
     if (showAll) {
       setRevealed(new Set());
@@ -382,87 +928,82 @@ function TerminologyView() {
     }
     setShowAll(!showAll);
   };
-
-  return (
-    <div className="max-w-2xl mx-auto">
-      <div className="text-center mb-6">
-        <div className="text-4xl mb-2">📖</div>
-        <h1 className="text-2xl font-bold">Bar Terminology</h1>
-        <p className="text-base-content/60 mt-1">Essential terms every service professional must know</p>
-      </div>
-      <div className="bg-base-200 rounded-xl p-4 mb-5">
-        <p className="text-sm text-base-content/70">
-          <strong>Study mode:</strong> Tap each term to reveal its definition. 
-          Try to recall the meaning before tapping — this builds recall faster.
-        </p>
-        <button onClick={toggleAll} className="btn btn-ghost btn-sm mt-2">
-          {showAll ? '🙈 Hide All' : '👁️ Show All'}
-        </button>
-      </div>
-      <div className="flex flex-col gap-3">
-        {terminology.map((term, idx) => {
-          const isRevealed = revealed.has(idx);
-          return (
-            <div key={idx} onClick={() => toggleReveal(idx)} className="bg-base-200 rounded-xl p-4 cursor-pointer hover:bg-base-300 transition-colors">
-              <div className="flex items-center justify-between">
-                <h3 className="font-bold text-lg text-primary">{term.term}</h3>
-                {!isRevealed && <span className="text-xs text-base-content/40">Tap to reveal</span>}
-              </div>
-              {isRevealed && (
-                <div className="mt-2">
-                  <p className="text-sm text-base-content/80">{term.definition}</p>
-                  {term.example && (
-                    <p className="text-sm text-base-content/50 italic mt-2 bg-base-300 rounded-lg px-3 py-2">
-                      💬 {term.example}
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+  return /*#__PURE__*/React.createElement("div", {
+    className: "max-w-2xl mx-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-center mb-6"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-4xl mb-2"
+  }, "\uD83D\uDCD6"), /*#__PURE__*/React.createElement("h1", {
+    className: "text-2xl font-bold"
+  }, "Bar Terminology"), /*#__PURE__*/React.createElement("p", {
+    className: "text-base-content/60 mt-1"
+  }, "Essential terms every service professional must know")), /*#__PURE__*/React.createElement("div", {
+    className: "bg-base-200 rounded-xl p-4 mb-5"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-sm text-base-content/70"
+  }, /*#__PURE__*/React.createElement("strong", null, "Study mode:"), " Tap each term to reveal its definition. Try to recall the meaning before tapping \u2014 this builds recall faster."), /*#__PURE__*/React.createElement("button", {
+    onClick: toggleAll,
+    className: "btn btn-ghost btn-sm mt-2"
+  }, showAll ? '🙈 Hide All' : '👁️ Show All')), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col gap-3"
+  }, terminology.map((term, idx) => {
+    const isRevealed = revealed.has(idx);
+    return /*#__PURE__*/React.createElement("div", {
+      key: idx,
+      onClick: () => toggleReveal(idx),
+      className: "bg-base-200 rounded-xl p-4 cursor-pointer hover:bg-base-300 transition-colors"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "flex items-center justify-between"
+    }, /*#__PURE__*/React.createElement("h3", {
+      className: "font-bold text-lg text-primary"
+    }, term.term), !isRevealed && /*#__PURE__*/React.createElement("span", {
+      className: "text-xs text-base-content/40"
+    }, "Tap to reveal")), isRevealed && /*#__PURE__*/React.createElement("div", {
+      className: "mt-2"
+    }, /*#__PURE__*/React.createElement("p", {
+      className: "text-sm text-base-content/80"
+    }, term.definition), term.example && /*#__PURE__*/React.createElement("p", {
+      className: "text-sm text-base-content/50 italic mt-2 bg-base-300 rounded-lg px-3 py-2"
+    }, "\uD83D\uDCAC ", term.example)));
+  })));
 }
-
-function MenuItemCard({ item }) {
+function MenuItemCard({
+  item
+}) {
   const [expanded, setExpanded] = useState(false);
   const hasAllergens = item.allergens && item.allergens !== 'No major allergens';
   const allergenBadges = hasAllergens ? item.allergens.split(',').map(a => a.trim()).filter(Boolean) : [];
-
-  return (
-    <div onClick={() => setExpanded(!expanded)} className="bg-base-200 rounded-lg p-3 cursor-pointer hover:bg-base-300 transition-colors">
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex-1">
-          <h4 className="font-semibold text-sm">{item.name}</h4>
-          {item.description && <p className="text-xs text-base-content/50 mt-0.5">{item.description}</p>}
-        </div>
-        {hasAllergens ? (
-          <span className="badge badge-warning badge-xs shrink-0">⚠️</span>
-        ) : (
-          <span className="badge badge-success badge-xs shrink-0">✓</span>
-        )}
-      </div>
-      {expanded && (
-        <div className="mt-2 pt-2 border-t border-base-300">
-          <div className="text-xs font-semibold text-base-content/50 uppercase tracking-wider mb-1">Allergens</div>
-          {hasAllergens ? (
-            <div className="flex flex-wrap gap-1">
-              {allergenBadges.map((a, i) => (
-                <span key={i} className="badge badge-warning badge-sm">{a}</span>
-              ))}
-            </div>
-          ) : (
-            <span className="badge badge-success badge-sm">No major allergens</span>
-          )}
-          {item.notes && <p className="text-xs text-base-content/50 mt-2 italic">{item.notes}</p>}
-        </div>
-      )}
-    </div>
-  );
+  return /*#__PURE__*/React.createElement("div", {
+    onClick: () => setExpanded(!expanded),
+    className: "bg-base-200 rounded-lg p-3 cursor-pointer hover:bg-base-300 transition-colors"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-start justify-between gap-2"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex-1"
+  }, /*#__PURE__*/React.createElement("h4", {
+    className: "font-semibold text-sm"
+  }, item.name), item.description && /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-base-content/50 mt-0.5"
+  }, item.description)), hasAllergens ? /*#__PURE__*/React.createElement("span", {
+    className: "badge badge-warning badge-xs shrink-0"
+  }, "\u26A0\uFE0F") : /*#__PURE__*/React.createElement("span", {
+    className: "badge badge-success badge-xs shrink-0"
+  }, "\u2713")), expanded && /*#__PURE__*/React.createElement("div", {
+    className: "mt-2 pt-2 border-t border-base-300"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-xs font-semibold text-base-content/50 uppercase tracking-wider mb-1"
+  }, "Allergens"), hasAllergens ? /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-wrap gap-1"
+  }, allergenBadges.map((a, i) => /*#__PURE__*/React.createElement("span", {
+    key: i,
+    className: "badge badge-warning badge-sm"
+  }, a))) : /*#__PURE__*/React.createElement("span", {
+    className: "badge badge-success badge-sm"
+  }, "No major allergens"), item.notes && /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-base-content/50 mt-2 italic"
+  }, item.notes)));
 }
-
 function MenuGuide() {
   const [menu, setMenu] = useState('dinner');
   const activeMenu = menu === 'brunch' ? brunchMenu : dinnerMenu;
@@ -470,47 +1011,44 @@ function MenuGuide() {
   activeMenu.forEach(item => {
     if (!sections.includes(item.section)) sections.push(item.section);
   });
-
-  return (
-    <div className="max-w-2xl mx-auto">
-      <div className="text-center mb-6">
-        <div className="text-4xl mb-2">🍽️</div>
-        <h1 className="text-2xl font-bold">Menu Knowledge</h1>
-        <p className="text-base-content/60 mt-1">Know every dish, every allergen, every detail</p>
-      </div>
-      <div className="bg-base-200 rounded-xl p-4 mb-5">
-        <p className="text-sm text-base-content/70">
-          <strong>Northport standard:</strong> You should be able to describe any dish from memory — 
-          ingredients, preparation, and allergens. Tap any item to see allergen details.
-        </p>
-        <p className="text-xs text-base-content/50 mt-2">
-          ⚠️ = Contains allergens &nbsp; ✓ = No major allergens
-        </p>
-      </div>
-      <div className="flex gap-2 mb-5 justify-center">
-        <button onClick={() => setMenu('dinner')} className={`btn btn-sm ${menu === 'dinner' ? 'btn-primary' : 'btn-ghost'}`}>🌙 Dinner Menu</button>
-        <button onClick={() => setMenu('brunch')} className={`btn btn-sm ${menu === 'brunch' ? 'btn-primary' : 'btn-ghost'}`}>☀️ Brunch Menu</button>
-      </div>
-      <div className="text-sm text-base-content/40 mb-4">
-        Executive Chef Michael Ross
-        {menu === 'brunch' ? ' · Sat & Sun 11am – 1:45pm' : ' · Sun–Wed 4:30–9pm · Thu–Sat 4:30–10pm'}
-      </div>
-      {sections.map(section => (
-        <div key={section} className="mb-6">
-          <h3 className="font-bold text-base text-base-content/70 uppercase tracking-wider mb-3 border-b border-base-300 pb-1">
-            {section}
-          </h3>
-          <div className="flex flex-col gap-2">
-            {activeMenu.filter(i => i.section === section).map((item, idx) => (
-              <MenuItemCard key={`${item.name}-${idx}`} item={item} />
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+  return /*#__PURE__*/React.createElement("div", {
+    className: "max-w-2xl mx-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-center mb-6"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-4xl mb-2"
+  }, "\uD83C\uDF7D\uFE0F"), /*#__PURE__*/React.createElement("h1", {
+    className: "text-2xl font-bold"
+  }, "Menu Knowledge"), /*#__PURE__*/React.createElement("p", {
+    className: "text-base-content/60 mt-1"
+  }, "Know every dish, every allergen, every detail")), /*#__PURE__*/React.createElement("div", {
+    className: "bg-base-200 rounded-xl p-4 mb-5"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-sm text-base-content/70"
+  }, /*#__PURE__*/React.createElement("strong", null, "Northport standard:"), " You should be able to describe any dish from memory \u2014 ingredients, preparation, and allergens. Tap any item to see allergen details."), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-base-content/50 mt-2"
+  }, "\u26A0\uFE0F = Contains allergens \xA0 \u2713 = No major allergens")), /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-2 mb-5 justify-center"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setMenu('dinner'),
+    className: `btn btn-sm ${menu === 'dinner' ? 'btn-primary' : 'btn-ghost'}`
+  }, "\uD83C\uDF19 Dinner Menu"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setMenu('brunch'),
+    className: `btn btn-sm ${menu === 'brunch' ? 'btn-primary' : 'btn-ghost'}`
+  }, "\u2600\uFE0F Brunch Menu")), /*#__PURE__*/React.createElement("div", {
+    className: "text-sm text-base-content/40 mb-4"
+  }, "Executive Chef Michael Ross", menu === 'brunch' ? ' · Sat & Sun 11am – 1:45pm' : ' · Sun–Wed 4:30–9pm · Thu–Sat 4:30–10pm'), sections.map(section => /*#__PURE__*/React.createElement("div", {
+    key: section,
+    className: "mb-6"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "font-bold text-base text-base-content/70 uppercase tracking-wider mb-3 border-b border-base-300 pb-1"
+  }, section), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col gap-2"
+  }, activeMenu.filter(i => i.section === section).map((item, idx) => /*#__PURE__*/React.createElement(MenuItemCard, {
+    key: `${item.name}-${idx}`,
+    item: item
+  }))))));
 }
-
 function generateQuestions() {
   const questions = [];
 
@@ -520,7 +1058,12 @@ function generateQuestions() {
     const wrong = shuffle(glassTypes.filter(g => g !== c.glassware)).slice(0, 3);
     if (wrong.length >= 3) {
       const opts = shuffle([c.glassware, ...wrong]);
-      questions.push({ question: `What glassware is used for a ${c.name}?`, options: opts, correctIndex: opts.indexOf(c.glassware), category: 'Cocktails' });
+      questions.push({
+        question: `What glassware is used for a ${c.name}?`,
+        options: opts,
+        correctIndex: opts.indexOf(c.glassware),
+        category: 'Cocktails'
+      });
     }
   });
 
@@ -529,7 +1072,12 @@ function generateQuestions() {
     const otherGarnishes = shuffle(cocktails.filter(x => x.garnish !== c.garnish).map(x => x.garnish)).slice(0, 3);
     if (otherGarnishes.length >= 3) {
       const opts = shuffle([c.garnish, ...otherGarnishes]);
-      questions.push({ question: `What is the garnish for a ${c.name}?`, options: opts, correctIndex: opts.indexOf(c.garnish), category: 'Cocktails' });
+      questions.push({
+        question: `What is the garnish for a ${c.name}?`,
+        options: opts,
+        correctIndex: opts.indexOf(c.garnish),
+        category: 'Cocktails'
+      });
     }
   });
 
@@ -538,7 +1086,12 @@ function generateQuestions() {
     const others = shuffle(cocktails.filter(x => x.name !== c.name).map(x => x.ingredients)).slice(0, 3);
     if (others.length >= 3) {
       const opts = shuffle([c.ingredients, ...others]);
-      questions.push({ question: `What are the ingredients in a ${c.name}?`, options: opts, correctIndex: opts.indexOf(c.ingredients), category: 'Cocktails' });
+      questions.push({
+        question: `What are the ingredients in a ${c.name}?`,
+        options: opts,
+        correctIndex: opts.indexOf(c.ingredients),
+        category: 'Cocktails'
+      });
     }
   });
 
@@ -547,7 +1100,12 @@ function generateQuestions() {
     const others = shuffle(terminology.filter(x => x.term !== t.term).map(x => x.definition)).slice(0, 3);
     if (others.length >= 3) {
       const opts = shuffle([t.definition, ...others]);
-      questions.push({ question: `What does "${t.term}" mean?`, options: opts, correctIndex: opts.indexOf(t.definition), category: 'Terminology' });
+      questions.push({
+        question: `What does "${t.term}" mean?`,
+        options: opts,
+        correctIndex: opts.indexOf(t.definition),
+        category: 'Terminology'
+      });
     }
   });
 
@@ -557,7 +1115,12 @@ function generateQuestions() {
     const otherBehaviors = shuffle(forbesStandards.filter(x => x.title !== s.title).flatMap(x => x.keyBehaviors)).slice(0, 3);
     if (otherBehaviors.length >= 3) {
       const opts = shuffle([behavior, ...otherBehaviors]);
-      questions.push({ question: `Which behavior belongs to "${s.title}"?`, options: opts, correctIndex: opts.indexOf(behavior), category: 'Northport Standards' });
+      questions.push({
+        question: `Which behavior belongs to "${s.title}"?`,
+        options: opts,
+        correctIndex: opts.indexOf(behavior),
+        category: 'Northport Standards'
+      });
     }
   });
 
@@ -567,13 +1130,16 @@ function generateQuestions() {
     const others = shuffle(allergenItems.filter(x => x.allergens !== item.allergens).map(x => x.allergens)).slice(0, 3);
     if (others.length >= 3) {
       const opts = shuffle([item.allergens, ...others]);
-      questions.push({ question: `What allergens does the ${item.name} contain?`, options: opts, correctIndex: opts.indexOf(item.allergens), category: 'Menu Knowledge' });
+      questions.push({
+        question: `What allergens does the ${item.name} contain?`,
+        options: opts,
+        correctIndex: opts.indexOf(item.allergens),
+        category: 'Menu Knowledge'
+      });
     }
   });
-
   return shuffle(questions);
 }
-
 function Quiz() {
   const [mode, setMode] = useState('setup');
   const [category, setCategory] = useState('all');
@@ -583,10 +1149,8 @@ function Quiz() {
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(false);
   const numQuestions = 10;
-
   const allQuestions = useMemo(() => generateQuestions(), []);
   const categories = ['all', ...new Set(allQuestions.map(q => q.category))];
-
   const startQuiz = () => {
     const pool = category === 'all' ? allQuestions : allQuestions.filter(q => q.category === category);
     setQuestions(shuffle(pool).slice(0, numQuestions));
@@ -596,8 +1160,7 @@ function Quiz() {
     setAnswered(false);
     setMode('active');
   };
-
-  const handleSelect = (idx) => {
+  const handleSelect = idx => {
     if (answered) return;
     setSelected(idx);
     setAnswered(true);
@@ -605,7 +1168,6 @@ function Quiz() {
       setScore(s => s + 1);
     }
   };
-
   const nextQuestion = () => {
     if (current + 1 >= questions.length) {
       setMode('results');
@@ -615,147 +1177,156 @@ function Quiz() {
       setAnswered(false);
     }
   };
-
   if (mode === 'setup') {
-    return (
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-6">
-          <div className="text-4xl mb-2">✅</div>
-          <h1 className="text-2xl font-bold">Test Your Knowledge</h1>
-          <p className="text-base-content/60 mt-1">{numQuestions} questions from your training</p>
-        </div>
-        <div className="bg-base-200 rounded-xl p-5">
-          <label className="text-sm font-semibold text-base-content/70 mb-3 block">Choose a category:</label>
-          <div className="flex flex-wrap gap-2 mb-5">
-            {categories.map(cat => (
-              <button key={cat} onClick={() => setCategory(cat)} className={`btn btn-sm ${category === cat ? 'btn-primary' : 'btn-ghost'}`}>
-                {cat === 'all' ? '🎯 All Topics' : cat}
-              </button>
-            ))}
-          </div>
-          <button onClick={startQuiz} className="btn btn-primary w-full">Start Quiz →</button>
-        </div>
-      </div>
-    );
+    return /*#__PURE__*/React.createElement("div", {
+      className: "max-w-2xl mx-auto"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "text-center mb-6"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "text-4xl mb-2"
+    }, "\u2705"), /*#__PURE__*/React.createElement("h1", {
+      className: "text-2xl font-bold"
+    }, "Test Your Knowledge"), /*#__PURE__*/React.createElement("p", {
+      className: "text-base-content/60 mt-1"
+    }, numQuestions, " questions from your training")), /*#__PURE__*/React.createElement("div", {
+      className: "bg-base-200 rounded-xl p-5"
+    }, /*#__PURE__*/React.createElement("label", {
+      className: "text-sm font-semibold text-base-content/70 mb-3 block"
+    }, "Choose a category:"), /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-wrap gap-2 mb-5"
+    }, categories.map(cat => /*#__PURE__*/React.createElement("button", {
+      key: cat,
+      onClick: () => setCategory(cat),
+      className: `btn btn-sm ${category === cat ? 'btn-primary' : 'btn-ghost'}`
+    }, cat === 'all' ? '🎯 All Topics' : cat))), /*#__PURE__*/React.createElement("button", {
+      onClick: startQuiz,
+      className: "btn btn-primary w-full"
+    }, "Start Quiz \u2192")));
   }
-
   if (mode === 'results') {
-    const pct = Math.round((score / questions.length) * 100);
+    const pct = Math.round(score / questions.length * 100);
     const emoji = pct >= 90 ? '🌟' : pct >= 70 ? '👏' : pct >= 50 ? '📚' : '💪';
-    const message = pct >= 90
-      ? 'Outstanding! True Northport material.'
-      : pct >= 70
-      ? 'Great work! A little more study and you\'re there.'
-      : pct >= 50
-      ? 'Good start! Review the modules and try again.'
-      : 'Keep studying — you\'ll get there! Review the training modules.';
-
-    return (
-      <div className="max-w-2xl mx-auto text-center">
-        <div className="text-6xl mb-4">{emoji}</div>
-        <h1 className="text-2xl font-bold mb-2">Quiz Complete!</h1>
-        <div className="text-5xl font-bold text-primary mb-2">{pct}%</div>
-        <p className="text-base-content/60 mb-2">{score} of {questions.length} correct</p>
-        <p className="text-base-content/70 mb-6">{message}</p>
-        <div className="flex gap-3 justify-center">
-          <button onClick={() => setMode('setup')} className="btn btn-primary">Try Again</button>
-        </div>
-      </div>
-    );
+    const message = pct >= 90 ? 'Outstanding! True Northport material.' : pct >= 70 ? 'Great work! A little more study and you\'re there.' : pct >= 50 ? 'Good start! Review the modules and try again.' : 'Keep studying — you\'ll get there! Review the training modules.';
+    return /*#__PURE__*/React.createElement("div", {
+      className: "max-w-2xl mx-auto text-center"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "text-6xl mb-4"
+    }, emoji), /*#__PURE__*/React.createElement("h1", {
+      className: "text-2xl font-bold mb-2"
+    }, "Quiz Complete!"), /*#__PURE__*/React.createElement("div", {
+      className: "text-5xl font-bold text-primary mb-2"
+    }, pct, "%"), /*#__PURE__*/React.createElement("p", {
+      className: "text-base-content/60 mb-2"
+    }, score, " of ", questions.length, " correct"), /*#__PURE__*/React.createElement("p", {
+      className: "text-base-content/70 mb-6"
+    }, message), /*#__PURE__*/React.createElement("div", {
+      className: "flex gap-3 justify-center"
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: () => setMode('setup'),
+      className: "btn btn-primary"
+    }, "Try Again")));
   }
-
   const q = questions[current];
-  return (
-    <div className="max-w-2xl mx-auto">
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-sm text-base-content/50">Question {current + 1} of {questions.length}</span>
-        <span className="badge badge-primary badge-sm">{q.category}</span>
-      </div>
-      <progress className="progress progress-primary w-full mb-5" value={current + 1} max={questions.length}></progress>
-      <div className="bg-base-200 rounded-xl p-5 mb-5">
-        <h2 className="text-lg font-semibold mb-4">{q.question}</h2>
-        <div className="flex flex-col gap-2">
-          {q.options.map((opt, idx) => {
-            let cls = 'btn btn-ghost bg-base-100 h-auto py-3 px-4 text-left justify-start font-normal';
-            if (answered) {
-              if (idx === q.correctIndex) cls = 'btn btn-success h-auto py-3 px-4 text-left justify-start font-normal text-white';
-              else if (idx === selected && idx !== q.correctIndex) cls = 'btn btn-error h-auto py-3 px-4 text-left justify-start font-normal text-white';
-            } else if (idx === selected) {
-              cls = 'btn btn-primary h-auto py-3 px-4 text-left justify-start font-normal';
-            }
-            return (
-              <button key={idx} className={cls} onClick={() => handleSelect(idx)}>
-                <span className="text-sm leading-relaxed" style={{whiteSpace: 'normal'}}>{opt}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-      {answered && (
-        <div className="flex justify-between items-center">
-          <span className={`text-sm font-semibold ${selected === q.correctIndex ? 'text-success' : 'text-error'}`}>
-            {selected === q.correctIndex ? '✓ Correct!' : '✗ Incorrect'}
-          </span>
-          <button onClick={nextQuestion} className="btn btn-primary btn-sm">
-            {current + 1 >= questions.length ? 'See Results' : 'Next Question →'}
-          </button>
-        </div>
-      )}
-      <div className="text-center mt-4">
-        <span className="text-sm text-base-content/40">Score: {score}/{current + (answered ? 1 : 0)}</span>
-      </div>
-    </div>
-  );
+  return /*#__PURE__*/React.createElement("div", {
+    className: "max-w-2xl mx-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-between mb-4"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-sm text-base-content/50"
+  }, "Question ", current + 1, " of ", questions.length), /*#__PURE__*/React.createElement("span", {
+    className: "badge badge-primary badge-sm"
+  }, q.category)), /*#__PURE__*/React.createElement("progress", {
+    className: "progress progress-primary w-full mb-5",
+    value: current + 1,
+    max: questions.length
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "bg-base-200 rounded-xl p-5 mb-5"
+  }, /*#__PURE__*/React.createElement("h2", {
+    className: "text-lg font-semibold mb-4"
+  }, q.question), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col gap-2"
+  }, q.options.map((opt, idx) => {
+    let cls = 'btn btn-ghost bg-base-100 h-auto py-3 px-4 text-left justify-start font-normal';
+    if (answered) {
+      if (idx === q.correctIndex) cls = 'btn btn-success h-auto py-3 px-4 text-left justify-start font-normal text-white';else if (idx === selected && idx !== q.correctIndex) cls = 'btn btn-error h-auto py-3 px-4 text-left justify-start font-normal text-white';
+    } else if (idx === selected) {
+      cls = 'btn btn-primary h-auto py-3 px-4 text-left justify-start font-normal';
+    }
+    return /*#__PURE__*/React.createElement("button", {
+      key: idx,
+      className: cls,
+      onClick: () => handleSelect(idx)
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-sm leading-relaxed",
+      style: {
+        whiteSpace: 'normal'
+      }
+    }, opt));
+  }))), answered && /*#__PURE__*/React.createElement("div", {
+    className: "flex justify-between items-center"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: `text-sm font-semibold ${selected === q.correctIndex ? 'text-success' : 'text-error'}`
+  }, selected === q.correctIndex ? '✓ Correct!' : '✗ Incorrect'), /*#__PURE__*/React.createElement("button", {
+    onClick: nextQuestion,
+    className: "btn btn-primary btn-sm"
+  }, current + 1 >= questions.length ? 'See Results' : 'Next Question →')), /*#__PURE__*/React.createElement("div", {
+    className: "text-center mt-4"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-sm text-base-content/40"
+  }, "Score: ", score, "/", current + (answered ? 1 : 0))));
 }
 
 // ============ MAIN APP ============
 
-const navItems = [
-  { id: 'home', icon: '🏠', label: 'Home' },
-  { id: 'forbes', icon: '⭐', label: 'Northport Standards' },
-  { id: 'cocktails', icon: '🍸', label: 'Cocktails' },
-  { id: 'terminology', icon: '📖', label: 'Terminology' },
-  { id: 'menus', icon: '🍽️', label: 'Menu' },
-  { id: 'quiz', icon: '✅', label: 'Quiz' },
-];
-
+const navItems = [{
+  id: 'home',
+  icon: '🏠',
+  label: 'Home'
+}, {
+  id: 'forbes',
+  icon: '⭐',
+  label: 'Northport Standards'
+}, {
+  id: 'cocktails',
+  icon: '🍸',
+  label: 'Cocktails'
+}, {
+  id: 'terminology',
+  icon: '📖',
+  label: 'Terminology'
+}, {
+  id: 'menus',
+  icon: '🍽️',
+  label: 'Menu'
+}, {
+  id: 'quiz',
+  icon: '✅',
+  label: 'Quiz'
+}];
 function App() {
   const [section, setSection] = useState('home');
-
-  const navigate = (id) => {
+  const navigate = id => {
     setSection(id);
     window.scrollTo(0, 0);
   };
-
-  return (
-    <div className="min-h-screen bg-base-100 flex flex-col">
-      <div className="sticky top-0 z-50 bg-base-100 border-b border-base-300">
-        <div className="flex gap-1 p-2 overflow-x-auto scrollbar-none">
-          {navItems.map(item => (
-            <button
-              key={item.id}
-              onClick={() => navigate(item.id)}
-              className={`btn btn-sm shrink-0 gap-1 ${section === item.id ? 'btn-primary' : 'btn-ghost'}`}
-            >
-              <span>{item.icon}</span>
-              <span className="hidden sm:inline">{item.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="flex-1 p-4 pb-8">
-        {section === 'home' && <Welcome onNavigate={navigate} />}
-        {section === 'forbes' && <ForbesStandardsView />}
-        {section === 'cocktails' && <CocktailGuide />}
-        {section === 'terminology' && <TerminologyView />}
-        {section === 'menus' && <MenuGuide />}
-        {section === 'quiz' && <Quiz />}
-      </div>
-    </div>
-  );
+  return /*#__PURE__*/React.createElement("div", {
+    className: "min-h-screen bg-base-100 flex flex-col"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "sticky top-0 z-50 bg-base-100 border-b border-base-300"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-1 p-2 overflow-x-auto scrollbar-none"
+  }, navItems.map(item => /*#__PURE__*/React.createElement("button", {
+    key: item.id,
+    onClick: () => navigate(item.id),
+    className: `btn btn-sm shrink-0 gap-1 ${section === item.id ? 'btn-primary' : 'btn-ghost'}`
+  }, /*#__PURE__*/React.createElement("span", null, item.icon), /*#__PURE__*/React.createElement("span", {
+    className: "hidden sm:inline"
+  }, item.label))))), /*#__PURE__*/React.createElement("div", {
+    className: "flex-1 p-4 pb-8"
+  }, section === 'home' && /*#__PURE__*/React.createElement(Welcome, {
+    onNavigate: navigate
+  }), section === 'forbes' && /*#__PURE__*/React.createElement(ForbesStandardsView, null), section === 'cocktails' && /*#__PURE__*/React.createElement(CocktailGuide, null), section === 'terminology' && /*#__PURE__*/React.createElement(TerminologyView, null), section === 'menus' && /*#__PURE__*/React.createElement(MenuGuide, null), section === 'quiz' && /*#__PURE__*/React.createElement(Quiz, null)));
 }
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-</script>
+ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));</script>
 </body>
 </html>
