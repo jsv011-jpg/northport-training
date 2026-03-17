@@ -876,7 +876,7 @@ function App() {
   ];
   
   // Swipe section order
-  var sectionOrder = ['cocktails','wines','menus','terminology','quiz'];
+  var sectionOrder = ['cocktails','wines','menus','terminology','quiz','forbes'];
   
   var minSwipeDistance = 50;
   
@@ -951,7 +951,7 @@ function App() {
       
       /* Main content area with swipe support */
       React.createElement("div",{
-        className:"flex-1 p-4 " + (section !== 'home' && section !== 'forbes' ? 'pb-24' : 'pb-8'),
+        className:"flex-1 p-4 " + (section !== 'home' ? 'pb-24' : 'pb-8'),
         onTouchStart: onTouchStart,
         onTouchMove: onTouchMove,
         onTouchEnd: onTouchEnd
