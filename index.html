@@ -923,38 +923,38 @@ function CocktailGuide() {
 
 const wines = {
   red: [
-    { name: "Pinot Noir", producer: "Benton Lane", region: "Willamette, Oregon", vintage: "2023" },
-    { name: "Cabernet Franc", producer: "Bedell Cellars", region: "North Fork, NY", vintage: "2023" },
-    { name: "Cabernet Sauvignon", producer: "Raeburn", region: "Sonoma, CA", vintage: "2022" },
-    { name: "Pinot Noir", producer: "Peters Vineyard", region: "Sonoma, CA", vintage: "2020" },
-    { name: "Super Tuscan", producer: "Yantra Toscana", region: "Italy", vintage: "2023" },
-    { name: "Chianti Classico", producer: "Tenuta di Arceno", region: "Siena, Italy", vintage: "2022" },
-    { name: "Cabernet Sauvignon", producer: "Quilt Estates", region: "Napa Valley", vintage: "2022" }
+    { name: "Benton Lane", producer: "Pinot Noir", region: "Willamette, Oregon", vintage: "2023", body: "Medium", flavor: "Fruity" },
+    { name: "Bedell Cellars", producer: "Cabernet Franc", region: "North Fork, NY", vintage: "2023", body: "Medium", flavor: "Bold" },
+    { name: "Raeburn", producer: "Cabernet Sauvignon", region: "Sonoma, CA", vintage: "2022", body: "Medium", flavor: "Rich" },
+    { name: "Peters Vineyard", producer: "Pinot Noir", region: "Sonoma, CA", vintage: "2020", body: "Light", flavor: "Fruity" },
+    { name: "Yantra Toscana", producer: "Super Tuscan", region: "Italy", vintage: "2023", body: "Full", flavor: "Bold" },
+    { name: "Tenuta di Arceno", producer: "Chianti Classico", region: "Siena, Italy", vintage: "2022", body: "Medium", flavor: "Bold" },
+    { name: "Quilt Estates", producer: "Cabernet Sauvignon", region: "Napa Valley", vintage: "2022", body: "Full", flavor: "Rich" }
   ],
   rose: [
-    { name: "Rosé", producer: "Les Sarrin", region: "Provence, France", vintage: "2024" },
-    { name: "Rosé", producer: "Bedell Cellars", region: "North Fork, NY", vintage: "2024" }
+    { name: "Les Sarrin", producer: "Ros\u00e9", region: "Provence, France", vintage: "2024", body: "Light", flavor: "Fruity" },
+    { name: "Bedell Cellars", producer: "Ros\u00e9", region: "North Fork, NY", vintage: "2024", body: "Light", flavor: "Fruity" }
   ],
   white: [
-    { name: "Muscadet", producer: "Domaine Bel Air", region: "France", vintage: "2023" },
-    { name: "Chardonnay", producer: "Mas La Chevalerie", region: "France", vintage: "2023" },
-    { name: "Chardonnay", producer: "Boen", region: "Rutherford, CA", vintage: "2024" },
-    { name: "Sauvignon Blanc", producer: "Loveblock", region: "New Zealand", vintage: "2023" },
-    { name: "Pinot Grigio", producer: "Terlato Vineyards", region: "Friuli, Italy", vintage: "2023" },
-    { name: "Pinot Grigio", producer: "Santa Margherita", region: "Valdadige, Italy", vintage: "2024" },
-    { name: "Sauvignon Blanc", producer: "Illumination by Quintessa", region: "CA", vintage: "2023" },
-    { name: "Chardonnay", producer: "Ch\u00e2teaux de Meursault", region: "France", vintage: "2022" }
+    { name: "Domaine Bel Air", producer: "Muscadet", region: "France", vintage: "2023", body: "Light", flavor: "Crisp" },
+    { name: "Mas La Chevalerie", producer: "Chardonnay", region: "France", vintage: "2023", body: "Light", flavor: "Fruity" },
+    { name: "Boen", producer: "Chardonnay", region: "Rutherford, CA", vintage: "2024", body: "Medium", flavor: "Rich" },
+    { name: "Loveblock", producer: "Sauvignon Blanc", region: "New Zealand", vintage: "2023", body: "Light", flavor: "Crisp" },
+    { name: "Terlato Vineyards", producer: "Pinot Grigio", region: "Friuli, Italy", vintage: "2023", body: "Light", flavor: "Crisp" },
+    { name: "Santa Margherita", producer: "Pinot Grigio", region: "Valdadige, Italy", vintage: "2024", body: "Light", flavor: "Fruity" },
+    { name: "Illumination by Quintessa", producer: "Sauvignon Blanc", region: "CA", vintage: "2023", body: "Medium", flavor: "Rich" },
+    { name: "Ch\u00e2teaux de Meursault", producer: "Chardonnay", region: "France", vintage: "2022", body: "Full", flavor: "Rich" }
   ],
   sparkling: [
-    { name: "Prosecco", producer: "Poggio DOC Brut", region: "Italy", vintage: "NV", note: "187ml" },
-    { name: "Prosecco Ros\u00e9", producer: "Ruggeri", region: "Italy", vintage: "NV", note: "187ml" },
-    { name: "Champagne", producer: "Telmont Reserve Brut", region: "France", vintage: "2020" }
+    { name: "Poggio DOC Brut", producer: "Prosecco", region: "Italy", vintage: "NV", note: "187ml", body: "Light", flavor: "Fruity" },
+    { name: "Ruggeri", producer: "Prosecco Ros\u00e9", region: "Italy", vintage: "NV", note: "187ml", body: "Light", flavor: "Fruity" },
+    { name: "Telmont Reserve Brut", producer: "Champagne", region: "France", vintage: "2020", body: "Medium", flavor: "Crisp" }
   ],
   exclusive: [
-    { name: "Brunello di Montalcino", producer: "Il Poggione", region: "Tuscany, Italy", vintage: "2020" },
-    { name: "Faust Cabernet", producer: "Faust", region: "Napa Valley, CA", vintage: "2021" },
-    { name: "Grgich Hills Cabernet", producer: "Grgich Hills", region: "Napa Valley, CA", vintage: "2020" },
-    { name: "Ch\u00e2teau Lass\u00e8gue Grand Cru", producer: "Ch\u00e2teau Lass\u00e8gue", region: "St. Emilion Bordeaux, France", vintage: "2014" }
+    { name: "Il Poggione", producer: "Brunello di Montalcino", region: "Tuscany, Italy", vintage: "2020", body: "Full", flavor: "Bold" },
+    { name: "Faust", producer: "Cabernet Sauvignon", region: "Napa Valley, CA", vintage: "2021", body: "Full", flavor: "Rich" },
+    { name: "Grgich Hills", producer: "Cabernet Sauvignon", region: "Napa Valley, CA", vintage: "2020", body: "Full", flavor: "Rich" },
+    { name: "Ch\u00e2teau Lass\u00e8gue Grand Cru", producer: "Bordeaux Blend", region: "St. Emilion, France", vintage: "2014", body: "Full", flavor: "Bold" }
   ]
 };
 function WineCard({wine}) {
@@ -970,7 +970,11 @@ function WineCard({wine}) {
           wine.note ? /*#__PURE__*/React.createElement("span", {className: "badge badge-ghost badge-sm"}, wine.note) : null
         )
       ),
-      /*#__PURE__*/React.createElement("p", {className: "text-xs text-base-content/60 mt-1"}, wine.region)
+      /*#__PURE__*/React.createElement("p", {className: "text-xs text-base-content/60 mt-1"}, wine.region),
+      wine.body ? /*#__PURE__*/React.createElement("div", {className: "flex gap-2 mt-2"},
+        /*#__PURE__*/React.createElement("span", {className: "badge badge-outline badge-sm"}, "Body: " + wine.body),
+        /*#__PURE__*/React.createElement("span", {className: "badge badge-outline badge-sm"}, "Flavor: " + wine.flavor)
+      ) : null
     )
   );
 }
