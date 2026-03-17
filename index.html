@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Northport Hotel — New Hire Training</title>
+<title>The Northport Hotel — Training Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -22,643 +22,465 @@
     setTimeout(waitForReact, 50);
     return;
   }
+
+// ============ LANGUAGE CONTEXT ============
+const LangContext = React.createContext('en');
+
+const T = {
+  en: {
+    welcomeTitle: "Welcome to The Northport Hotel",
+    trainingDashboard: "Training Dashboard",
+    trainingIntro: "This training will give you the knowledge and confidence to deliver ",
+    worldClass: "world-class hospitality",
+    fromDayOne: " from day one. Work through each module at your own pace, then test yourself with the quiz.",
+    trainingModules: "Training Modules",
+    chefCredit: "Executive Chef Michael Ross \u00b7 The Northport Hotel",
+    modStandards: "Northport Standards",
+    modStandardsDesc: "The foundation of everything we do",
+    modCocktails: "Cocktail Program",
+    modCocktailsDesc: "18 cocktails \u2014 classics & signatures",
+    modWines: "Wines By The Glass",
+    modWinesDesc: "Red, white, ros\u00e9, sparkling & exclusive pours",
+    modTerms: "Bar Terminology",
+    modTermsDesc: "Neat, up, dirty, tall & more",
+    modMenu: "Menu Knowledge",
+    modMenuDesc: "Brunch & dinner menus with allergens",
+    modQuiz: "Test Your Knowledge",
+    modQuizDesc: "Interactive quizzes across all modules",
+    serviceStandards: "Northport Service Standards",
+    eightPillars: "The 8 pillars that define world-class hospitality",
+    stdIntro: "The Northport Hotel holds itself to the ",
+    stdHighest: "highest standards",
+    stdIntro2: " in hospitality. It's not about luxury \u2014 it's about ",
+    stdFeel: "how you make people feel",
+    stdIntro3: ". These standards should become second nature. Click each to explore.",
+    corePrinciples: "Core Principles",
+    keyBehaviors: "Key Behaviors",
+    principles: "principles",
+    cocktailsTitle: "Cocktail Program",
+    cocktailsTap: " cocktails \u2014 tap any card to study",
+    all: "All",
+    classics: "Classics",
+    signatures: "Signatures",
+    tapDetails: "Tap to see details \u2192",
+    tapClose: "Tap to close",
+    runnerNotes: "\ud83c\udfc3 Runner Notes",
+    signature: "\u2728 Signature",
+    classic: "Classic",
+    winesTitle: "Wines By The Glass",
+    winesSub: "Current wine program",
+    red: "\ud83c\udf77 Red", white: "\ud83e\udd42 White", rose: "\ud83c\udf38 Ros\u00e9",
+    sparkling: "\u2728 Sparkling", exclusive: "\u2b50 Exclusive",
+    bodyLbl: "Body", flavorLbl: "Flavor",
+    redT: "Red", whiteT: "White", roseT: "Ros\u00e9", sparklingT: "Sparkling", exclusiveT: "Exclusive Pours",
+    termTitle: "Bar Terminology",
+    termSub: "Essential terms every service professional must know",
+    studyMode: "Study mode:",
+    studyDesc: " Tap each term to reveal its definition. Try to recall the meaning before tapping \u2014 this builds recall faster.",
+    hideAll: "\ud83d\ude48 Hide All", showAll: "\ud83d\udc41\ufe0f Show All",
+    tapReveal: "Tap to reveal",
+    menuTitle: "Menu Knowledge",
+    menuSub: "Know every dish, every allergen, every detail",
+    menuStd: "Northport standard:",
+    menuStdDesc: " You should be able to describe any dish from memory \u2014 ingredients, preparation, and allergens. Tap any item to see allergen details.",
+    allergenWarn: "\u26a0\ufe0f = Contains allergens \u00a0 \u2713 = No major allergens",
+    dinner: "\ud83c\udf19 Dinner Menu", brunch: "\u2600\ufe0f Brunch Menu",
+    allergens: "Allergens", noAllergens: "No major allergens",
+    quizTitle: "Test Your Knowledge",
+    quizSub: " questions from your training",
+    chooseCat: "Choose a category:", allTopics: "\ud83c\udfaf All Topics",
+    startQuiz: "Start Quiz \u2192",
+    quizDone: "Quiz Complete!", correct: "correct", tryAgain: "Try Again",
+    qOf: "Question", of: "of", score: "Score",
+    correctA: "\u2713 Correct!", incorrectA: "\u2717 Incorrect",
+    seeResults: "See Results", nextQ: "Next Question \u2192",
+    msg90: "Outstanding! True Northport material.",
+    msg70: "Great work! A little more study and you're there.",
+    msg50: "Good start! Review the modules and try again.",
+    msg0: "Keep studying \u2014 you'll get there! Review the training modules.",
+    qGlass: "What glassware is used for a", qGarnish: "What is the garnish for a",
+    qIngr: "What are the ingredients in a", qMean: 'What does "', qMean2: '" mean?',
+    qBehav: 'Which behavior belongs to "', qBehav2: '"?',
+    qAllerg: "What allergens does the", qAllerg2: "contain?",
+    navHome: "Home", navStd: "Northport Standards", navCocktails: "Cocktails",
+    navWines: "Wines", navMenu: "Menu", navTerms: "Terms", navQuiz: "Quiz",
+    brunchTime: " \u00b7 Sat & Sun 11am \u2013 1:45pm",
+    dinnerTime: " \u00b7 Sun\u2013Wed 4:30\u20139pm \u00b7 Thu\u2013Sat 4:30\u201310pm",
+    ingredients: "Ingredients", glassware: "Glassware", ice: "Ice", garnish: "Garnish", rim: "Rim"
+  },
+  es: {
+    welcomeTitle: "Bienvenido al The Northport Hotel",
+    trainingDashboard: "Panel de Capacitaci\u00f3n",
+    trainingIntro: "Esta capacitaci\u00f3n te dar\u00e1 el conocimiento y la confianza para brindar ",
+    worldClass: "hospitalidad de clase mundial",
+    fromDayOne: " desde el primer d\u00eda. Trabaja cada m\u00f3dulo a tu ritmo y eval\u00fate con el cuestionario.",
+    trainingModules: "M\u00f3dulos de Capacitaci\u00f3n",
+    chefCredit: "Chef Ejecutivo Michael Ross \u00b7 The Northport Hotel",
+    modStandards: "Est\u00e1ndares Northport",
+    modStandardsDesc: "La base de todo lo que hacemos",
+    modCocktails: "Programa de C\u00f3cteles",
+    modCocktailsDesc: "18 c\u00f3cteles \u2014 cl\u00e1sicos y de la casa",
+    modWines: "Vinos por Copa",
+    modWinesDesc: "Tinto, blanco, rosado, espumoso y exclusivos",
+    modTerms: "Terminolog\u00eda de Bar",
+    modTermsDesc: "Neat, up, dirty, tall y m\u00e1s",
+    modMenu: "Conocimiento del Men\u00fa",
+    modMenuDesc: "Men\u00fas de brunch y cena con al\u00e9rgenos",
+    modQuiz: "Pon a Prueba tu Conocimiento",
+    modQuizDesc: "Cuestionarios interactivos de todos los m\u00f3dulos",
+    serviceStandards: "Est\u00e1ndares de Servicio Northport",
+    eightPillars: "Los 8 pilares que definen la hospitalidad de clase mundial",
+    stdIntro: "The Northport Hotel se mantiene a los ",
+    stdHighest: "m\u00e1s altos est\u00e1ndares",
+    stdIntro2: " de hospitalidad. No se trata de lujo \u2014 se trata de ",
+    stdFeel: "c\u00f3mo haces sentir a las personas",
+    stdIntro3: ". Estos est\u00e1ndares deben ser tu segunda naturaleza. Haz clic en cada uno para explorar.",
+    corePrinciples: "Principios Fundamentales",
+    keyBehaviors: "Comportamientos Clave",
+    principles: "principios",
+    cocktailsTitle: "Programa de C\u00f3cteles",
+    cocktailsTap: " c\u00f3cteles \u2014 toca cualquier tarjeta para estudiar",
+    all: "Todos", classics: "Cl\u00e1sicos", signatures: "De la Casa",
+    tapDetails: "Toca para ver detalles \u2192",
+    tapClose: "Toca para cerrar",
+    runnerNotes: "\ud83c\udfc3 Notas del Corredor",
+    signature: "\u2728 De la Casa", classic: "Cl\u00e1sico",
+    winesTitle: "Vinos por Copa",
+    winesSub: "Programa de vinos actual",
+    red: "\ud83c\udf77 Tinto", white: "\ud83e\udd42 Blanco", rose: "\ud83c\udf38 Rosado",
+    sparkling: "\u2728 Espumoso", exclusive: "\u2b50 Exclusivo",
+    bodyLbl: "Cuerpo", flavorLbl: "Sabor",
+    redT: "Tinto", whiteT: "Blanco", roseT: "Rosado", sparklingT: "Espumoso", exclusiveT: "Vertidos Exclusivos",
+    termTitle: "Terminolog\u00eda de Bar",
+    termSub: "T\u00e9rminos esenciales que todo profesional de servicio debe conocer",
+    studyMode: "Modo estudio:",
+    studyDesc: " Toca cada t\u00e9rmino para revelar su definici\u00f3n. Intenta recordar antes de tocar \u2014 esto mejora la memoria.",
+    hideAll: "\ud83d\ude48 Ocultar Todo", showAll: "\ud83d\udc41\ufe0f Mostrar Todo",
+    tapReveal: "Toca para revelar",
+    menuTitle: "Conocimiento del Men\u00fa",
+    menuSub: "Conoce cada plato, cada al\u00e9rgeno, cada detalle",
+    menuStd: "Est\u00e1ndar Northport:",
+    menuStdDesc: " Debes poder describir cualquier plato de memoria \u2014 ingredientes, preparaci\u00f3n y al\u00e9rgenos. Toca cualquier art\u00edculo para ver detalles.",
+    allergenWarn: "\u26a0\ufe0f = Contiene al\u00e9rgenos \u00a0 \u2713 = Sin al\u00e9rgenos principales",
+    dinner: "\ud83c\udf19 Men\u00fa de Cena", brunch: "\u2600\ufe0f Men\u00fa de Brunch",
+    allergens: "Al\u00e9rgenos", noAllergens: "Sin al\u00e9rgenos principales",
+    quizTitle: "Pon a Prueba tu Conocimiento",
+    quizSub: " preguntas de tu capacitaci\u00f3n",
+    chooseCat: "Elige una categor\u00eda:", allTopics: "\ud83c\udfaf Todos los Temas",
+    startQuiz: "Comenzar \u2192",
+    quizDone: "\u00a1Cuestionario Completo!", correct: "correctas", tryAgain: "Intentar de Nuevo",
+    qOf: "Pregunta", of: "de", score: "Puntuaci\u00f3n",
+    correctA: "\u2713 \u00a1Correcto!", incorrectA: "\u2717 Incorrecto",
+    seeResults: "Ver Resultados", nextQ: "Siguiente \u2192",
+    msg90: "\u00a1Excepcional! Verdadero material Northport.",
+    msg70: "\u00a1Gran trabajo! Un poco m\u00e1s de estudio y lo logras.",
+    msg50: "\u00a1Buen comienzo! Revisa los m\u00f3dulos e intenta de nuevo.",
+    msg0: "\u00a1Sigue estudiando! Revisa los m\u00f3dulos de capacitaci\u00f3n.",
+    qGlass: "\u00bfQu\u00e9 cristaler\u00eda se usa para un", qGarnish: "\u00bfCu\u00e1l es la guarnici\u00f3n de un",
+    qIngr: "\u00bfCu\u00e1les son los ingredientes de un", qMean: '\u00bfQu\u00e9 significa "', qMean2: '"?',
+    qBehav: '\u00bfQu\u00e9 comportamiento pertenece a "', qBehav2: '"?',
+    qAllerg: "\u00bfQu\u00e9 al\u00e9rgenos contiene", qAllerg2: "?",
+    navHome: "Inicio", navStd: "Est\u00e1ndares Northport", navCocktails: "C\u00f3cteles",
+    navWines: "Vinos", navMenu: "Men\u00fa", navTerms: "T\u00e9rminos", navQuiz: "Quiz",
+    brunchTime: " \u00b7 S\u00e1b y Dom 11am \u2013 1:45pm",
+    dinnerTime: " \u00b7 Dom\u2013Mi\u00e9 4:30\u20139pm \u00b7 Jue\u2013S\u00e1b 4:30\u201310pm",
+    ingredients: "Ingredientes", glassware: "Cristaler\u00eda", ice: "Hielo", garnish: "Guarnici\u00f3n", rim: "Borde"
+  }
+};
+
+function t(lang, key) { return (T[lang] && T[lang][key]) || (T.en[key]) || key; }
+
+
 // ============ DATA ============
 
-const cocktails = [{
-  name: "Old Fashioned",
-  category: "classic",
-  ingredients: "Bourbon or Rye, sugar, bitters",
-  glassware: "Rocks glass",
-  ice: "Large cube",
-  garnish: "Orange peel (sometimes cherry)",
-  guestDescription: "Spirit-forward, lightly sweetened, bitters-forward whiskey cocktail.",
-  runnerNotes: "Always confirm bourbon or rye. Serve gently — large cube presentation matters."
-}, {
-  name: "Margarita",
-  category: "classic",
-  ingredients: "Tequila, lime, orange liqueur",
-  glassware: "Rocks or Coupe (confirm style)",
-  ice: "Rocks or Up",
-  garnish: "Lime wheel",
-  guestDescription: "Citrus-forward tequila cocktail with lime and orange liqueur.",
-  runnerNotes: "Always check salted or no salt, half rim or full. If served up, no ice in glass.",
-  rim: "Salt (confirm full or half rim)"
-}, {
-  name: "Classic Martini",
-  category: "classic",
-  ingredients: "Gin or Vodka, dry vermouth",
-  glassware: "Martini glass",
-  ice: "Served up (no ice)",
-  garnish: "Olive or lemon twist",
-  guestDescription: "Spirit-forward, chilled, minimal dilution cocktail.",
-  runnerNotes: "Confirm garnish — olives or twist. Count olives (usually 3). Do not tilt glass — martinis spill easily."
-}, {
-  name: "Dirty Martini",
-  category: "classic",
-  ingredients: "Gin or Vodka, dry vermouth, olive brine",
-  glassware: "Martini glass",
-  ice: "Up",
-  garnish: "Olives",
-  guestDescription: "Martini with olive brine added for salinity.",
-  runnerNotes: "Glass may appear slightly cloudy — that is correct. Confirm if extra dirty."
-}, {
-  name: "Manhattan",
-  category: "classic",
-  ingredients: "Bourbon or Rye, sweet vermouth, bitters",
-  glassware: "Coupe or Martini glass",
-  ice: "Up",
-  garnish: "Cherry",
-  guestDescription: "Whiskey stirred with sweet vermouth and bitters.",
-  runnerNotes: "Always confirm bourbon vs rye. Cherry should be in the glass, not on rim."
-}, {
-  name: "Lemon Drop",
-  category: "classic",
-  ingredients: "Vodka, lemon, sugar",
-  glassware: "Martini glass",
-  ice: "Up",
-  garnish: "Lemon twist or sugared rim",
-  guestDescription: "Bright and citrusy vodka cocktail.",
-  runnerNotes: "Check for sugared rim. Ensure rim is clean and not dripping."
-}, {
-  name: "Gimlet",
-  category: "classic",
-  ingredients: "Gin or Vodka, lime, simple syrup",
-  glassware: "Coupe or Martini",
-  ice: "Up",
-  garnish: "Lime wheel",
-  guestDescription: "Simple lime-forward cocktail, slightly sweet.",
-  runnerNotes: "Clarify spirit if not specified. Similar look to martini — double check ticket."
-}, {
-  name: "Whiskey Sour",
-  category: "classic",
-  ingredients: "Bourbon, lemon, simple syrup (may contain egg white)",
-  glassware: "Rocks or Coupe",
-  ice: "Rocks or Up",
-  garnish: "Cherry and/or orange",
-  guestDescription: "Balanced whiskey, lemon, and sugar cocktail.",
-  runnerNotes: "If foam on top, handle gently. Confirm rocks vs up."
-}, {
-  name: "Cosmopolitan",
-  category: "classic",
-  ingredients: "Vodka, cranberry, lime, orange liqueur",
-  glassware: "Martini",
-  ice: "Up",
-  garnish: "Orange peel or lime",
-  guestDescription: "Classic vodka cocktail with cranberry and lime.",
-  runnerNotes: "Pale pink color is correct. Present confidently — this is a recognizable drink."
-}, {
-  name: "Moscow Mule",
-  category: "classic",
-  ingredients: "Vodka, lime, ginger beer",
-  glassware: "Copper mug",
-  ice: "Crushed or regular ice",
-  garnish: "Lime wedge",
-  guestDescription: "Refreshing vodka cocktail with ginger and lime.",
-  runnerNotes: "Always served in copper mug. Mug handle faces guest right."
-}, {
-  name: "Negroni",
-  category: "classic",
-  ingredients: "Gin, Campari, sweet vermouth",
-  glassware: "Rocks glass",
-  ice: "Large cube",
-  garnish: "Orange peel",
-  guestDescription: "Equal parts gin, Campari, sweet vermouth — bitter, aromatic.",
-  runnerNotes: "Deep red color is correct. Large cube is part of presentation."
-}, {
-  name: "Paloma",
-  category: "classic",
-  ingredients: "Tequila, grapefruit, lime, soda",
-  glassware: "Highball",
-  ice: "Regular ice",
-  garnish: "Lime",
-  guestDescription: "Tequila with grapefruit and lime.",
-  runnerNotes: "Confirm salted rim if requested. Tall, refreshing presentation.",
-  rim: "Salt (optional)"
-}, {
-  name: "Yuzu Royale",
-  category: "signature",
-  ingredients: "Empress Gin, housemade lychee simple, fresh lime, yuzu soda",
-  glassware: "Wine glass",
-  ice: "",
-  garnish: "Dried lavender & dehydrated lime",
-  guestDescription: "Bright, floral, and lightly sparkling. A refreshing gin cocktail with soft lychee sweetness and crisp citrus — clean, aromatic, and effortless.",
-  runnerNotes: "Beautiful purple hue from Empress Gin. Handle garnish gently."
-}, {
-  name: "Golden Negroni",
-  category: "signature",
-  ingredients: "Drumshanbo Citrus Gin, Italicus Bergamot Liqueur, Amaro Montenegro",
-  glassware: "Rocks glass",
-  ice: "Large cube",
-  garnish: "Orange peel",
-  guestDescription: "A softer, golden take on the classic Negroni — bright bergamot citrus, gentle bitterness, and a smooth, elegant finish.",
-  runnerNotes: "Golden color distinguishes this from classic Negroni. Large cube presentation."
-}, {
-  name: "The Bloom",
-  category: "signature",
-  ingredients: "Your choice of premium vodka, white cranberry, fresh lemon",
-  glassware: "Martini glass",
-  ice: "",
-  garnish: "Dehydrated lemon",
-  guestDescription: "Light, crisp, and refreshing. A clean vodka cocktail with subtle fruit and bright citrus — easy to love, easy to drink.",
-  runnerNotes: "Ask guest for vodka preference. Clean, elegant presentation."
-}, {
-  name: "Rosa Picante",
-  category: "signature",
-  ingredients: "Jalapeño-infused tequila, grapefruit, lime, ginger agave, rose petal salt",
-  glassware: "Rocks glass",
-  ice: "Regular ice",
-  garnish: "Rose petal salt rim",
-  guestDescription: "Spicy, citrusy, and aromatic. A bold yet balanced cocktail with heat up front and a soft floral finish.",
-  runnerNotes: "Rose petal salt rim is signature. Warn guests about spice level if asked.",
-  rim: "Rose petal salt"
-}, {
-  name: "Northport Nightcap",
-  category: "signature",
-  ingredients: "Yellowstone Toasted Bourbon, B&B, house bitters",
-  glassware: "Rocks glass",
-  ice: "Large cube",
-  garnish: "Maraschino cherry",
-  guestDescription: "Rich, smooth, and comforting. A refined bourbon nightcap with subtle herbal sweetness and warming depth.",
-  runnerNotes: "Great end-of-evening suggestion. Rich and warming."
-}, {
-  name: "Smoke & Sound",
-  category: "signature",
-  ingredients: "Mezcal, maraschino liqueur, pineapple, Tajín",
-  glassware: "Martini glass",
-  ice: "",
-  garnish: "Tajín half rim",
-  guestDescription: "Smoky, tropical, and savory-sweet. Mezcal depth meets bright pineapple with a subtle chili-lime edge.",
-  runnerNotes: "Tajín half rim is signature. Smoky aroma is expected.",
-  rim: "Tajín (half rim)"
-}, {
-  name: "Triple Espresso Martini",
-  category: "signature",
-  ingredients: "Cuban espresso & vanilla-infused vodka, Italian espresso liqueur, Fever-Tree espresso",
-  glassware: "Martini glass",
-  ice: "",
-  garnish: "Three coffee beans",
-  guestDescription: "Bold, smooth, and energizing. Rich espresso flavor with a silky vanilla finish — dessert and cocktail in one.",
-  runnerNotes: "Three coffee beans on top is standard. Serve quickly — foam settles."
-}];
-const terminology = [{
-  term: "Neat",
-  definition: "No ice, room temperature spirit in a rocks glass. No chilling, no dilution.",
-  example: "\"I'll have a Macallan 12, neat.\""
-}, {
-  term: "On the Rocks",
-  definition: "Served over ice in a rocks glass.",
-  example: "\"Maker's Mark on the rocks, please.\""
-}, {
-  term: "Up / Straight Up",
-  definition: "Shaken or stirred with ice, then strained into a chilled glass — no ice in the glass.",
-  example: "\"Martini, up.\" — Chilled but served without ice."
-}, {
-  term: "Twist",
-  definition: "A lemon or orange peel expressed (squeezed) over the drink to release oils, then placed in or on the glass.",
-  example: "\"Martini with a twist\" = lemon peel garnish."
-}, {
-  term: "Olives",
-  definition: "Used in martinis. Always verify the number if the guest specifies.",
-  example: "Standard is usually 1 or 3 olives."
-}, {
-  term: "With a Splash",
-  definition: "A very small amount of a mixer added — soda, juice, etc.",
-  example: "\"Bourbon with a splash of water.\""
-}, {
-  term: "Dry",
-  definition: "Less vermouth in a martini. The drier the martini, the less vermouth.",
-  example: "\"Extra dry martini\" = very little or no vermouth."
-}, {
-  term: "Dirty",
-  definition: "Olive brine added to a martini for salinity.",
-  example: "\"Dirty martini\" = olive brine added. Glass may appear slightly cloudy."
-}, {
-  term: "Extra Dirty",
-  definition: "More olive brine than a standard dirty martini.",
-  example: "\"Extra dirty\" = noticeably salty and cloudy."
-}, {
-  term: "Tall",
-  definition: "More mixer, served in a larger (highball) glass. Same amount of spirit.",
-  example: "\"Vodka soda, tall\" = more soda, taller glass."
-}, {
-  term: "Back",
-  definition: "A separate small glass served alongside the main drink.",
-  example: "\"Whiskey with a water back\" = whiskey + a separate glass of water."
-}, {
-  term: "Float",
-  definition: "A spirit or liqueur poured gently on top of a drink so it sits on the surface.",
-  example: "\"Float of Grand Marnier\" on a margarita."
-}, {
-  term: "Muddled",
-  definition: "Ingredients pressed/crushed in the glass to release flavors.",
-  example: "Mint in a mojito, sugar and bitters in an Old Fashioned."
-}, {
-  term: "Shaken vs Stirred",
-  definition: "Shaken: vigorous mixing with ice, creates aeration and dilution. Stirred: gentle mixing, maintains clarity. Spirit-forward drinks are typically stirred; citrus/juice drinks are shaken.",
-  example: "Martini = stirred. Margarita = shaken."
-}];
-const brunchMenu = [{
-  name: "Blue Claw Crab Bisque",
-  description: "Jumbo Lump Crabmeat + Vermouth + Thyme + Grissini",
-  allergens: "Gluten (grissini), dairy (cream/butter), shellfish",
-  section: "Appetizers"
-}, {
-  name: "Late Season Tomato & Artichoke Tart",
-  description: "Lemon Infused EVO + Herbed Chevre + Shaved Truffle",
-  allergens: "Gluten (tart shell), dairy (chèvre)",
-  section: "Appetizers"
-}, {
-  name: "Fresh Fruit Parfait",
-  description: "Mango Sauce + Coconut Yogurt + Candied Macadamias + Toasted Coconut",
-  allergens: "Tree nuts (macadamia); coconut; may contain dairy",
-  section: "Appetizers"
-}, {
-  name: "Fresh Baked Cheddar & Chive Biscuit",
-  description: "Tasso Gravy + Tomato Aioli",
-  allergens: "Gluten (biscuit), dairy (cheddar/gravy), egg (aioli)",
-  section: "Appetizers"
-}, {
-  name: "Fried Artichokes",
-  description: "Jumbo Lump Crab Beurre Blanc",
-  allergens: "Gluten (fry batter), dairy (beurre blanc), shellfish (crab)",
-  section: "Appetizers"
-}, {
-  name: "Giant Shrimp Cocktail",
-  description: "Cocktail Sauce + Lemon",
-  allergens: "Shellfish",
-  section: "Appetizers"
-}, {
-  name: "Eggs & Bacon Deviled Eggs",
-  description: "Andouille-Scallion Filling + Baby Spinach + House Bacon Vinaigrette + Soy Syrup",
-  allergens: "Egg, soy; soy syrup may contain gluten",
-  section: "Appetizers"
-}, {
-  name: "Beet Salad",
-  description: "Bibb Lettuce + Goat Cheese + Pistachios + Orange + Citrus Vinaigrette",
-  allergens: "Dairy (goat cheese), tree nuts (pistachios)",
-  section: "Appetizers"
-}, {
-  name: "Classic Caesar Salad",
-  description: "Romaine + Shaved Pecorino + Caesar Dressing + Croutons. Optional: White Anchovies",
-  allergens: "Gluten (croutons), dairy (pecorino), egg (dressing), fish (anchovy)",
-  section: "Appetizers"
-}, {
-  name: "Classic Eggs Benedict",
-  description: "English Muffin + Canadian Bacon + Poached Eggs + Hollandaise",
-  allergens: "Gluten, dairy, egg",
-  section: "Entrées",
-  notes: "Served with Roasted Yukon Gold Duck Fat Potatoes"
-}, {
-  name: "Eggs Royale",
-  description: "Poached Eggs + Tasso Ham + English Muffin + Madeira Sauce + Sauce Charon",
-  allergens: "Gluten, dairy, egg",
-  section: "Entrées"
-}, {
-  name: "Crab Cake Benedict",
-  description: "English Muffin + Poached Eggs + Creole Mustard + Sauce Maltaise",
-  allergens: "Gluten, dairy, egg, shellfish (crab)",
-  section: "Entrées"
-}, {
-  name: "Northport Hotel Omelette",
-  description: "Mushroom + Asparagus + Gruyere Cheese + Fingerling Potatoes",
-  allergens: "Egg, dairy (Gruyere)",
-  section: "Entrées"
-}, {
-  name: "Garden Vegetable Omelette",
-  description: "Tomatoes + Peas + Asparagus + Spinach + Brussels + Herbs + Feta Cheese + EVO",
-  allergens: "Egg, dairy (feta)",
-  section: "Entrées"
-}, {
-  name: "Steak & Eggs",
-  description: "Skirt Steak + Mushroom Sauce + Sunnyside Eggs",
-  allergens: "Egg; mushroom sauce may contain dairy",
-  section: "Entrées"
-}, {
-  name: "Roasted Shrimp",
-  description: "White Cheddar Grits + Andouille Sausage + Tomatoes + Chili Butter + Sunnyside Eggs",
-  allergens: "Shellfish, dairy, egg",
-  section: "Entrées"
-}, {
-  name: "Duck Confit & Crabmeat Pancakes",
-  description: "Short Stack + Crispy Duck Skin + Charred Scallion Butter + Herbal Aioli + Sunnyside Eggs",
-  allergens: "Gluten, dairy, egg, shellfish (crab)",
-  section: "Entrées"
-}, {
-  name: "Pan Blackened Swordfish",
-  description: "Basmati Rice Pilaf + Crawfish & Shrimp Cream Sauce",
-  allergens: "Shellfish, dairy",
-  section: "Entrées"
-}, {
-  name: "Belgian Waffle",
-  description: "Bananas Foster + Whipped Cream + Dark Rum Syrup",
-  allergens: "Gluten, dairy, egg",
-  section: "Entrées"
-}, {
-  name: "Orange-Vanilla Scented French Toast",
-  description: "Fresh Berries + Gran Marnier Syrup",
-  allergens: "Gluten, dairy, egg",
-  section: "Entrées"
-}, {
-  name: "Avocado Toast",
-  description: "Tomatoes + Goat Cheese + Baby Arugula + EVO + Sea Salt + Scrambled Eggs",
-  allergens: "Gluten, dairy, egg",
-  section: "Entrées"
-}, {
-  name: "White Cheddar Grits",
-  description: "",
-  allergens: "Dairy",
-  section: "Sides"
-}, {
-  name: "House Bacon",
-  description: "",
-  allergens: "No major allergens",
-  section: "Sides"
-}, {
-  name: "Grilled Andouille Sausage",
-  description: "",
-  allergens: "May contain soy",
-  section: "Sides"
-}, {
-  name: "Artisanal Whole Grain Toast",
-  description: "",
-  allergens: "Gluten",
-  section: "Sides"
-}, {
-  name: "Real Truffle Fries",
-  description: "",
-  allergens: "Possible gluten cross-contact; may contain dairy",
-  section: "Sides"
-}];
-const dinnerMenu = [{
-  name: "Blue Claw Crab Bisque",
-  description: "Jumbo Lump Crabmeat + Vermouth + Thyme + Grissini",
-  allergens: "Gluten, dairy, shellfish",
-  section: "Appetizers"
-}, {
-  name: "Classic Italian Meatballs",
-  description: "Ricotta + EVO + Herbs",
-  allergens: "Gluten, dairy, egg",
-  section: "Appetizers"
-}, {
-  name: "Duck Confit & Crab Pancake",
-  description: "Short Stack + Crispy Duck Skin + Charred Scallion Butter + Herbal Aioli",
-  allergens: "Gluten, dairy, egg, shellfish",
-  section: "Appetizers"
-}, {
-  name: "Burrata",
-  description: "Smoked Mediterranean White Bean & Roasted Tomato Dip + Olives + Sweet Peppers + Parsley + Almonds + Pomegranate + Flat Bread",
-  allergens: "Gluten, dairy, tree nuts",
-  section: "Appetizers"
-}, {
-  name: "Tuna Tartare",
-  description: "Scallion + Chives + Sesame Seeds + Cucumber + Lemon-Truffle Dressing + Dashi Aioli + Chips",
-  allergens: "Gluten, egg, soy, sesame; raw fish",
-  section: "Appetizers"
-}, {
-  name: "Eggs & Bacon Deviled Eggs",
-  description: "Andouille-Scallion Filling + Baby Spinach + House Bacon Vinaigrette + Soy Syrup",
-  allergens: "Egg, soy",
-  section: "Appetizers"
-}, {
-  name: "Braised Octopus",
-  description: "Flash Finished + Chickpeas + Olives + Red Pepper Hummus + Sweet Peppers + Tomatoes + Herbs",
-  allergens: "Shellfish; hummus may contain sesame",
-  section: "Appetizers"
-}, {
-  name: "Crispy Brussels Sprouts",
-  description: "Shallots + Dried Cranberries + Pumpkin Seeds + Apples + Maple-Cider Dressing",
-  allergens: "Possible gluten cross-contact",
-  section: "Appetizers"
-}, {
-  name: "Mussels",
-  description: "Green Thai Curry Sauce + Cilantro + Lime + Charred Bread",
-  allergens: "Shellfish, gluten; curry may contain dairy",
-  section: "Appetizers"
-}, {
-  name: "Salt & Pepper Calamari",
-  description: "Gigante Beans + Cherry Peppers + Spicy Japanese Mayo",
-  allergens: "Gluten, egg, shellfish",
-  section: "Appetizers"
-}, {
-  name: "Local Littleneck Clams",
-  description: "Cocktail Sauce + Lemon",
-  allergens: "Shellfish; served raw",
-  section: "Raw Bar"
-}, {
-  name: "Oysters",
-  description: "Today's Local & East Coast Selections — Mignonette + Cocktail Sauce + Lemon",
-  allergens: "Shellfish; served raw",
-  section: "Raw Bar"
-}, {
-  name: "Giant Shrimp Cocktail",
-  description: "Cocktail Sauce + Lemon",
-  allergens: "Shellfish",
-  section: "Raw Bar"
-}, {
-  name: "Chilled Lobster Cocktail",
-  description: "Cocktail Sauce + Lemon",
-  allergens: "Shellfish",
-  section: "Raw Bar"
-}, {
-  name: "Cauliflower Salad",
-  description: "Frisée + Arugula + Honey-Dijon Dressing + Cauliflower Yogurt Puree + Golden Raisins + Pine Nuts + EVO",
-  allergens: "Dairy, tree nuts",
-  section: "Salads"
-}, {
-  name: "Baby Iceberg Wedge Salad",
-  description: "Tomatoes + Red Onion + Pt. Reyes Blue Cheese + House Bacon + Red Wine Ranch",
-  allergens: "Dairy",
-  section: "Salads"
-}, {
-  name: "Beet Salad",
-  description: "Bibb Lettuce + Goat Cheese + Pistachios + Orange + Citrus Vinaigrette",
-  allergens: "Dairy, tree nuts",
-  section: "Salads"
-}, {
-  name: "Classic Caesar Salad",
-  description: "Romaine + Shaved Pecorino + Caesar Dressing + Croutons — Optional: White Anchovies",
-  allergens: "Gluten, dairy, egg, fish",
-  section: "Salads"
-}, {
-  name: "Figs Flatbread",
-  description: "Fig Preserves + Goat Cheese + Arugula + EVO + Sea Salt",
-  allergens: "Gluten, dairy",
-  section: "Flatbreads"
-}, {
-  name: "Spicy Sausage Flatbread",
-  description: "Mozzarella + Tomato Sauce + EVO + Herbs",
-  allergens: "Gluten, dairy",
-  section: "Flatbreads"
-}, {
-  name: "Wild Mushroom Flatbread",
-  description: "Ricotta + Truffle Essence + EVO + Fresh Basil",
-  allergens: "Gluten, dairy",
-  section: "Flatbreads"
-}, {
-  name: "Mezzi Rigatoni",
-  description: "Spicy Italian Sausage + Peas + Tomatoes + Pecorino + Tomato-Cream Sauce",
-  allergens: "Gluten, dairy",
-  section: "Pasta"
-}, {
-  name: "Mafaldine",
-  description: "Lobster + Crabmeat + Spinach + Tomatoes + Lemon Butter Sauce",
-  allergens: "Gluten, dairy, shellfish",
-  section: "Pasta"
-}, {
-  name: "Burrata Ravioli",
-  description: "Pistachio Butter + Reggiano + Candied Pistachios + Pistachio Oil",
-  allergens: "Gluten, dairy, tree nuts",
-  section: "Pasta"
-}, {
-  name: "Mardi Gras Pasta",
-  description: "Tagliatelle + Shrimp + Crawfish + Andouille + Tasso + Smoked Chicken + Trinity + Cajun Spiced Cream Sauce",
-  allergens: "Gluten, dairy, shellfish",
-  section: "Pasta"
-}, {
-  name: "Seafood Stew",
-  description: "Shrimp + Clams + Mussels + Calamari + Lobster + Saffron Ginger-Butter + Charred Bread",
-  allergens: "Shellfish, dairy, gluten",
-  section: "Entrées"
-}, {
-  name: "Butter Poached Lobster",
-  description: "Lobster Risotto + Intense Lobster Sauce + Truffle Essence",
-  allergens: "Shellfish, dairy",
-  section: "Entrées"
-}, {
-  name: "Roasted Gulf Shrimp",
-  description: "White Cheddar Grits + Andouille Sausage + Tomatoes + Chili Butter",
-  allergens: "Shellfish, dairy",
-  section: "Entrées"
-}, {
-  name: "Roasted Hudson Valley Farms Chicken",
-  description: "Wild Mushrooms + Asparagus + Cipollini Onions + Bacon + Dijon Chicken Jus",
-  allergens: "May contain dairy",
-  section: "Entrées"
-}, {
-  name: "Grilled Lamb Chops",
-  description: "Mini Greek Salad + Flatbread + Greek Yogurt",
-  allergens: "Gluten, dairy",
-  section: "Entrées"
-}, {
-  name: "Grilled Pork Chop",
-  description: "Cipollini Onions + Hot Cherry Peppers + Fingerling Potatoes + Balsamic Glaze",
-  allergens: "No major allergens",
-  section: "Entrées"
-}, {
-  name: "Pan Roasted Wild Salmon",
-  description: "Coconut-Cilantro Rice + Asparagus + Mango Salsa + Passionfruit Puree",
-  allergens: "No major allergens",
-  section: "Entrées"
-}, {
-  name: "Pan Blackened Swordfish",
-  description: "Basmati Rice + Crawfish & Shrimp Cream Sauce",
-  allergens: "Shellfish, dairy",
-  section: "Entrées"
-}, {
-  name: "Pan Seared Northern Monkfish",
-  description: "\"Francaise Style\" — Lemon Mussel Broth + Spinach + Carrots",
-  allergens: "Gluten, egg, dairy, shellfish",
-  section: "Entrées"
-}, {
-  name: "Pan Roasted Halibut",
-  description: "Wild Mushrooms + Leeks + Shallots + Shrimp + Fingerling Potatoes + Lobster Glaze",
-  allergens: "Shellfish, dairy",
-  section: "Entrées"
-}, {
-  name: "Roasted Honeynut Squash",
-  description: "Lentil \"Pilaf\" + Sweet Potato Puree + Pomegranate + Pumpkinseeds",
-  allergens: "No major allergens",
-  section: "Entrées"
-}, {
-  name: "Prime 28 Day Dry Aged Bone In Cowboy Ribeye",
-  description: "24 OZ — Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce",
-  allergens: "May contain dairy/gluten (steak sauce)",
-  section: "Prime Steaks"
-}, {
-  name: "Filet Mignon",
-  description: "10 OZ — Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce",
-  allergens: "May contain dairy/gluten (steak sauce)",
-  section: "Prime Steaks"
-}, {
-  name: "Prime NY Strip Boneless",
-  description: "14 OZ — Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce",
-  allergens: "May contain dairy/gluten (steak sauce)",
-  section: "Prime Steaks"
-}, {
-  name: "Marinated Skirt Steak",
-  description: "12 OZ — Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce",
-  allergens: "May contain soy, gluten, or dairy",
-  section: "Prime Steaks"
-}, {
-  name: "Baby Carrots",
-  description: "Butter + Sea Salt",
-  allergens: "Dairy",
-  section: "Sides"
-}, {
-  name: "Roasted Domestic & Wild Mushrooms",
-  description: "",
-  allergens: "No major allergens",
-  section: "Sides"
-}, {
-  name: "Sautéed Asparagus",
-  description: "Butter + Sea Salt",
-  allergens: "Dairy",
-  section: "Sides"
-}, {
-  name: "Roasted Yukon Gold Duck Fat Potatoes",
-  description: "",
-  allergens: "No major allergens",
-  section: "Sides"
-}, {
-  name: "French Fries",
-  description: "Add Real Truffle",
-  allergens: "Possible gluten cross-contact",
-  section: "Sides"
-}];
-const forbesStandards = [{
-  title: "Anticipatory Service",
-  icon: "🔮",
-  principles: ["Recognize guest needs before they ask", "Read body language and table cues constantly", "A guest should never have to flag you down"],
-  keyBehaviors: ["Water glasses refilled before empty — when they reach 1/3 full", "Offer dessert menus or after-dinner drinks proactively", "Notice when a guest looks around — approach immediately", "Pre-set for the next course before it arrives", "Clear finished plates within 2 minutes of the last guest finishing"]
-}, {
-  title: "Seamless & Invisible Execution",
-  icon: "🪄",
-  principles: ["Service should feel effortless to the guest", "Coordination between team members should be invisible", "The guest's experience is never interrupted"],
-  keyBehaviors: ["Serve from the left, clear from the right", "All guests at a table receive courses simultaneously", "Crumb the table between courses when needed", "Never auction food — know your seat numbers", "Carry trays with confidence; never rush across the dining room"]
-}, {
-  title: "Genuine Warmth & Confidence",
-  icon: "🤝",
-  principles: ["Greet every guest with eye contact and a warm smile", "Be confident, not scripted — speak naturally", "Make every guest feel like the most important person in the room"],
-  keyBehaviors: ["Greet guests within 30 seconds of seating", "Use the guest's name when known — but never overuse it", "Introduce yourself naturally: \"Good evening, I'm [name]. Welcome to The Northport Hotel.\"", "Stand tall, make eye contact, speak clearly", "Smile genuinely — it's the most powerful tool you have"]
-}, {
-  title: "Product Knowledge Mastery",
-  icon: "📚",
-  principles: ["Know every dish, cocktail, and wine on the menu", "Speak about food and drink with passion and accuracy", "Guide the guest — don't just take orders"],
-  keyBehaviors: ["Describe dishes from memory with ingredients and allergens", "Recommend cocktails confidently based on guest preferences", "Know which wines pair with which dishes", "If you don't know something, say \"Great question — let me find out\" and follow up quickly", "Taste and understand every menu item during pre-shift"]
-}, {
-  title: "Attention to Detail",
-  icon: "🔍",
-  principles: ["Every detail matters — from glassware placement to garnish", "Consistency is the hallmark of five-star service", "The small things are the big things"],
-  keyBehaviors: ["Glassware is always polished and spotless", "Silverware is aligned and properly placed before each course", "Check every plate before it leaves the kitchen", "Napkins are refolded when a guest leaves the table", "Candles, flowers, and table settings are perfect before service"]
-}, {
-  title: "Graceful Problem Resolution",
-  icon: "💫",
-  principles: ["Problems are opportunities to create memorable experiences", "Own the issue — never deflect blame", "Speed and empathy are everything"],
-  keyBehaviors: ["Acknowledge the issue immediately with genuine concern", "\"I'm sorry about that. Let me take care of it right away.\"", "Resolve within 2 minutes or provide a clear update", "Follow up after resolution to ensure satisfaction", "Empower yourself to make it right — don't wait for a manager"]
-}, {
-  title: "Professional Presence",
-  icon: "👔",
-  principles: ["You represent The Northport Hotel at all times", "Your appearance and demeanor set the tone for the guest experience", "Professionalism is confidence without arrogance"],
-  keyBehaviors: ["Uniform is pressed, clean, and properly fitted", "Hair is neat and pulled back when required", "No phone visible on the floor — ever", "Walk with purpose but never rush", "Maintain composure during high-volume service"]
-}, {
-  title: "Farewell & Follow-Through",
-  icon: "🌟",
-  principles: ["The last impression is as important as the first", "A proper farewell invites the guest back", "Every interaction should end on a high note"],
-  keyBehaviors: ["Thank every guest sincerely as they leave", "\"Thank you for dining with us. We look forward to seeing you again.\"", "Ensure the check is presented promptly and processed quickly", "Offer to call a car or provide directions if needed", "Reset the table to perfection within 3 minutes of departure"]
-}];
+const cocktails = [
+  {name:"Old Fashioned",category:"classic",ingredients:"Bourbon or Rye, sugar, bitters",glassware:"Rocks glass",ice:"Large cube",garnish:"Orange peel (sometimes cherry)",
+   guestDescription:"Spirit-forward, lightly sweetened, bitters-forward whiskey cocktail.",
+   guestDescription_es:"C\u00f3ctel de whiskey con cuerpo, ligeramente endulzado, acentuado con amargos.",
+   runnerNotes:"Always confirm bourbon or rye. Serve gently \u2014 large cube presentation matters.",
+   runnerNotes_es:"Siempre confirma bourbon o rye. Sirve con cuidado \u2014 la presentaci\u00f3n del cubo grande importa."},
+  {name:"Margarita",category:"classic",ingredients:"Tequila, lime, orange liqueur",glassware:"Rocks or Coupe (confirm style)",ice:"Rocks or Up",garnish:"Lime wheel",
+   guestDescription:"Citrus-forward tequila cocktail with lime and orange liqueur.",
+   guestDescription_es:"C\u00f3ctel de tequila c\u00edtrico con lim\u00f3n y licor de naranja.",
+   runnerNotes:"Always check salted or no salt, half rim or full. If served up, no ice in glass.",
+   runnerNotes_es:"Siempre verifica sal o sin sal, medio borde o completo. Si es servido up, sin hielo en el vaso.",
+   rim:"Salt (confirm full or half rim)"},
+  {name:"Classic Martini",category:"classic",ingredients:"Gin or Vodka, dry vermouth",glassware:"Martini glass",ice:"Served up (no ice)",garnish:"Olive or lemon twist",
+   guestDescription:"Spirit-forward, chilled, minimal dilution cocktail.",
+   guestDescription_es:"C\u00f3ctel con cuerpo, fr\u00edo, con m\u00ednima diluci\u00f3n.",
+   runnerNotes:"Confirm garnish \u2014 olives or twist. Count olives (usually 3). Do not tilt glass \u2014 martinis spill easily.",
+   runnerNotes_es:"Confirma guarnici\u00f3n \u2014 aceitunas o twist. Cuenta las aceitunas (usualmente 3). No inclines el vaso \u2014 los martinis se derraman f\u00e1cilmente."},
+  {name:"Dirty Martini",category:"classic",ingredients:"Gin or Vodka, dry vermouth, olive brine",glassware:"Martini glass",ice:"Up",garnish:"Olives",
+   guestDescription:"Martini with olive brine added for salinity.",
+   guestDescription_es:"Martini con salmuera de aceituna a\u00f1adida para salinidad.",
+   runnerNotes:"Glass may appear slightly cloudy \u2014 that is correct. Confirm if extra dirty.",
+   runnerNotes_es:"El vaso puede verse ligeramente turbio \u2014 eso es correcto. Confirma si es extra dirty."},
+  {name:"Manhattan",category:"classic",ingredients:"Bourbon or Rye, sweet vermouth, bitters",glassware:"Coupe or Martini glass",ice:"Up",garnish:"Cherry",
+   guestDescription:"Whiskey stirred with sweet vermouth and bitters.",
+   guestDescription_es:"Whiskey mezclado con vermut dulce y amargos.",
+   runnerNotes:"Always confirm bourbon vs rye. Cherry should be in the glass, not on rim.",
+   runnerNotes_es:"Siempre confirma bourbon vs rye. La cereza debe estar en el vaso, no en el borde."},
+  {name:"Lemon Drop",category:"classic",ingredients:"Vodka, lemon, sugar",glassware:"Martini glass",ice:"Up",garnish:"Lemon twist or sugared rim",
+   guestDescription:"Bright and citrusy vodka cocktail.",
+   guestDescription_es:"C\u00f3ctel de vodka brillante y c\u00edtrico.",
+   runnerNotes:"Check for sugared rim. Ensure rim is clean and not dripping.",
+   runnerNotes_es:"Verifica el borde azucarado. Aseg\u00farate de que el borde est\u00e9 limpio y sin goteos."},
+  {name:"Gimlet",category:"classic",ingredients:"Gin or Vodka, lime, simple syrup",glassware:"Coupe or Martini",ice:"Up",garnish:"Lime wheel",
+   guestDescription:"Simple lime-forward cocktail, slightly sweet.",
+   guestDescription_es:"C\u00f3ctel simple con predominio de lima, ligeramente dulce.",
+   runnerNotes:"Clarify spirit if not specified. Similar look to martini \u2014 double check ticket.",
+   runnerNotes_es:"Aclara el destilado si no se especifica. Aspecto similar al martini \u2014 verifica dos veces el ticket."},
+  {name:"Whiskey Sour",category:"classic",ingredients:"Bourbon, lemon, simple syrup (may contain egg white)",glassware:"Rocks or Coupe",ice:"Rocks or Up",garnish:"Cherry and/or orange",
+   guestDescription:"Balanced whiskey, lemon, and sugar cocktail.",
+   guestDescription_es:"C\u00f3ctel equilibrado de whiskey, lim\u00f3n y az\u00facar.",
+   runnerNotes:"If foam on top, handle gently. Confirm rocks vs up.",
+   runnerNotes_es:"Si tiene espuma encima, maneja con cuidado. Confirma rocks vs up."},
+  {name:"Cosmopolitan",category:"classic",ingredients:"Vodka, cranberry, lime, orange liqueur",glassware:"Martini",ice:"Up",garnish:"Orange peel or lime",
+   guestDescription:"Classic vodka cocktail with cranberry and lime.",
+   guestDescription_es:"C\u00f3ctel cl\u00e1sico de vodka con ar\u00e1ndano y lima.",
+   runnerNotes:"Pale pink color is correct. Present confidently \u2014 this is a recognizable drink.",
+   runnerNotes_es:"El color rosa p\u00e1lido es correcto. Presenta con confianza \u2014 es una bebida reconocible."},
+  {name:"Moscow Mule",category:"classic",ingredients:"Vodka, lime, ginger beer",glassware:"Copper mug",ice:"Crushed or regular ice",garnish:"Lime wedge",
+   guestDescription:"Refreshing vodka cocktail with ginger and lime.",
+   guestDescription_es:"C\u00f3ctel refrescante de vodka con jengibre y lima.",
+   runnerNotes:"Always served in copper mug. Mug handle faces guest right.",
+   runnerNotes_es:"Siempre se sirve en taza de cobre. El asa de la taza mira a la derecha del invitado."},
+  {name:"Negroni",category:"classic",ingredients:"Gin, Campari, sweet vermouth",glassware:"Rocks glass",ice:"Large cube",garnish:"Orange peel",
+   guestDescription:"Equal parts gin, Campari, sweet vermouth \u2014 bitter, aromatic.",
+   guestDescription_es:"Partes iguales de gin, Campari, vermut dulce \u2014 amargo, arom\u00e1tico.",
+   runnerNotes:"Deep red color is correct. Large cube is part of presentation.",
+   runnerNotes_es:"El color rojo profundo es correcto. El cubo grande es parte de la presentaci\u00f3n."},
+  {name:"Paloma",category:"classic",ingredients:"Tequila, grapefruit, lime, soda",glassware:"Highball",ice:"Regular ice",garnish:"Lime",
+   guestDescription:"Tequila with grapefruit and lime.",
+   guestDescription_es:"Tequila con toronja y lima.",
+   runnerNotes:"Confirm salted rim if requested. Tall, refreshing presentation.",
+   runnerNotes_es:"Confirma borde con sal si lo piden. Presentaci\u00f3n alta y refrescante.",
+   rim:"Salt (optional)"},
+  {name:"Yuzu Royale",category:"signature",ingredients:"Empress Gin, housemade lychee simple, fresh lime, yuzu soda",glassware:"Wine glass",ice:"",garnish:"Dried lavender & dehydrated lime",
+   guestDescription:"Bright, floral, and lightly sparkling. A refreshing gin cocktail with soft lychee sweetness and crisp citrus \u2014 clean, aromatic, and effortless.",
+   guestDescription_es:"Brillante, floral y ligeramente espumoso. Un c\u00f3ctel de gin refrescante con suave dulzura de lychee y c\u00edtricos frescos \u2014 limpio, arom\u00e1tico y sin esfuerzo.",
+   runnerNotes:"Beautiful purple hue from Empress Gin. Handle garnish gently.",
+   runnerNotes_es:"Hermoso tono p\u00farpura del Empress Gin. Maneja la guarnici\u00f3n con cuidado."},
+  {name:"Golden Negroni",category:"signature",ingredients:"Drumshanbo Citrus Gin, Italicus Bergamot Liqueur, Amaro Montenegro",glassware:"Rocks glass",ice:"Large cube",garnish:"Orange peel",
+   guestDescription:"A softer, golden take on the classic Negroni \u2014 bright bergamot citrus, gentle bitterness, and a smooth, elegant finish.",
+   guestDescription_es:"Una versi\u00f3n m\u00e1s suave y dorada del Negroni cl\u00e1sico \u2014 c\u00edtrico de bergamota brillante, amargura suave y un final elegante.",
+   runnerNotes:"Golden color distinguishes this from classic Negroni. Large cube presentation.",
+   runnerNotes_es:"El color dorado lo distingue del Negroni cl\u00e1sico. Presentaci\u00f3n con cubo grande."},
+  {name:"The Bloom",category:"signature",ingredients:"Your choice of premium vodka, white cranberry, fresh lemon",glassware:"Martini glass",ice:"",garnish:"Dehydrated lemon",
+   guestDescription:"Light, crisp, and refreshing. A clean vodka cocktail with subtle fruit and bright citrus \u2014 easy to love, easy to drink.",
+   guestDescription_es:"Ligero, fresco y refrescante. Un c\u00f3ctel de vodka limpio con fruta sutil y c\u00edtricos brillantes \u2014 f\u00e1cil de amar, f\u00e1cil de beber.",
+   runnerNotes:"Ask guest for vodka preference. Clean, elegant presentation.",
+   runnerNotes_es:"Pregunta al invitado su preferencia de vodka. Presentaci\u00f3n limpia y elegante."},
+  {name:"Rosa Picante",category:"signature",ingredients:"Jalape\u00f1o-infused tequila, grapefruit, lime, ginger agave, rose petal salt",glassware:"Rocks glass",ice:"Regular ice",garnish:"Rose petal salt rim",
+   guestDescription:"Spicy, citrusy, and aromatic. A bold yet balanced cocktail with heat up front and a soft floral finish.",
+   guestDescription_es:"Picante, c\u00edtrico y arom\u00e1tico. Un c\u00f3ctel audaz pero equilibrado con calor al frente y un suave final floral.",
+   runnerNotes:"Rose petal salt rim is signature. Warn guests about spice level if asked.",
+   runnerNotes_es:"El borde de sal con p\u00e9talos de rosa es la firma. Advierte a los invitados sobre el nivel de picante si preguntan.",
+   rim:"Rose petal salt"},
+  {name:"Northport Nightcap",category:"signature",ingredients:"Yellowstone Toasted Bourbon, B&B, house bitters",glassware:"Rocks glass",ice:"Large cube",garnish:"Maraschino cherry",
+   guestDescription:"Rich, smooth, and comforting. A refined bourbon nightcap with subtle herbal sweetness and warming depth.",
+   guestDescription_es:"Rico, suave y reconfortante. Un nightcap refinado de bourbon con sutil dulzura herbal y calidez profunda.",
+   runnerNotes:"Great end-of-evening suggestion. Rich and warming.",
+   runnerNotes_es:"Gran sugerencia para el final de la noche. Rico y c\u00e1lido."},
+  {name:"Smoke & Sound",category:"signature",ingredients:"Mezcal, maraschino liqueur, pineapple, Taj\u00edn",glassware:"Martini glass",ice:"",garnish:"Taj\u00edn half rim",
+   guestDescription:"Smoky, tropical, and savory-sweet. Mezcal depth meets bright pineapple with a subtle chili-lime edge.",
+   guestDescription_es:"Ahumado, tropical y agridulce. La profundidad del mezcal se encuentra con pi\u00f1a brillante y un sutil toque de chile-lima.",
+   runnerNotes:"Taj\u00edn half rim is signature. Smoky aroma is expected.",
+   runnerNotes_es:"El medio borde de Taj\u00edn es la firma. El aroma ahumado es esperado.",
+   rim:"Taj\u00edn (half rim)"},
+  {name:"Triple Espresso Martini",category:"signature",ingredients:"Cuban espresso & vanilla-infused vodka, Italian espresso liqueur, Fever-Tree espresso",glassware:"Martini glass",ice:"",garnish:"Three coffee beans",
+   guestDescription:"Bold, smooth, and energizing. Rich espresso flavor with a silky vanilla finish \u2014 dessert and cocktail in one.",
+   guestDescription_es:"Audaz, suave y energizante. Rico sabor a espresso con un sedoso final de vainilla \u2014 postre y c\u00f3ctel en uno.",
+   runnerNotes:"Three coffee beans on top is standard. Serve quickly \u2014 foam settles.",
+   runnerNotes_es:"Tres granos de caf\u00e9 encima es est\u00e1ndar. Sirve r\u00e1pido \u2014 la espuma se asienta."}
+];
+
+const terminology = [
+  {term:"Neat",definition:"No ice, room temperature spirit in a rocks glass. No chilling, no dilution.",definition_es:"Sin hielo, destilado a temperatura ambiente en vaso rocks. Sin enfriar, sin diluci\u00f3n.",example:'"I\'ll have a Macallan 12, neat."',example_es:'"Quiero un Macallan 12, neat."'},
+  {term:"On the Rocks",definition:"Served over ice in a rocks glass.",definition_es:"Servido sobre hielo en vaso rocks.",example:'"Maker\'s Mark on the rocks, please."',example_es:'"Maker\'s Mark on the rocks, por favor."'},
+  {term:"Up / Straight Up",definition:"Shaken or stirred with ice, then strained into a chilled glass \u2014 no ice in the glass.",definition_es:"Agitado o mezclado con hielo, luego colado en un vaso fr\u00edo \u2014 sin hielo en el vaso.",example:'"Martini, up." \u2014 Chilled but served without ice.',example_es:'"Martini, up." \u2014 Fr\u00edo pero servido sin hielo.'},
+  {term:"Twist",definition:"A lemon or orange peel expressed (squeezed) over the drink to release oils, then placed in or on the glass.",definition_es:"Una c\u00e1scara de lim\u00f3n o naranja exprimida sobre la bebida para liberar aceites, luego colocada en el vaso.",example:'"Martini with a twist" = lemon peel garnish.',example_es:'"Martini with a twist" = guarnici\u00f3n de c\u00e1scara de lim\u00f3n.'},
+  {term:"Olives",definition:"Used in martinis. Always verify the number if the guest specifies.",definition_es:"Usadas en martinis. Siempre verifica la cantidad si el invitado lo especifica.",example:"Standard is usually 1 or 3 olives.",example_es:"El est\u00e1ndar es usualmente 1 o 3 aceitunas."},
+  {term:"With a Splash",definition:"A very small amount of a mixer added \u2014 soda, juice, etc.",definition_es:"Una cantidad muy peque\u00f1a de mezclador a\u00f1adido \u2014 soda, jugo, etc.",example:'"Bourbon with a splash of water."',example_es:'"Bourbon con un splash de agua."'},
+  {term:"Dry",definition:"Less vermouth in a martini. The drier the martini, the less vermouth.",definition_es:"Menos vermut en un martini. Mientras m\u00e1s seco, menos vermut.",example:'"Extra dry martini" = very little or no vermouth.',example_es:'"Extra dry martini" = muy poco o nada de vermut.'},
+  {term:"Dirty",definition:"Olive brine added to a martini for salinity.",definition_es:"Salmuera de aceituna a\u00f1adida al martini para salinidad.",example:'"Dirty martini" = olive brine added. Glass may appear slightly cloudy.',example_es:'"Dirty martini" = salmuera a\u00f1adida. El vaso puede verse ligeramente turbio.'},
+  {term:"Extra Dirty",definition:"More olive brine than a standard dirty martini.",definition_es:"M\u00e1s salmuera de aceituna que un dirty martini est\u00e1ndar.",example:'"Extra dirty" = noticeably salty and cloudy.',example_es:'"Extra dirty" = notablemente salado y turbio.'},
+  {term:"Tall",definition:"More mixer, served in a larger (highball) glass. Same amount of spirit.",definition_es:"M\u00e1s mezclador, servido en un vaso m\u00e1s grande (highball). Misma cantidad de destilado.",example:'"Vodka soda, tall" = more soda, taller glass.',example_es:'"Vodka soda, tall" = m\u00e1s soda, vaso m\u00e1s alto.'},
+  {term:"Back",definition:"A separate small glass served alongside the main drink.",definition_es:"Un vaso peque\u00f1o separado servido junto a la bebida principal.",example:'"Whiskey with a water back" = whiskey + a separate glass of water.',example_es:'"Whiskey with a water back" = whiskey + un vaso separado de agua.'},
+  {term:"Float",definition:"A spirit or liqueur poured gently on top of a drink so it sits on the surface.",definition_es:"Un destilado o licor vertido suavemente encima de la bebida para que quede en la superficie.",example:'"Float of Grand Marnier" on a margarita.',example_es:'"Float de Grand Marnier" en una margarita.'},
+  {term:"Muddled",definition:"Ingredients pressed/crushed in the glass to release flavors.",definition_es:"Ingredientes presionados/triturados en el vaso para liberar sabores.",example:"Mint in a mojito, sugar and bitters in an Old Fashioned.",example_es:"Menta en un mojito, az\u00facar y amargos en un Old Fashioned."},
+  {term:"Shaken vs Stirred",definition:"Shaken: vigorous mixing with ice, creates aeration and dilution. Stirred: gentle mixing, maintains clarity. Spirit-forward drinks are typically stirred; citrus/juice drinks are shaken.",definition_es:"Shaken: mezcla vigorosa con hielo, crea aeraci\u00f3n y diluci\u00f3n. Stirred: mezcla suave, mantiene claridad. Bebidas con cuerpo se mezclan; bebidas c\u00edtricas se agitan.",example:"Martini = stirred. Margarita = shaken.",example_es:"Martini = stirred. Margarita = shaken."}
+];
+
+
+const brunchMenu = [
+  {name:"Blue Claw Crab Bisque",description:"Jumbo Lump Crabmeat + Vermouth + Thyme + Grissini",allergens:"Gluten (grissini), dairy (cream/butter), shellfish",allergens_es:"Gluten (grissini), l\u00e1cteos (crema/mantequilla), mariscos",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Late Season Tomato & Artichoke Tart",description:"Lemon Infused EVO + Herbed Chevre + Shaved Truffle",allergens:"Gluten (tart shell), dairy (ch\u00e8vre)",allergens_es:"Gluten (masa), l\u00e1cteos (ch\u00e8vre)",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Fresh Fruit Parfait",description:"Mango Sauce + Coconut Yogurt + Candied Macadamias + Toasted Coconut",allergens:"Tree nuts (macadamia); coconut; may contain dairy",allergens_es:"Frutos secos (macadamia); coco; puede contener l\u00e1cteos",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Fresh Baked Cheddar & Chive Biscuit",description:"Tasso Gravy + Tomato Aioli",allergens:"Gluten (biscuit), dairy (cheddar/gravy), egg (aioli)",allergens_es:"Gluten (bizcocho), l\u00e1cteos (cheddar/salsa), huevo (aioli)",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Fried Artichokes",description:"Jumbo Lump Crab Beurre Blanc",allergens:"Gluten (fry batter), dairy (beurre blanc), shellfish (crab)",allergens_es:"Gluten (empanizado), l\u00e1cteos (beurre blanc), mariscos (cangrejo)",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Giant Shrimp Cocktail",description:"Cocktail Sauce + Lemon",allergens:"Shellfish",allergens_es:"Mariscos",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Eggs & Bacon Deviled Eggs",description:"Andouille-Scallion Filling + Baby Spinach + House Bacon Vinaigrette + Soy Syrup",allergens:"Egg, soy; soy syrup may contain gluten",allergens_es:"Huevo, soya; el jarabe de soya puede contener gluten",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Beet Salad",description:"Bibb Lettuce + Goat Cheese + Pistachios + Orange + Citrus Vinaigrette",allergens:"Dairy (goat cheese), tree nuts (pistachios)",allergens_es:"L\u00e1cteos (queso de cabra), frutos secos (pistachos)",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Classic Caesar Salad",description:"Romaine + Shaved Pecorino + Caesar Dressing + Croutons. Optional: White Anchovies",allergens:"Gluten (croutons), dairy (pecorino), egg (dressing), fish (anchovy)",allergens_es:"Gluten (crutones), l\u00e1cteos (pecorino), huevo (aderezo), pescado (anchoa)",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Classic Eggs Benedict",description:"English Muffin + Canadian Bacon + Poached Eggs + Hollandaise",allergens:"Gluten, dairy, egg",allergens_es:"Gluten, l\u00e1cteos, huevo",section:"Entr\u00e9es",section_es:"Platos Principales",notes:"Served with Roasted Yukon Gold Duck Fat Potatoes",notes_es:"Servido con Papas Yukon Gold Asadas en Grasa de Pato"},
+  {name:"Eggs Royale",description:"Poached Eggs + Tasso Ham + English Muffin + Madeira Sauce + Sauce Charon",allergens:"Gluten, dairy, egg",allergens_es:"Gluten, l\u00e1cteos, huevo",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Crab Cake Benedict",description:"English Muffin + Poached Eggs + Creole Mustard + Sauce Maltaise",allergens:"Gluten, dairy, egg, shellfish (crab)",allergens_es:"Gluten, l\u00e1cteos, huevo, mariscos (cangrejo)",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Northport Hotel Omelette",description:"Mushroom + Asparagus + Gruyere Cheese + Fingerling Potatoes",allergens:"Egg, dairy (Gruyere)",allergens_es:"Huevo, l\u00e1cteos (Gruyere)",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Garden Vegetable Omelette",description:"Tomatoes + Peas + Asparagus + Spinach + Brussels + Herbs + Feta Cheese + EVO",allergens:"Egg, dairy (feta)",allergens_es:"Huevo, l\u00e1cteos (feta)",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Steak & Eggs",description:"Skirt Steak + Mushroom Sauce + Sunnyside Eggs",allergens:"Egg; mushroom sauce may contain dairy",allergens_es:"Huevo; la salsa de hongos puede contener l\u00e1cteos",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Roasted Shrimp",description:"White Cheddar Grits + Andouille Sausage + Tomatoes + Chili Butter + Sunnyside Eggs",allergens:"Shellfish, dairy, egg",allergens_es:"Mariscos, l\u00e1cteos, huevo",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Duck Confit & Crabmeat Pancakes",description:"Short Stack + Crispy Duck Skin + Charred Scallion Butter + Herbal Aioli + Sunnyside Eggs",allergens:"Gluten, dairy, egg, shellfish (crab)",allergens_es:"Gluten, l\u00e1cteos, huevo, mariscos (cangrejo)",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Pan Blackened Swordfish",description:"Basmati Rice Pilaf + Crawfish & Shrimp Cream Sauce",allergens:"Shellfish, dairy",allergens_es:"Mariscos, l\u00e1cteos",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Belgian Waffle",description:"Bananas Foster + Whipped Cream + Dark Rum Syrup",allergens:"Gluten, dairy, egg",allergens_es:"Gluten, l\u00e1cteos, huevo",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Orange-Vanilla Scented French Toast",description:"Fresh Berries + Gran Marnier Syrup",allergens:"Gluten, dairy, egg",allergens_es:"Gluten, l\u00e1cteos, huevo",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Avocado Toast",description:"Tomatoes + Goat Cheese + Baby Arugula + EVO + Sea Salt + Scrambled Eggs",allergens:"Gluten, dairy, egg",allergens_es:"Gluten, l\u00e1cteos, huevo",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"White Cheddar Grits",description:"",allergens:"Dairy",allergens_es:"L\u00e1cteos",section:"Sides",section_es:"Acompa\u00f1amientos"},
+  {name:"House Bacon",description:"",allergens:"No major allergens",allergens_es:"Sin al\u00e9rgenos principales",section:"Sides",section_es:"Acompa\u00f1amientos"},
+  {name:"Grilled Andouille Sausage",description:"",allergens:"May contain soy",allergens_es:"Puede contener soya",section:"Sides",section_es:"Acompa\u00f1amientos"},
+  {name:"Artisanal Whole Grain Toast",description:"",allergens:"Gluten",allergens_es:"Gluten",section:"Sides",section_es:"Acompa\u00f1amientos"},
+  {name:"Real Truffle Fries",description:"",allergens:"Possible gluten cross-contact; may contain dairy",allergens_es:"Posible contacto cruzado con gluten; puede contener l\u00e1cteos",section:"Sides",section_es:"Acompa\u00f1amientos"}
+];
+
+
+const dinnerMenu = [
+  {name:"Blue Claw Crab Bisque",description:"Jumbo Lump Crabmeat + Vermouth + Thyme + Grissini",allergens:"Gluten, dairy, shellfish",allergens_es:"Gluten, l\u00e1cteos, mariscos",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Classic Italian Meatballs",description:"Ricotta + EVO + Herbs",allergens:"Gluten, dairy, egg",allergens_es:"Gluten, l\u00e1cteos, huevo",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Duck Confit & Crab Pancake",description:"Short Stack + Crispy Duck Skin + Charred Scallion Butter + Herbal Aioli",allergens:"Gluten, dairy, egg, shellfish",allergens_es:"Gluten, l\u00e1cteos, huevo, mariscos",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Burrata",description:"Smoked Mediterranean White Bean & Roasted Tomato Dip + Olives + Sweet Peppers + Parsley + Almonds + Pomegranate + Flat Bread",allergens:"Gluten, dairy, tree nuts",allergens_es:"Gluten, l\u00e1cteos, frutos secos",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Tuna Tartare",description:"Scallion + Chives + Sesame Seeds + Cucumber + Lemon-Truffle Dressing + Dashi Aioli + Chips",allergens:"Gluten, egg, soy, sesame; raw fish",allergens_es:"Gluten, huevo, soya, s\u00e9samo; pescado crudo",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Eggs & Bacon Deviled Eggs",description:"Andouille-Scallion Filling + Baby Spinach + House Bacon Vinaigrette + Soy Syrup",allergens:"Egg, soy",allergens_es:"Huevo, soya",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Braised Octopus",description:"Flash Finished + Chickpeas + Olives + Red Pepper Hummus + Sweet Peppers + Tomatoes + Herbs",allergens:"Shellfish; hummus may contain sesame",allergens_es:"Mariscos; el hummus puede contener s\u00e9samo",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Crispy Brussels Sprouts",description:"Shallots + Dried Cranberries + Pumpkin Seeds + Apples + Maple-Cider Dressing",allergens:"Possible gluten cross-contact",allergens_es:"Posible contacto cruzado con gluten",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Mussels",description:"Green Thai Curry Sauce + Cilantro + Lime + Charred Bread",allergens:"Shellfish, gluten; curry may contain dairy",allergens_es:"Mariscos, gluten; el curry puede contener l\u00e1cteos",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Salt & Pepper Calamari",description:"Gigante Beans + Cherry Peppers + Spicy Japanese Mayo",allergens:"Gluten, egg, shellfish",allergens_es:"Gluten, huevo, mariscos",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Local Littleneck Clams",description:"Cocktail Sauce + Lemon",allergens:"Shellfish; served raw",allergens_es:"Mariscos; servido crudo",section:"Raw Bar",section_es:"Barra Cruda"},
+  {name:"Oysters",description:"Today's Local & East Coast Selections \u2014 Mignonette + Cocktail Sauce + Lemon",allergens:"Shellfish; served raw",allergens_es:"Mariscos; servido crudo",section:"Raw Bar",section_es:"Barra Cruda"},
+  {name:"Giant Shrimp Cocktail",description:"Cocktail Sauce + Lemon",allergens:"Shellfish",allergens_es:"Mariscos",section:"Raw Bar",section_es:"Barra Cruda"},
+  {name:"Chilled Lobster Cocktail",description:"Cocktail Sauce + Lemon",allergens:"Shellfish",allergens_es:"Mariscos",section:"Raw Bar",section_es:"Barra Cruda"},
+  {name:"Cauliflower Salad",description:"Fris\u00e9e + Arugula + Honey-Dijon Dressing + Cauliflower Yogurt Puree + Golden Raisins + Pine Nuts + EVO",allergens:"Dairy, tree nuts",allergens_es:"L\u00e1cteos, frutos secos",section:"Salads",section_es:"Ensaladas"},
+  {name:"Baby Iceberg Wedge Salad",description:"Tomatoes + Red Onion + Pt. Reyes Blue Cheese + House Bacon + Red Wine Ranch",allergens:"Dairy",allergens_es:"L\u00e1cteos",section:"Salads",section_es:"Ensaladas"},
+  {name:"Beet Salad",description:"Bibb Lettuce + Goat Cheese + Pistachios + Orange + Citrus Vinaigrette",allergens:"Dairy, tree nuts",allergens_es:"L\u00e1cteos, frutos secos",section:"Salads",section_es:"Ensaladas"},
+  {name:"Classic Caesar Salad",description:"Romaine + Shaved Pecorino + Caesar Dressing + Croutons \u2014 Optional: White Anchovies",allergens:"Gluten, dairy, egg, fish",allergens_es:"Gluten, l\u00e1cteos, huevo, pescado",section:"Salads",section_es:"Ensaladas"},
+  {name:"Figs Flatbread",description:"Fig Preserves + Goat Cheese + Arugula + EVO + Sea Salt",allergens:"Gluten, dairy",allergens_es:"Gluten, l\u00e1cteos",section:"Flatbreads",section_es:"Pan Plano"},
+  {name:"Spicy Sausage Flatbread",description:"Mozzarella + Tomato Sauce + EVO + Herbs",allergens:"Gluten, dairy",allergens_es:"Gluten, l\u00e1cteos",section:"Flatbreads",section_es:"Pan Plano"},
+  {name:"Wild Mushroom Flatbread",description:"Ricotta + Truffle Essence + EVO + Fresh Basil",allergens:"Gluten, dairy",allergens_es:"Gluten, l\u00e1cteos",section:"Flatbreads",section_es:"Pan Plano"},
+  {name:"Mezzi Rigatoni",description:"Spicy Italian Sausage + Peas + Tomatoes + Pecorino + Tomato-Cream Sauce",allergens:"Gluten, dairy",allergens_es:"Gluten, l\u00e1cteos",section:"Pasta",section_es:"Pasta"},
+  {name:"Mafaldine",description:"Lobster + Crabmeat + Spinach + Tomatoes + Lemon Butter Sauce",allergens:"Gluten, dairy, shellfish",allergens_es:"Gluten, l\u00e1cteos, mariscos",section:"Pasta",section_es:"Pasta"},
+  {name:"Burrata Ravioli",description:"Pistachio Butter + Reggiano + Candied Pistachios + Pistachio Oil",allergens:"Gluten, dairy, tree nuts",allergens_es:"Gluten, l\u00e1cteos, frutos secos",section:"Pasta",section_es:"Pasta"},
+  {name:"Mardi Gras Pasta",description:"Tagliatelle + Shrimp + Crawfish + Andouille + Tasso + Smoked Chicken + Trinity + Cajun Spiced Cream Sauce",allergens:"Gluten, dairy, shellfish",allergens_es:"Gluten, l\u00e1cteos, mariscos",section:"Pasta",section_es:"Pasta"},
+  {name:"Seafood Stew",description:"Shrimp + Clams + Mussels + Calamari + Lobster + Saffron Ginger-Butter + Charred Bread",allergens:"Shellfish, dairy, gluten",allergens_es:"Mariscos, l\u00e1cteos, gluten",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Butter Poached Lobster",description:"Lobster Risotto + Intense Lobster Sauce + Truffle Essence",allergens:"Shellfish, dairy",allergens_es:"Mariscos, l\u00e1cteos",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Roasted Gulf Shrimp",description:"White Cheddar Grits + Andouille Sausage + Tomatoes + Chili Butter",allergens:"Shellfish, dairy",allergens_es:"Mariscos, l\u00e1cteos",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Roasted Hudson Valley Farms Chicken",description:"Wild Mushrooms + Asparagus + Cipollini Onions + Bacon + Dijon Chicken Jus",allergens:"May contain dairy",allergens_es:"Puede contener l\u00e1cteos",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Grilled Lamb Chops",description:"Mini Greek Salad + Flatbread + Greek Yogurt",allergens:"Gluten, dairy",allergens_es:"Gluten, l\u00e1cteos",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Grilled Pork Chop",description:"Cipollini Onions + Hot Cherry Peppers + Fingerling Potatoes + Balsamic Glaze",allergens:"No major allergens",allergens_es:"Sin al\u00e9rgenos principales",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Pan Roasted Wild Salmon",description:"Coconut-Cilantro Rice + Asparagus + Mango Salsa + Passionfruit Puree",allergens:"No major allergens",allergens_es:"Sin al\u00e9rgenos principales",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Pan Blackened Swordfish",description:"Basmati Rice + Crawfish & Shrimp Cream Sauce",allergens:"Shellfish, dairy",allergens_es:"Mariscos, l\u00e1cteos",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Pan Seared Northern Monkfish",description:'"Francaise Style" \u2014 Lemon Mussel Broth + Spinach + Carrots',allergens:"Gluten, egg, dairy, shellfish",allergens_es:"Gluten, huevo, l\u00e1cteos, mariscos",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Pan Roasted Halibut",description:"Wild Mushrooms + Leeks + Shallots + Shrimp + Fingerling Potatoes + Lobster Glaze",allergens:"Shellfish, dairy",allergens_es:"Mariscos, l\u00e1cteos",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Roasted Honeynut Squash",description:'Lentil "Pilaf" + Sweet Potato Puree + Pomegranate + Pumpkinseeds',allergens:"No major allergens",allergens_es:"Sin al\u00e9rgenos principales",section:"Entr\u00e9es",section_es:"Platos Principales"},
+  {name:"Prime 28 Day Dry Aged Bone In Cowboy Ribeye",description:"24 OZ \u2014 Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce",allergens:"May contain dairy/gluten (steak sauce)",allergens_es:"Puede contener l\u00e1cteos/gluten (salsa de steak)",section:"Prime Steaks",section_es:"Steaks Premium"},
+  {name:"Filet Mignon",description:"10 OZ \u2014 Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce",allergens:"May contain dairy/gluten (steak sauce)",allergens_es:"Puede contener l\u00e1cteos/gluten (salsa de steak)",section:"Prime Steaks",section_es:"Steaks Premium"},
+  {name:"Prime NY Strip Boneless",description:"14 OZ \u2014 Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce",allergens:"May contain dairy/gluten (steak sauce)",allergens_es:"Puede contener l\u00e1cteos/gluten (salsa de steak)",section:"Prime Steaks",section_es:"Steaks Premium"},
+  {name:"Marinated Skirt Steak",description:"12 OZ \u2014 Asparagus + Roasted Yukon Gold Duck Fat Potatoes + TNH Steak Sauce",allergens:"May contain soy, gluten, or dairy",allergens_es:"Puede contener soya, gluten o l\u00e1cteos",section:"Prime Steaks",section_es:"Steaks Premium"},
+  {name:"Baby Carrots",description:"Butter + Sea Salt",allergens:"Dairy",allergens_es:"L\u00e1cteos",section:"Sides",section_es:"Acompa\u00f1amientos"},
+  {name:"Roasted Domestic & Wild Mushrooms",description:"",allergens:"No major allergens",allergens_es:"Sin al\u00e9rgenos principales",section:"Sides",section_es:"Acompa\u00f1amientos"},
+  {name:"Saut\u00e9ed Asparagus",description:"Butter + Sea Salt",allergens:"Dairy",allergens_es:"L\u00e1cteos",section:"Sides",section_es:"Acompa\u00f1amientos"},
+  {name:"Roasted Yukon Gold Duck Fat Potatoes",description:"",allergens:"No major allergens",allergens_es:"Sin al\u00e9rgenos principales",section:"Sides",section_es:"Acompa\u00f1amientos"},
+  {name:"French Fries",description:"Add Real Truffle",allergens:"Possible gluten cross-contact",allergens_es:"Posible contacto cruzado con gluten",section:"Sides",section_es:"Acompa\u00f1amientos"}
+];
+
+
+const forbesStandards = [
+  {title:"Anticipatory Service",title_es:"Servicio Anticipado",icon:"\ud83d\udd2e",
+   principles:["Recognize guest needs before they ask","Read body language and table cues constantly","A guest should never have to flag you down"],
+   principles_es:["Reconoce las necesidades del invitado antes de que pregunte","Lee el lenguaje corporal y las se\u00f1ales de la mesa constantemente","Un invitado nunca deber\u00eda tener que llamarte"],
+   keyBehaviors:["Water glasses refilled before empty \u2014 when they reach 1/3 full","Offer dessert menus or after-dinner drinks proactively","Notice when a guest looks around \u2014 approach immediately","Pre-set for the next course before it arrives","Clear finished plates within 2 minutes of the last guest finishing"],
+   keyBehaviors_es:["Vasos de agua rellenados antes de vaciarse \u2014 cuando llegan a 1/3","Ofrece men\u00fas de postre o tragos despu\u00e9s de cenar proactivamente","Nota cuando un invitado mira alrededor \u2014 ac\u00e9rcate inmediatamente","Prepara para el siguiente curso antes de que llegue","Retira platos terminados dentro de 2 minutos"]},
+  {title:"Seamless & Invisible Execution",title_es:"Ejecuci\u00f3n Fluida e Invisible",icon:"\ud83e\ude84",
+   principles:["Service should feel effortless to the guest","Coordination between team members should be invisible","The guest's experience is never interrupted"],
+   principles_es:["El servicio debe sentirse sin esfuerzo para el invitado","La coordinaci\u00f3n entre el equipo debe ser invisible","La experiencia del invitado nunca se interrumpe"],
+   keyBehaviors:["Serve from the left, clear from the right","All guests at a table receive courses simultaneously","Crumb the table between courses when needed","Never auction food \u2014 know your seat numbers","Carry trays with confidence; never rush across the dining room"],
+   keyBehaviors_es:["Sirve por la izquierda, retira por la derecha","Todos los invitados reciben los cursos simult\u00e1neamente","Limpia migajas de la mesa entre cursos cuando sea necesario","Nunca subastes la comida \u2014 conoce los n\u00fameros de asiento","Lleva bandejas con confianza; nunca corras por el comedor"]},
+  {title:"Genuine Warmth & Confidence",title_es:"Calidez Genuina y Confianza",icon:"\ud83e\udd1d",
+   principles:["Greet every guest with eye contact and a warm smile","Be confident, not scripted \u2014 speak naturally","Make every guest feel like the most important person in the room"],
+   principles_es:["Saluda a cada invitado con contacto visual y una sonrisa c\u00e1lida","S\u00e9 seguro, no guionizado \u2014 habla naturalmente","Haz que cada invitado se sienta la persona m\u00e1s importante del sal\u00f3n"],
+   keyBehaviors:["Greet guests within 30 seconds of seating","Use the guest's name when known \u2014 but never overuse it","Introduce yourself naturally: \"Good evening, I'm [name]. Welcome to The Northport Hotel.\"","Stand tall, make eye contact, speak clearly","Smile genuinely \u2014 it's the most powerful tool you have"],
+   keyBehaviors_es:["Saluda a los invitados dentro de 30 segundos de sentarse","Usa el nombre del invitado cuando lo sepas \u2014 pero nunca en exceso","Pres\u00e9ntate naturalmente: \"Buenas noches, soy [nombre]. Bienvenido a The Northport Hotel.\"","Mant\u00e9n la postura, haz contacto visual, habla claro","Sonr\u00ede genuinamente \u2014 es la herramienta m\u00e1s poderosa que tienes"]},
+  {title:"Product Knowledge Mastery",title_es:"Dominio del Conocimiento del Producto",icon:"\ud83d\udcda",
+   principles:["Know every dish, cocktail, and wine on the menu","Speak about food and drink with passion and accuracy","Guide the guest \u2014 don't just take orders"],
+   principles_es:["Conoce cada plato, c\u00f3ctel y vino del men\u00fa","Habla de comida y bebida con pasi\u00f3n y precisi\u00f3n","Gu\u00eda al invitado \u2014 no solo tomes pedidos"],
+   keyBehaviors:["Describe dishes from memory with ingredients and allergens","Recommend cocktails confidently based on guest preferences","Know which wines pair with which dishes","If you don't know something, say \"Great question \u2014 let me find out\" and follow up quickly","Taste and understand every menu item during pre-shift"],
+   keyBehaviors_es:["Describe platos de memoria con ingredientes y al\u00e9rgenos","Recomienda c\u00f3cteles con confianza seg\u00fan las preferencias del invitado","Conoce qu\u00e9 vinos combinan con qu\u00e9 platos","Si no sabes algo, di \"Gran pregunta \u2014 d\u00e9jame averiguarlo\" y haz seguimiento r\u00e1pido","Prueba y comprende cada plato del men\u00fa durante el pre-servicio"]},
+  {title:"Attention to Detail",title_es:"Atenci\u00f3n al Detalle",icon:"\ud83d\udd0d",
+   principles:["Every detail matters \u2014 from glassware placement to garnish","Consistency is the hallmark of five-star service","The small things are the big things"],
+   principles_es:["Cada detalle importa \u2014 desde la ubicaci\u00f3n de la cristaler\u00eda hasta la guarnici\u00f3n","La consistencia es la marca del servicio cinco estrellas","Las cosas peque\u00f1as son las grandes cosas"],
+   keyBehaviors:["Glassware is always polished and spotless","Silverware is aligned and properly placed before each course","Check every plate before it leaves the kitchen","Napkins are refolded when a guest leaves the table","Candles, flowers, and table settings are perfect before service"],
+   keyBehaviors_es:["La cristaler\u00eda siempre est\u00e1 pulida e impecable","Los cubiertos est\u00e1n alineados y colocados correctamente antes de cada curso","Revisa cada plato antes de que salga de la cocina","Las servilletas se redoblan cuando un invitado deja la mesa","Velas, flores y montaje de mesa perfectos antes del servicio"]},
+  {title:"Graceful Problem Resolution",title_es:"Resoluci\u00f3n Elegante de Problemas",icon:"\ud83d\udcab",
+   principles:["Problems are opportunities to create memorable experiences","Own the issue \u2014 never deflect blame","Speed and empathy are everything"],
+   principles_es:["Los problemas son oportunidades para crear experiencias memorables","Ad\u00fae\u00f1ate del problema \u2014 nunca desvies la culpa","La velocidad y empat\u00eda son todo"],
+   keyBehaviors:["Acknowledge the issue immediately with genuine concern","\"I'm sorry about that. Let me take care of it right away.\"","Resolve within 2 minutes or provide a clear update","Follow up after resolution to ensure satisfaction","Empower yourself to make it right \u2014 don't wait for a manager"],
+   keyBehaviors_es:["Reconoce el problema inmediatamente con preocupaci\u00f3n genuina","\"Lo siento mucho. D\u00e9jame encargarme de esto de inmediato.\"","Resuelve en 2 minutos o proporciona una actualizaci\u00f3n clara","Haz seguimiento despu\u00e9s de la resoluci\u00f3n para asegurar satisfacci\u00f3n","Empod\u00e9rate para corregirlo \u2014 no esperes a un gerente"]},
+  {title:"Professional Presence",title_es:"Presencia Profesional",icon:"\ud83d\udc54",
+   principles:["You represent The Northport Hotel at all times","Your appearance and demeanor set the tone for the guest experience","Professionalism is confidence without arrogance"],
+   principles_es:["Representas a The Northport Hotel en todo momento","Tu apariencia y comportamiento establecen el tono de la experiencia del invitado","El profesionalismo es confianza sin arrogancia"],
+   keyBehaviors:["Uniform is pressed, clean, and properly fitted","Hair is neat and pulled back when required","No phone visible on the floor \u2014 ever","Walk with purpose but never rush","Maintain composure during high-volume service"],
+   keyBehaviors_es:["El uniforme est\u00e1 planchado, limpio y bien ajustado","El cabello est\u00e1 ordenado y recogido cuando se requiere","Ning\u00fan tel\u00e9fono visible en el piso \u2014 nunca","Camina con prop\u00f3sito pero nunca corras","Mant\u00e9n la compostura durante servicio de alto volumen"]},
+  {title:"Farewell & Follow-Through",title_es:"Despedida y Seguimiento",icon:"\ud83c\udf1f",
+   principles:["The last impression is as important as the first","A proper farewell invites the guest back","Every interaction should end on a high note"],
+   principles_es:["La \u00faltima impresi\u00f3n es tan importante como la primera","Una despedida apropiada invita al invitado a regresar","Cada interacci\u00f3n debe terminar en alto"],
+   keyBehaviors:["Thank every guest sincerely as they leave","\"Thank you for dining with us. We look forward to seeing you again.\"","Ensure the check is presented promptly and processed quickly","Offer to call a car or provide directions if needed","Reset the table to perfection within 3 minutes of departure"],
+   keyBehaviors_es:["Agradece sinceramente a cada invitado al irse","\"Gracias por cenar con nosotros. Esperamos verle de nuevo.\"","Aseg\u00farate de que la cuenta se presente y procese r\u00e1pidamente","Ofrece llamar un auto o dar direcciones si es necesario","Restablece la mesa a la perfecci\u00f3n dentro de 3 minutos de la partida"]}
+];
+
+
+const wines = {
+  red: [
+    {name:"Benton Lane",producer:"Pinot Noir",region:"Willamette, Oregon",vintage:"2023",body:"Light",flavor:"Fruity"},
+    {name:"Bedell Cellars",producer:"Cabernet Franc",region:"North Fork, NY",vintage:"2023",body:"Medium",flavor:"Bold"},
+    {name:"Raeburn",producer:"Cabernet Sauvignon",region:"Sonoma, CA",vintage:"2022",body:"Medium",flavor:"Rich"},
+    {name:"Peters Vineyard",producer:"Pinot Noir",region:"Sonoma, CA",vintage:"2020",body:"Light",flavor:"Fruity"},
+    {name:"Yantra Toscana",producer:"Super Tuscan",region:"Italy",vintage:"2023",body:"Full",flavor:"Bold"},
+    {name:"Tenuta di Arceno",producer:"Chianti Classico",region:"Siena, Italy",vintage:"2022",body:"Medium",flavor:"Bold"},
+    {name:"Quilt Estates",producer:"Cabernet Sauvignon",region:"Napa Valley",vintage:"2022",body:"Full",flavor:"Rich"}
+  ],
+  rose: [
+    {name:"Les Sarrin",producer:"Ros\u00e9",region:"Provence, France",vintage:"2024",body:"Light",flavor:"Fruity"},
+    {name:"Bedell Cellars",producer:"Ros\u00e9",region:"North Fork, NY",vintage:"2024",body:"Light",flavor:"Fruity"}
+  ],
+  white: [
+    {name:"Domaine Bel Air",producer:"Muscadet",region:"France",vintage:"2023",body:"Light",flavor:"Crisp"},
+    {name:"Mas La Chevalerie",producer:"Chardonnay",region:"France",vintage:"2023",body:"Light",flavor:"Fruity"},
+    {name:"Boen",producer:"Chardonnay",region:"Rutherford, CA",vintage:"2024",body:"Medium",flavor:"Rich"},
+    {name:"Loveblock",producer:"Sauvignon Blanc",region:"New Zealand",vintage:"2023",body:"Light",flavor:"Crisp"},
+    {name:"Terlato Vineyards",producer:"Pinot Grigio",region:"Friuli, Italy",vintage:"2023",body:"Light",flavor:"Crisp"},
+    {name:"Santa Margherita",producer:"Pinot Grigio",region:"Valdadige, Italy",vintage:"2024",body:"Light",flavor:"Fruity"},
+    {name:"Illumination by Quintessa",producer:"Sauvignon Blanc",region:"CA",vintage:"2023",body:"Medium",flavor:"Rich"},
+    {name:"Ch\u00e2teaux de Meursault",producer:"Chardonnay",region:"France",vintage:"2022",body:"Full",flavor:"Rich"}
+  ],
+  sparkling: [
+    {name:"Poggio DOC Brut",producer:"Prosecco",region:"Italy",vintage:"NV",note:"187ml",body:"Light",flavor:"Fruity"},
+    {name:"Ruggeri",producer:"Prosecco Ros\u00e9",region:"Italy",vintage:"NV",note:"187ml",body:"Light",flavor:"Fruity"},
+    {name:"Telmont Reserve Brut",producer:"Champagne",region:"France",vintage:"2020",body:"Medium",flavor:"Crisp"}
+  ],
+  exclusive: [
+    {name:"Il Poggione",producer:"Brunello di Montalcino",region:"Tuscany, Italy",vintage:"2020",body:"Full",flavor:"Bold"},
+    {name:"Faust",producer:"Cabernet Sauvignon",region:"Napa Valley, CA",vintage:"2021",body:"Full",flavor:"Rich"},
+    {name:"Grgich Hills",producer:"Cabernet Sauvignon",region:"Napa Valley, CA",vintage:"2020",body:"Full",flavor:"Rich"},
+    {name:"Ch\u00e2teau Lass\u00e8gue Grand Cru",producer:"Bordeaux Blend",region:"St. Emilion, France",vintage:"2014",body:"Full",flavor:"Bold"}
+  ]
+};
+
+// Body/flavor translation map
+const bodyFlavorMap = {
+  en: {Light:"Light",Medium:"Medium",Full:"Full",Bold:"Bold",Rich:"Rich",Fruity:"Fruity",Crisp:"Crisp"},
+  es: {Light:"Ligero",Medium:"Medio",Full:"Completo",Bold:"Intenso",Rich:"Rico",Fruity:"Afrutado",Crisp:"Fresco"}
+};
+
 
 // ============ HELPERS ============
-
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -669,776 +491,402 @@ function shuffle(arr) {
 }
 
 // ============ COMPONENTS ============
+const {useState, useMemo, useContext} = React;
 
-const {
-  useState,
-  useMemo
-} = React;
-function Welcome({
-  onNavigate
-}) {
-  const modules = [{
-    id: 'forbes',
-    icon: '⭐',
-    title: 'Northport Standards',
-    desc: 'The foundation of everything we do',
-    color: 'bg-amber-500'
-  }, {
-    id: 'cocktails',
-    icon: '🍸',
-    title: 'Cocktail Program',
-    desc: '18 cocktails — classics & signatures',
-    color: 'bg-purple-500'
-  }, {
-    id: 'wines',
-    icon: '🍷',
-    title: 'Wines By The Glass',
-    desc: 'Red, white, rosé, sparkling & exclusive pours',
-    color: 'bg-red-700'
-  }, {
-    id: 'terminology',
-    icon: '📖',
-    title: 'Bar Terminology',
-    desc: 'Neat, up, dirty, tall & more',
-    color: 'bg-blue-500'
-  }, {
-    id: 'menus',
-    icon: '🍽️',
-    title: 'Menu Knowledge',
-    desc: 'Brunch & dinner menus with allergens',
-    color: 'bg-green-500'
-  }, {
-    id: 'quiz',
-    icon: '✅',
-    title: 'Test Your Knowledge',
-    desc: 'Interactive quizzes across all modules',
-    color: 'bg-red-500'
-  }];
-  return /*#__PURE__*/React.createElement("div", {
-    className: "max-w-2xl mx-auto"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-center mb-8"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "mb-3"
-  }, /*#__PURE__*/React.createElement("img", {
-    src: "data:image/jpeg;base64,/9j/4QC8RXhpZgAASUkqAAgAAAAGABIBAwABAAAAAQAAABoBBQABAAAAVgAAABsBBQABAAAAXgAAACgBAwABAAAAAgAAABMCAwABAAAAAQAAAGmHBAABAAAAZgAAAAAAAABIAAAAAQAAAEgAAAABAAAABgAAkAcABAAAADAyMTABkQcABAAAAAECAwAAoAcABAAAADAxMDABoAMAAQAAAP//AAACoAQAAQAAAMAAAAADoAQAAQAAAMAAAAAAAAAA/9sAQwADAgIDAgIDAwMDBAMDBAUIBQUEBAUKBwcGCAwKDAwLCgsLDQ4SEA0OEQ4LCxAWEBETFBUVFQwPFxgWFBgSFBUU/9sAQwEDBAQFBAUJBQUJFA0LDRQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU/8IAEQgAwADAAwERAAIRAQMRAf/EABsAAAMBAAMBAAAAAAAAAAAAAAABBAUDBgcC/8QAGAEBAQEBAQAAAAAAAAAAAAAAAAECAwT/2gAMAwEAAhADEAAAAc33efwv08EhTAcKvmAYAAgHX0gIJUM9d8/byv0c47gGAhjPQu3DnsQwADil87490AhK0ALZqPWCUEMAPUO/n09YYAAiHOvK+HpQgAFES2yy3KpQAoNPT+/n09Y6/jrubw0y862NYgzryvh6UJQYIKi6WO5BAoCM9O7+fgl57Os8+vee3DNzrnsUeVcPShArEARdbJcqAK+YYz0/v5+KW7Wfo6ny67XTGdjW9vn5Xw9PwoAAjFF91GyhAAlaeo9/Pqaxg46bW8R51wmvrGdNeWef0oUOgBBFt1JcqEJWgB6l38+prH0JUNPlc+Xyvz+lCVgjARbNRXIAAAz0/v59G5BjPkFhl8t4ehCGMBAWTcdwlaADA1tPiVIlYAciZMIBgogKK247loAAKkYAoCADECiNRABFk3HcgCSqzXsklZRZnZ1EoAIxAADECqK5qrpzizeM19ZyM72NZ5EZzpmZ19aZubxqAAIKAgqAsmqdc+7deXnHHvraxi42CGBq6ltzjTU8qAZ8jQlCmwJpbWnrFqdm6c+p46atzJNaFzRZn5utrORnXCtlmhZg51z0opspsilqszM66/jdzXHrnSV2dh3zjmun8und+vLOXq3Lr2/pyjmsbOuw758p1Dn19P7+fo3LtrbxSnSOXbs2+eHnc0tzXLvnypk51bZ9nMSy1azk512HWeJc3N09TW1zwcdYMtTeeCWy5xM7os07OvY3a1JcIKcgoAAAwA7j055WdfYyaKtSkilwc6UtbUtwAAhiAYAFARZQVJHK6pTiPkhzqxqS4AChFKU4diUgoQUgAApQKQrLZuS4ACgEAlAAYqIApwqBQAJbZqS4AGIBU4AoCAAGAgogEJbpqPWHAIAAAEOlAMBDAKIBCPdfL6PDPV5wKQBAMQAAUQAAAAlaetefv//EAC8QAAEDAgQFAwQBBQAAAAAAAAQBAgMABRITFCAGETEzNBAhQBUwMjU2ByIjJCX/2gAIAQEAAQUC4/48MJuSyPVcbqxurG6sbqxurG6sxazFrMWsxaxrWYtZi1mLWN1Y3VjdWN1Y3VjdWN1cF8emWc833N3J1bA8ibQS1oJa0EtaCWtBLWglpR3wTr13mebuTqH3NxXeXrvM83cnUPuUbcpwHxSsnikzOQZc5foV3l/LeZ5u5OofcW4SNlJYhMEbpLEU1yPbmoKMUTpRC+8v5bzPM3J1D7hDVW5k9CRmFwhkvtBBaK63XAHDbi+8vXeZ5m5OoXcq5FYWMlZLRwLDobTE+AKi+8vXeZ5m5OoX51iWufPYX3V67zfN3J1Ec1smays1lZrKzGVmsrNZRL2umXrvM83e+5Okfrq11a+tfWvrX0y5Ojf9gzzfjmebsHyMVyDGCqENJQHhIy3BBQzCFsiZJ90zzB7XOUyeB40rGZjvopStljWNbwRGSYGbpbaQdqbXbCY4g7i9HzgW7X1IzKk+2Z5lrldDcChoryK5qsdFIv0fpXNK58q51zo0XRwcPr/0y/YvnzrElc/Tny2DQOKnKRjCqM8wL2NhMfbz7iC25wRfrIoW2+3DXWXOkgdarrdpmgnHXdrpLwdMItnlfPeSzXjGXRjCABpdTZILk1rjbQsR5szQJR4mXgayYTIwjhB32YrmaZcpFkozzB/IuLMFwtdyUGS9wxtCP/2LG1qvdeJEddOIf2DunEaf5uH053Qj3JI/jw38bVMVSytiPu7FZc+Hf7ZuH3Ynt/Hh/wDZE+xNGeYKYgri7hrPTWSaIQ6QOozWDugJyZzrhr1r6vmDjXTTTEStmmluTJRAZciwRGRjvllfNJLcGmNkO5jgXJgDH4MQhTgyCrgPK6jPM+4nusWQ2z28NCWlgoJblYMCKZBEEacg8Q4IccgAI8c939DPM+9CSsESkqocVxwwEkvLmnJUhsR6RjDmKMYSQyf0M8345nm/HM8345qcjfj/ANQOBiw7n8bgrgYu9n//xAAlEQABAwQCAgMBAQEAAAAAAAABAAIRECEwMRJBMkAgUYEiQmH/2gAIAQMBAT8Be/oetKY/7Tt4CYXJclKlSuSmcLt4HfMd4XbwO6o1oKIjdCAKDvC7A7pcf+oWNlZ4pHIgICTCHeF28DkPEoIGERzuE3yCabod4XbwOo0KEDCfc2oO8Lt4HfMd4XbwFRSKwh3hdg0v1fq/V+r9X6jfvC7fsO38b9IElTeFN4RmYCv3mdtEgLdOQo3SIkqP6TtoImMrtp1whLKf6+QvpP8AFDWIUdtFESE08TBX+lMmER9KeQTbhBvRTQCneKFxdNsYR8rIt+kHWuhe5R/lPsiCbpwtKDaO3QaRbKbtCzoo3RTNUZ2n+NB5I+VOiU3Sen9Uf41dtEICKReUb0jpARTj9Iiacbyj5U0ojSjsotmhE2QBo7eYg8phExCBkq5KBkISibomBV3odyoQEICFF5lESIQEUdv2Hew7fsO37D2dj12M+1//xAAkEQACAQMDBAMBAAAAAAAAAAAAARECECEwMUEDEiBAIjJRQv/aAAgBAgEBPwHpdNRL9fqdJPKFowQQQQRpLQXPm+NFaC5s6oN7Jt2fGitBcncPJ9HbYbhSPjRWguR7oY1In2uGPZjWB8aK0FzZuzUlOFZ8aK0Fz5vjRWgubTaSbPRWhJJJJJJJ3aK9heOORpIjEkYkSxI9ZCTZtbtYyrInCJlFLwMSnWp3H8rfz5NQUbj30Vke9kImGNTlHBspFV+n1ZVhjq5RU4Kc1DcPBVlSLNOTuHTkeMIXyRTkTSKXmBuys9xOCrYeabVbor3tWUbj3P4F9bcoq3KCjm1G497ITgbm04gTgn8s3Nu79FVBud2IF9SbTO5PCFVFk4JVlrYiBKZGoRhbjwxxAlgWaoutdODiCR5GycQJw5Jmy9hewvYW3sdLqJqH6/U6ipWD/8QARRAAAgAEAQULCAcHBQAAAAAAAQIAAwQREhMhMTJxECAiMEFRc5GSssEUMzRhcnSBsQUjQEJDk5QkU2Oh0dLhUmKDwvD/2gAIAQEABj8Cn/R1BOalpadsm7yjZ5jDTn5uSLl3J9oxrN1xrN1xrN1xrN1xrN1xrN2o1z2o1z2o1z2o1z2o1z2o1z2o1z2o1z2o1m641m641m641m641m641m64127USaesqHqPo+YwRsq2IyvWDzeqKnpX7x342xU4XlS1ScyBfJkMeflfpEj0iV+kSPPyv0iR5+V+kSPPyv0iR6RK/SJFLieVNWZOVCvkyiDt4io6V+8d+NsVvvL+G/oPek8YO3iKjpX7x342xW+8v4bi4pCPLbQysYWZLOJG0R9WFY8zG0PeQspVbCcT579W5Qe9J4wdvEVHSv3jvxtit95fwhJZopgd9UYxniQJsvDimrdCdsYHu9NM5fHbAZTiU5wRFZOIxBJrtbqg1BQsLA22xQ+8p4wdvEVHSv3jvxtit95fwiiNswD5/hEnpk+cGXM0Hl5vXBpqnzR0NyD17IrwBcl3sB8IZleodrLwC5I6oofek8YO3iKjpX7x342xW+8v4bksIrzHExWIVTyGLoT8QRGA8FhqtzQEmDC4dtyh96Txg7eIqOlfvHfjbFb7y/huad7Q+8p4wdvEVPSv3jvxtituyj9pfSdkecTtCPOJ2hHnE7QjzidoR5xO0I84naEUNmU/tKaDtg7eIqOlfvHiCzU9KzHOSZIj0Wk/IEei0n5Aj0Wk/IEei0n5Aj0Wk/IEei0n5AgOtPSqwzgiTxNR0r94/aKjpX7x3p8oMwJb8PTeMmrzjOsGGK2G0T53CMxGChRCzziEwzMGE80TZ04zeA+G0oXgCTlcNvxhY8dUdK/eMY5RlMObKZxtgy5gwuICggX/ANRsIxWl4dOLKi0Fbqx50a4gPLbEuTUXioVJpl1BcFbc3LCJMml6jK3N+aJss1JpZjOCGC3gEVTVfB84y2+EELPRHH3GB0Q6acJK8ZUdK/eMSMJ1mCH1gxiQ2moSAeY8xgqwwsuYg8kVKfdyqeP9N9S4xhmuGZuvMIT2Gif0jfPc079JSC5Y9QiciZlDkAfHcqOlfvGKc/xV+cTWGdcbBl588LU0/CmW7Y5tsVXSS/8AtAq2UPUTPN4hcL64C1L+USGzOszP8YlJLP1E1hmIvy2tGURFeeyi2MZkH9YlzqZME4JwmdQYpxLYDElzwQYExzdyrX6onLTHJAObtYEsfXFNWBQkx8z4eX/1oqGqCWw3BIte2aMM2mkGn5VCZx8YlypJ4E7VJ5OePJ6ZVXBrzWUFmPxiYMCy6uX99BbHtETkeTKuoAVsmL57xkjJUybWM5hiZjz7IMiUirJOI6vC9VzE+XgkYbst8kL9e5UdK/eMSfbX5xVD+I3zizZ5Daw5vXEybL/GdCSNB054ppq6EsG9Wa0BRpJsIo5YNyjC/wASI/4x4wYpubAYX2Wid7bfOKX2/wC6Kv2/7YsNJzRQSWPDwsP5W8IqL8rYhE+Y2ZFTOfjFY3PY/OBA9gxO9tvnuVHSv3jCsKeW8xdDveCXppQmaMot7/Pc8m0y8WIeqGC2aW+tLfQ0Y5FMsubyOzl8OyMsyCe98XDY6eeAzSURxmxqTo3ElVFKlRg0MxtDTsgrTCMOY4VUcwEGYsrJ3NyuK8LT+SgIur9YbiKhwA3D0MLg6sCZKpUWYNBZywHwgzHYs5z4oXyuUZkxcwmy2wt8Y8nkpkZF7kXuX2mGtILs2sTM/wARwFKLyAm8LNUXI5Dyw0yXRhZ7aXdrjbbn3KjpX7x40D5w9KauRlWOLWzaf8RWLZWmInAOLNe/PEtmC5YzSCytfNaKdpsg1MycuU18IUQllMyQyiYEY2NjyRJwU2F50vGGxngwkzydZzl2BxTsnAlPL+rLNwA1/wCe7UdK/ePHz0CgicuE35IWmwjCrmZflhJU2RKqVTUyn3YM2ZrHm0CJKlQMkmAW5YWS9NKnqpLDKXgVCS1BBNk5BC4aeVT2/d3z7lR0r94/aKnpX7x+0VHSv3j9oqQf3r94/aJ/0hRSGqaOexmOJQu0pjpzc3Lf7PJn1Mh5H0dLYOzTVtlf9q/1j//EACkQAQACAQIEBgMBAQEAAAAAAAEAESExQRBRYaEgcYGxwfEwkfBA4dH/2gAIAQEAAT8hVnVLi2PIW6GtK7AiSMqovefbZ9ln22fbZ9tn2yffp9uh/wBdPt0+/T79Pt0+3T7bPts+2z7bPvs+yz7VCreDWKB2ab6KusxKltfHHZPebE/mJW/r4XFHHKeGKbHNGbe/pO+e/F8D+Ch2b3jnL8F8YO7e/grw0L8XZvfi58w8KKTDK0ItfD1iHma7+oMsi6vGjUDk4wdy9/G/godk9+Bh77XZ2sZ2NRxoqyZaFdDXo6Nzf9QDIdiSLAoBauAMDStOjf1gjO5e/wCdh2T34eEVN2DB1TBZhm3gavYRRs1nubOrfl+5umoC8x5iKkjk24Vd+9/wGvBhfHsnvxMBGWmouc1UNsDkoeYk5jVXr/8AHeN0CJ6+0NeBHfvf87DsnvMOFOo/cVqb4Xx87t7y/wAKi+NSoP1PeAztlGQfy3vEf5u8P7b3n9t8z+W+Z/LfMIHbqNY7t7+PbwUDwDSPJuLv2zlesvEvEtEUxLQLRG1PRhGLavNvxvgoHifzPChfgCqE0SP7NtZb0mgyOpvC7U62I1eKuXP5Q0YOaq5VkhRJs5VNDhrq/lyly5f5AHMYQHotpuTSa+pzI6hbj9ZYUPD5C53HfWaD9xNhHkmS71hUQO29GrSUBJFe8Ws6bxRYXmFFzE4ZlTLo/tZu2psuqzDHUROJvTXhvjfh4KFFZ5iq+ZQGk+056T/2P/Vuymb+T88vZLpnBNLJnSI1IecpV2VzmWmdsShnclzos8j3huaxDtEWEP8A0QGhuCNAvzlLq88EakPODemZcUNWpTYS+4vSVOW/XQIOPBdK9nL32u+m/flKPckr9jo/5ynL1z4f7ACot1Tdov8AUuSbRhB2cq6S5Ph9jky5Xr1ICtRrAWYObnsEJIwMl7BfLOesfttfmY5+sEc0QBfkIAIwFjZUml7aVKhMVKFT8r9yrUQIMWC69L6wO+NYN5mtrrLxlzm47uYGY2eAKBt6ho6ETmVASNqMdL8oU9rgCgy+ms/Y+gQHNyNMTE566ocxmCksKwbS+rrxYWaNfiToT3rfMyPb1Hy/JvKUstdEr6rj16tTzPev3BXsxHNll5vS0uxfrDj/ADmO2mQNkPqTyL8Udjf5k/r6x/V1hwleAc2HQynRSP2qAor1AQSUeV12hq9hlZYqJ5rnYSl7t8MCFw/M48EzRaG35XUtrQ0H4n14ZDqndrW8HTMooZRrKKPhYBcHm3NpYkGu7VrEFyOomKcbxziVYMUz0Zrpy1mk2x0RoJ01lHixmFW2msRS5ei4znTOrHeIZjBoieSzLBJyeYvm4ps7LW9obieShyCIxqK2pNz+Kqg5WOEGr0NGsafWLz1ohPro6QdSWaBwU8mnzMeLB8V+ENwFtWqCUFXYXLRC6hfgGnO5sqYxaJ3MGMSzadasdCt4oYEQBqfmVVlXLXpTrG7jxQDTzgngJYChxTXTWOrH/AwKZlti7slfsodSlVGZTXJfRZqdI/hgKFAaB0h2m6thzZYEKGC+UZFBlLhK57wXVi+Z53Nv8VCuLx2/3QKD/iYhCkJH8Rf5WLOsLmVxlbYGlo1hURpEeScLl8Bl8Lly+Fy5fC5cvwP/ACCVCIDlHfRV7z//2gAMAwEAAgADAAAAEJvBEOS2v4TV358BSvIIA9kYZGVsBH2qc0TSLOhiAaxBV3ZARGlQKLxRqvbBJhMhiGgke3JJ3wsipT/dXUOQY4M5DQ3s9XYKTXebuz+00GaaLUZbkynkkraRR5CSRTQKYaKCbQAKUkUIKaTXBtXeAR3GJBRKJIkLl2yKBBDlTonsZl8ykY1KdM3bmbupkXqa3hKafqUPPnTSdk7GkaABe0+UKoinlKdZCJtPTgko8MQhZ/sDFYGwG90REooHbEmllCYCDkkEbMEkQiOJCpkEDeUBHwSNLJjjK//EACgRAAIBAwQBBAIDAQAAAAAAAAABERAhMSBBUXGRMGGxwYGhQNHw8f/aAAgBAwEBPxByYNtkkk1kuSy9JZcllySSWJ0ksGzFBNWSTRCL+yH+ZD38keP2R9/JHj9kOP2KB/2LFVViPqotLwbOqZ049BY0To+iq0PBZ+FE9ncY0BJTcX5mmPQ29DLxreDDoRiUkfkuJDUpZGmnDE3IUZj0Fj0Po+KTWabGzo+AbuhjyhabpZJ7EsbHxG2m9fo+NEVeDZ1S+2+Bssk+RlLRj0FimSDJBmn0fFVSKPBs61Mx6CxojQnw+KRWaN2FbjolwQ+CXBD4IfBLgVpdDb0MqulqQJQhN+S/LyS+Xkvy8l+Xkvy8l+XkSENvJHpCH/EWoYXhqw4JyomRNwX/AA9NaCyP4E0kobgvwJrIjUGQLalChJKwjaOJMcQZ7QnKn1RJUMyHhnuPB+xkhiTeCCBk74QZhJTouiHl1hvBDVW4TbEcJun0FyfQlSfCoA1Z0x+ziY2MSNbyhLTwdYLHIqUBUhpI0psVCTJyLctgsRaajDLiaYsg78GayIhO/mo7J/keUYpfcdtE9i8YdkLDqaMexkFhGUwis5Em0BlEvSRig80ldKox2kw07EkPcEXYabUN28DkthDhMRY5aJIUNkQokUGn+i9UNNqGxJJCFvRXSSxz5L7kGQkobtT6KLTNVREjCo0dF4JWMENJOEhnvCs3fA5RmF0OlTFimXqOrUtOcEbg7m02hCQi4fJKwyLkYzdNSCKTrnRNJqtGfgzSNOdUVjRFfo/i4qn+detNba3N+mR6jW5wP//EACQRAQACAQMFAAMBAQAAAAAAAAEAETEQICEwQVFxkUBhgaGx/9oACAECAQE/EBA7WUSiVKlSpU4lEJROJxOJxKJUqVKJRKIShTMCG8FWv+S3n/CW/XyW/XwlvJ8lvJ8lvJ8lIl+fEcy5e1mBo7svbfl7Tv0MDW9ufto2ZBBZG+07Bpl7Rz0MDoZ+0tdVOAsgtDiZLJdF/c5BMvaOd7MDSpUqVrl7QS7PcAUxu0aLPFmXtHO9mBL35+2naII4hmoGh0y9o50drFwau3P235e0c72YGl61qgbeZZ5lPMs8ynmU8yzzEKV5jnoYG25ejflCep8nofJ6Hyep8nofJ6kKYDoMwPx2YG0hxN8wstCJSlB46rMCCWRFUzM7kFRCslqDzHirzAELUfN3c7diU102GCJBUAOIlZhkbK0oF508nQYFUSggjMCcEgnYRgZ/yBzsxL7iIiGGLkMwlMkelR8jHQigyrIBfJxKgHeMcAN5JmEilJxMRiLaUaYEMkNKX/1ACTvOIkzxMbScTM080cJnlRaCClOKsy1OTTAmRU7o0tBMIAbEGm3mZaaNyhcsXXMUV1EPBHTYAbCKrbHtI8cBC7YtvER2RZsOYzAlaEdK31CjtzOM7zl3M4RF3AF4lQozCbVf9qEsGjMCdtDomtBPMuBxpLiVbLAPEK2FzgBEYFaYEuXL1dtbqlSta0wOtet7mYG10vokYbWLhsr8QQ/JtfwqQrZ//8QAJxABAAICAQMDBQEBAQAAAAAAAQARITFBEFHwYXHBgZGhsdEgMOH/2gAIAQEAAT8QZTSnbJQKBzMEYH1LZw7q2Z4f8zxf5nh/zO95/rPL/mPhv7ng3zAvH/MV4n5i+/G9Zi8b7w0tPlzO143rKvE/MGTz/rPL/meX/MS15/rMHn/eeP8AzAaQEyIKfmXOU5HVaVRZcgGyplKrasK9enPRvpzdfCmrnOW8ZgvD6Tyf5he34/rAXHn+sx+f954v/cb7U8+8s7Ltu8tBT+oKx1h/KJXRdKthglKb7SscpiXKqXmX0w8nCWJxh+0HVbGBuEPBxC8nlFuLnc30ajkjplsvTDFhLuKzPycJgfb9MD3hIxoMWqt0HIOHvuj34A0ncOA4Thljz7DOwKL64ii20m1RTbaherhuZ+DiPA90eo1LlzRgwzHD0TPS5Vw14uEuvVttd8QkOu2g2x1g7pBydmptmldN2S4igZAKKNB0cDXYeaqlq0j2hoIhLMUKNbuVktXQYMisffUQDzqD4fKOunP+HTM5ZUSo5iX0Fnu/4p4ntA04mVXC1UXxcowgAK+qPmIVatDfuT8ijhlxyhTlY/GNq3izeiAL69Bu644maHo1LaVyyaOKO0ftP6IFc39X+guOmULdHiC2xxL6E6eU7IHvfxgWqFp2QK8ZasnYaoBftH9Ni220BI+kZKJc09l5cQPZMhES2pv0o8o0mEqJLCntB7Pwx4nulQK6a6XREsfaM7Ey7iVHosWeU7IKW34YNQEDCcWlVZTu30bQ3E4fMjHyco9RfSsRwMTkiL0bYnU8E4R8XM3qsqUai5TbSmjKJkozpTKHv6g4rKhWs7hxeNo7lNw3Ex0bmbRZWY76lhfRzKsBfo3GrFQObVLlma/pf+sX4Pb+so8H8wLR7H8yj5/6Q7l4d4Ts5rTYiO4ztWirutzE1AiyhJVzR63EqbRNy6lzmD/gGJUNSsx10cdE6XUWGe96YqLFqNechMFCYYfdUWYTA2W7AcBx3nI/sKohJBdMwNWEwhYLNd6gVYsnA3dLS5p1DTKAOyt0A0qnvcbdBA3LjC5fDDo9HTFQ7gBaSEjdoptY5iP6GUCJYhhOEiYOaIMXlAfWBUXUE9par1uHB26dmjEvftALEoVSooDi9zLMVxAEURizLK6NhVBLDDsu8wvfB6lQCs0mWZEikINlwXdwrLHnWCoIWlg2Wd4B9o0EyS801AlZiS89G2LXQsuOmZYvahW08DDpfcHZBi+tzoqHboWPFg5F/wB0ug7GAGkKXwBZrsrp3IlFAbVoI4Gbub9pX53Vql2e9bEAqVroZK8Ad/SMSq1RKCOByJ3Q6lBiyjnB+INKNYu5EWA7jZAyfYBY6B6LzFua+e6qABQO4xJtCKACdW7itAVNWF7gFt/2Lyjq4QW5Wg3HTBV+5gJaRERcMMHp7DKvo4WMH2ZI8HGYL7K7E0KyWiI4ojp9ILj7gxWcWmWrHe2iLtAKymdr0KE7IKWiXJ3aFyVBGrLSMAk4XaoKj9Ay2AsNrFSm1q7KlIxOJZbCxDXoIag2qipgAwGiWXVVhrouQDQBhVYieQC1kQ5KDuqN0TCknc/dCrkMFs1KpOs3XcVtlVtOmX7ogacit0AdohvMZloNQRQEJgM3wQF/ipt0AWUUApVykXfdNOWMoh5bzMvNPwsKRprArCm25gwv6rKcighToPrEtvMjvDOOeV5jgZXszAMVxA7yakws9kH4EeVDQzpU9w9gdwidOtJak1yDbyg7uFXS5zis7V9oPMbhvgKAH3YIxEHIg+tP0IB24S+//USs0hppv0n3gL2OU4wPmOs2mWSAHa0iboyjX2ilDGe0wB7qEb0Oe+CoEXkM5ywPTKfRmaUf1Q+ypUhOkEoj6XLPdp+pmCrZ+P6uGTRcdmTpi3+3BF/Co4ICUGhC/rBA7hTBq+AYKOOli95b35E7m1Om62y8b2M5TZYjWLOO+JkzrcUpRiUpkHEoBkUIGwC74cQlZVdQq7Wys1cIVFiUkq6kpsAEC7oDYwySkL0WTkAFVyVeeVtwEQkRAhvWa/EqeEqjwS+pDhviNv52U2lkQfWORp4PpYLOFUhdGqVRWFaqigqqKlFAJLu9p9t0Nq8sb0Ad4XJCzBgBR2hh3PFABxZcr6x1x3D6ucz7ffcunQBBqRMlnPCDLK8ryikQP0GHNXABXFRrc9cGv+AKYwSLIZAateDuyrxUrYpPYCzBfYihO1LaGhEg22TYbOXFpNxM1nvG7Z0VQe/rfxiP79ujMXIieqqjaBZ129C4JbW9RF3gyIwVpcUF8wNuHRWFhAjBzXrBQVVKfmLDfURsh0LvpZDoYi2wYty2OdW9EtBhb74l8nxOTEarnvEx2JJLaU2cv1GRwGsKh8A+YXjKqQbyc54xGPVFhZeEHFQFomQqgjgGHsQAtLbWjldU1Xdi5QLbv/GJ0WoEC4YI5moDKlYlYgvQldV0RbjtMC/4Zkl4rrcWLfQIsWLU3DUWOmZvUwlQig9Dgn76hfS5dwlQ6Mqam4ls0Y1AyGRLiG5cqtdaua6cywy5c10VZdS3/FkX1iw3F7TVcTvUINVAEDIC2oT3HXT3TbZFDmUcxHclzBzEd4FOIJUp3lO8A6YIyl7hZwz3RSpZ3lW0ZXg3Fra7wkYuABSgWhP/2Q==",
-    alt: "The Northport Hotel",
-    style: {
-      width: '120px',
-      height: '120px',
-      borderRadius: '16px',
-      objectFit: 'cover',
-      margin: '0 auto'
-    }
-  })), /*#__PURE__*/React.createElement("h1", {
-    className: "text-3xl font-bold text-base-content mb-2"
-  }, "Welcome to The Northport Hotel"), /*#__PURE__*/React.createElement("p", {
-    className: "text-base-content/60 text-lg"
-  }, "Training Dashboard"), /*#__PURE__*/React.createElement("div", {
-    className: "divider"
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "bg-base-200 rounded-xl p-5 text-left"
-  },  /*#__PURE__*/React.createElement("p", {
-    className: "text-base-content/80 leading-relaxed mt-3"
-  }, "This training will give you the knowledge and confidence to deliver ", /*#__PURE__*/React.createElement("strong", null, "world-class hospitality"), " from day one. Work through each module at your own pace, then test yourself with the quiz."))), /*#__PURE__*/React.createElement("h2", {
-    className: "text-lg font-semibold mb-4 text-base-content/70"
-  }, "Training Modules"), /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-col gap-3"
-  }, modules.map(mod => /*#__PURE__*/React.createElement("button", {
-    key: mod.id,
-    onClick: () => onNavigate(mod.id),
-    className: "btn btn-ghost bg-base-200 hover:bg-base-300 h-auto py-4 px-5 justify-start text-left gap-4 rounded-xl"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: `${mod.color} text-white w-12 h-12 rounded-lg flex items-center justify-center text-2xl shrink-0`
-  }, mod.icon), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "font-semibold text-base"
-  }, mod.title), /*#__PURE__*/React.createElement("div", {
-    className: "text-sm text-base-content/50 font-normal"
-  }, mod.desc)), /*#__PURE__*/React.createElement("div", {
-    className: "ml-auto text-base-content/30"
-  }, "\u2192")))), /*#__PURE__*/React.createElement("div", {
-    className: "text-center mt-8 text-base-content/40 text-sm"
-  }, "Executive Chef Michael Ross \xB7 The Northport Hotel"));
-}
-function ForbesStandardsView() {
-  const [expanded, setExpanded] = useState(0);
-  return /*#__PURE__*/React.createElement("div", {
-    className: "max-w-2xl mx-auto"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-center mb-6"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-4xl mb-2"
-  }, "\u2B50"), /*#__PURE__*/React.createElement("h1", {
-    className: "text-2xl font-bold"
-  }, "Northport Service Standards"), /*#__PURE__*/React.createElement("p", {
-    className: "text-base-content/60 mt-1"
-  }, "The 8 pillars that define world-class hospitality")), /*#__PURE__*/React.createElement("div", {
-    className: "bg-base-200 rounded-xl p-4 mb-6"
-  }, /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-base-content/70 leading-relaxed"
-  }, "The Northport Hotel holds itself to the ", /*#__PURE__*/React.createElement("strong", null, "highest standards"), " in hospitality. It's not about luxury \u2014 it's about ", /*#__PURE__*/React.createElement("strong", null, "how you make people feel"), ". These standards should become second nature. Click each to explore.")), /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-col gap-3"
-  }, forbesStandards.map((standard, idx) => {
-    const isOpen = expanded === idx;
-    return /*#__PURE__*/React.createElement("div", {
-      key: idx,
-      className: "bg-base-200 rounded-xl overflow-hidden"
-    }, /*#__PURE__*/React.createElement("button", {
-      onClick: () => setExpanded(isOpen ? null : idx),
-      className: "w-full flex items-center gap-3 p-4 text-left hover:bg-base-300 transition-colors"
-    }, /*#__PURE__*/React.createElement("span", {
-      className: "text-2xl"
-    }, standard.icon), /*#__PURE__*/React.createElement("div", {
-      className: "flex-1"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "font-semibold"
-    }, standard.title), /*#__PURE__*/React.createElement("div", {
-      className: "text-xs text-base-content/50"
-    }, standard.principles.length, " principles \xB7 ", standard.keyBehaviors.length, " key behaviors")), /*#__PURE__*/React.createElement("span", {
-      className: `text-base-content/30 transition-transform ${isOpen ? 'rotate-90' : ''}`
-    }, "\u25B6")), isOpen && /*#__PURE__*/React.createElement("div", {
-      className: "px-4 pb-4"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "mb-3"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "text-xs font-semibold text-amber-600 uppercase tracking-wider mb-2"
-    }, "Core Principles"), standard.principles.map((p, i) => /*#__PURE__*/React.createElement("div", {
-      key: i,
-      className: "flex items-start gap-2 mb-1.5"
-    }, /*#__PURE__*/React.createElement("span", {
-      className: "text-amber-500 mt-0.5 shrink-0"
-    }, "\u2726"), /*#__PURE__*/React.createElement("span", {
-      className: "text-sm text-base-content/80"
-    }, p)))), /*#__PURE__*/React.createElement("div", {
-      className: "divider my-2"
-    }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-      className: "text-xs font-semibold text-base-content/50 uppercase tracking-wider mb-2"
-    }, "Key Behaviors"), standard.keyBehaviors.map((b, i) => /*#__PURE__*/React.createElement("div", {
-      key: i,
-      className: "flex items-start gap-2 mb-1.5"
-    }, /*#__PURE__*/React.createElement("span", {
-      className: "text-green-500 mt-0.5 shrink-0"
-    }, "\u2713"), /*#__PURE__*/React.createElement("span", {
-      className: "text-sm text-base-content/70"
-    }, b))))));
-  })));
-}
-function Detail({
-  label,
-  value
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "flex gap-2"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "font-semibold text-base-content/50 w-24 shrink-0"
-  }, label, ":"), /*#__PURE__*/React.createElement("span", {
-    className: "text-base-content/80"
-  }, value));
-}
-function CocktailCard({
-  cocktail,
-  flipped,
-  onFlip
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    onClick: onFlip,
-    className: "cursor-pointer bg-base-200 rounded-xl p-5 hover:bg-base-300 transition-all border-2 border-transparent hover:border-primary/20"
-  }, !flipped ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between mb-2"
-  }, /*#__PURE__*/React.createElement("h3", {
-    className: "font-bold text-lg"
-  }, cocktail.name), /*#__PURE__*/React.createElement("span", {
-    className: `badge badge-sm ${cocktail.category === 'signature' ? 'badge-primary' : 'badge-ghost'}`
-  }, cocktail.category === 'signature' ? '✨ Signature' : 'Classic')), /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-base-content/60 italic mb-3"
-  }, cocktail.guestDescription), /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-primary/60"
-  }, "Tap to see details \u2192")) : /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between mb-3"
-  }, /*#__PURE__*/React.createElement("h3", {
-    className: "font-bold text-lg"
-  }, cocktail.name), /*#__PURE__*/React.createElement("span", {
-    className: "text-xs text-base-content/40"
-  }, "Tap to close")), /*#__PURE__*/React.createElement("div", {
-    className: "grid grid-cols-1 gap-2 text-sm"
-  }, /*#__PURE__*/React.createElement(Detail, {
-    label: "Ingredients",
-    value: cocktail.ingredients
-  }), /*#__PURE__*/React.createElement(Detail, {
-    label: "Glassware",
-    value: cocktail.glassware
-  }), cocktail.ice && /*#__PURE__*/React.createElement(Detail, {
-    label: "Ice",
-    value: cocktail.ice
-  }), /*#__PURE__*/React.createElement(Detail, {
-    label: "Garnish",
-    value: cocktail.garnish
-  }), cocktail.rim && /*#__PURE__*/React.createElement(Detail, {
-    label: "Rim",
-    value: cocktail.rim
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "mt-3 bg-warning/10 border border-warning/20 rounded-lg p-3"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-xs font-semibold text-warning uppercase tracking-wider mb-1"
-  }, "\uD83C\uDFC3 Runner Notes"), /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-base-content/70"
-  }, cocktail.runnerNotes))));
-}
-function CocktailGuide() {
-  const [filter, setFilter] = useState('all');
-  const [flipped, setFlipped] = useState(null);
-  const filtered = cocktails.filter(c => filter === 'all' || c.category === filter);
-  const classics = cocktails.filter(c => c.category === 'classic');
-  const signatures = cocktails.filter(c => c.category === 'signature');
-  return /*#__PURE__*/React.createElement("div", {
-    className: "max-w-2xl mx-auto"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-center mb-6"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-4xl mb-2"
-  }, "\uD83C\uDF78"), /*#__PURE__*/React.createElement("h1", {
-    className: "text-2xl font-bold"
-  }, "Cocktail Program"), /*#__PURE__*/React.createElement("p", {
-    className: "text-base-content/60 mt-1"
-  }, cocktails.length, " cocktails \u2014 tap any card to study")), /*#__PURE__*/React.createElement("div", {
-    className: "flex gap-2 mb-5 justify-center"
-  }, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setFilter('all'),
-    className: `btn btn-sm ${filter === 'all' ? 'btn-primary' : 'btn-ghost'}`
-  }, "All (", cocktails.length, ")"), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setFilter('classic'),
-    className: `btn btn-sm ${filter === 'classic' ? 'btn-primary' : 'btn-ghost'}`
-  }, "Classics (", classics.length, ")"), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setFilter('signature'),
-    className: `btn btn-sm ${filter === 'signature' ? 'btn-primary' : 'btn-ghost'}`
-  }, "Signatures (", signatures.length, ")")), /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-col gap-3"
-  }, filtered.map(cocktail => /*#__PURE__*/React.createElement(CocktailCard, {
-    key: cocktail.name,
-    cocktail: cocktail,
-    flipped: flipped === cocktail.name,
-    onFlip: () => setFlipped(flipped === cocktail.name ? null : cocktail.name)
-  }))));
-}
-
-const wines = {
-  red: [
-    { name: "Benton Lane", producer: "Pinot Noir", region: "Willamette, Oregon", vintage: "2023", body: "Medium", flavor: "Fruity" },
-    { name: "Bedell Cellars", producer: "Cabernet Franc", region: "North Fork, NY", vintage: "2023", body: "Medium", flavor: "Bold" },
-    { name: "Raeburn", producer: "Cabernet Sauvignon", region: "Sonoma, CA", vintage: "2022", body: "Medium", flavor: "Rich" },
-    { name: "Peters Vineyard", producer: "Pinot Noir", region: "Sonoma, CA", vintage: "2020", body: "Light", flavor: "Fruity" },
-    { name: "Yantra Toscana", producer: "Super Tuscan", region: "Italy", vintage: "2023", body: "Full", flavor: "Bold" },
-    { name: "Tenuta di Arceno", producer: "Chianti Classico", region: "Siena, Italy", vintage: "2022", body: "Medium", flavor: "Bold" },
-    { name: "Quilt Estates", producer: "Cabernet Sauvignon", region: "Napa Valley", vintage: "2022", body: "Full", flavor: "Rich" }
-  ],
-  rose: [
-    { name: "Les Sarrin", producer: "Ros\u00e9", region: "Provence, France", vintage: "2024", body: "Light", flavor: "Fruity" },
-    { name: "Bedell Cellars", producer: "Ros\u00e9", region: "North Fork, NY", vintage: "2024", body: "Light", flavor: "Fruity" }
-  ],
-  white: [
-    { name: "Domaine Bel Air", producer: "Muscadet", region: "France", vintage: "2023", body: "Light", flavor: "Crisp" },
-    { name: "Mas La Chevalerie", producer: "Chardonnay", region: "France", vintage: "2023", body: "Light", flavor: "Fruity" },
-    { name: "Boen", producer: "Chardonnay", region: "Rutherford, CA", vintage: "2024", body: "Medium", flavor: "Rich" },
-    { name: "Loveblock", producer: "Sauvignon Blanc", region: "New Zealand", vintage: "2023", body: "Light", flavor: "Crisp" },
-    { name: "Terlato Vineyards", producer: "Pinot Grigio", region: "Friuli, Italy", vintage: "2023", body: "Light", flavor: "Crisp" },
-    { name: "Santa Margherita", producer: "Pinot Grigio", region: "Valdadige, Italy", vintage: "2024", body: "Light", flavor: "Fruity" },
-    { name: "Illumination by Quintessa", producer: "Sauvignon Blanc", region: "CA", vintage: "2023", body: "Medium", flavor: "Rich" },
-    { name: "Ch\u00e2teaux de Meursault", producer: "Chardonnay", region: "France", vintage: "2022", body: "Full", flavor: "Rich" }
-  ],
-  sparkling: [
-    { name: "Poggio DOC Brut", producer: "Prosecco", region: "Italy", vintage: "NV", note: "187ml", body: "Light", flavor: "Fruity" },
-    { name: "Ruggeri", producer: "Prosecco Ros\u00e9", region: "Italy", vintage: "NV", note: "187ml", body: "Light", flavor: "Fruity" },
-    { name: "Telmont Reserve Brut", producer: "Champagne", region: "France", vintage: "2020", body: "Medium", flavor: "Crisp" }
-  ],
-  exclusive: [
-    { name: "Il Poggione", producer: "Brunello di Montalcino", region: "Tuscany, Italy", vintage: "2020", body: "Full", flavor: "Bold" },
-    { name: "Faust", producer: "Cabernet Sauvignon", region: "Napa Valley, CA", vintage: "2021", body: "Full", flavor: "Rich" },
-    { name: "Grgich Hills", producer: "Cabernet Sauvignon", region: "Napa Valley, CA", vintage: "2020", body: "Full", flavor: "Rich" },
-    { name: "Ch\u00e2teau Lass\u00e8gue Grand Cru", producer: "Bordeaux Blend", region: "St. Emilion, France", vintage: "2014", body: "Full", flavor: "Bold" }
-  ]
-};
-function WineCard({wine}) {
-  return /*#__PURE__*/React.createElement("div", {className: "card bg-base-200 shadow-sm"},
-    /*#__PURE__*/React.createElement("div", {className: "card-body p-4"},
-      /*#__PURE__*/React.createElement("div", {className: "flex justify-between items-start"},
-        /*#__PURE__*/React.createElement("div", null,
-          /*#__PURE__*/React.createElement("h3", {className: "font-bold text-base"}, wine.name),
-          /*#__PURE__*/React.createElement("p", {className: "text-sm text-base-content/70"}, wine.producer)
-        ),
-        /*#__PURE__*/React.createElement("div", {className: "text-right"},
-          /*#__PURE__*/React.createElement("p", {className: "text-sm font-medium"}, wine.vintage),
-          wine.note ? /*#__PURE__*/React.createElement("span", {className: "badge badge-ghost badge-sm"}, wine.note) : null
-        )
-      ),
-      /*#__PURE__*/React.createElement("p", {className: "text-xs text-base-content/60 mt-1"}, wine.region),
-      wine.body ? /*#__PURE__*/React.createElement("div", {className: "flex gap-2 mt-2"},
-        /*#__PURE__*/React.createElement("span", {className: "badge badge-outline badge-sm"}, "Body: " + wine.body),
-        /*#__PURE__*/React.createElement("span", {className: "badge badge-outline badge-sm"}, "Flavor: " + wine.flavor)
-      ) : null
-    )
-  );
-}
-function WineSection({title, color, wines: list}) {
-  return /*#__PURE__*/React.createElement("div", {className: "mb-6"},
-    /*#__PURE__*/React.createElement("div", {className: "flex items-center gap-2 mb-3"},
-      /*#__PURE__*/React.createElement("div", {className: "w-3 h-3 rounded-full " + color}),
-      /*#__PURE__*/React.createElement("h2", {className: "text-lg font-bold uppercase tracking-wider"}, title)
-    ),
-    /*#__PURE__*/React.createElement("div", {className: "grid grid-cols-1 gap-2"},
-      list.map((wine, idx) => /*#__PURE__*/React.createElement(WineCard, {key: idx, wine: wine}))
-    )
-  );
-}
-function WineGuide() {
-  const [activeFilter, setActiveFilter] = React.useState('all');
-  const filters = [
-    {id: 'all', label: 'All'},
-    {id: 'red', label: '\ud83c\udf77 Red'},
-    {id: 'white', label: '\ud83e\udd42 White'},
-    {id: 'rose', label: '\ud83c\udf38 Ros\u00e9'},
-    {id: 'sparkling', label: '\u2728 Sparkling'},
-    {id: 'exclusive', label: '\u2b50 Exclusive'}
+function Welcome({onNavigate}) {
+  const lang = useContext(LangContext);
+  const modules = [
+    {id:'forbes',icon:'\u2b50',title:t(lang,'modStandards'),desc:t(lang,'modStandardsDesc'),color:'bg-amber-500'},
+    {id:'cocktails',icon:'\ud83c\udf78',title:t(lang,'modCocktails'),desc:t(lang,'modCocktailsDesc'),color:'bg-purple-500'},
+    {id:'wines',icon:'\ud83c\udf77',title:t(lang,'modWines'),desc:t(lang,'modWinesDesc'),color:'bg-red-700'},
+    {id:'terminology',icon:'\ud83d\udcd6',title:t(lang,'modTerms'),desc:t(lang,'modTermsDesc'),color:'bg-blue-500'},
+    {id:'menus',icon:'\ud83c\udf7d\ufe0f',title:t(lang,'modMenu'),desc:t(lang,'modMenuDesc'),color:'bg-green-500'},
+    {id:'quiz',icon:'\u2705',title:t(lang,'modQuiz'),desc:t(lang,'modQuizDesc'),color:'bg-red-500'}
   ];
-  return /*#__PURE__*/React.createElement("div", {className: "max-w-2xl mx-auto p-4"},
-    /*#__PURE__*/React.createElement("h1", {className: "text-2xl font-bold mb-1"}, "Wines By The Glass"),
-    /*#__PURE__*/React.createElement("p", {className: "text-base-content/60 text-sm mb-4"}, "Current wine program"),
-    /*#__PURE__*/React.createElement("div", {className: "flex flex-wrap gap-2 mb-6"},
-      filters.map(f => /*#__PURE__*/React.createElement("button", {
-        key: f.id,
-        onClick: () => setActiveFilter(f.id),
-        className: "btn btn-sm " + (activeFilter === f.id ? 'btn-primary' : 'btn-ghost')
-      }, f.label))
-    ),
-    (activeFilter === 'all' || activeFilter === 'red') && /*#__PURE__*/React.createElement(WineSection, {title: "Red", color: "bg-red-700", wines: wines.red}),
-    (activeFilter === 'all' || activeFilter === 'white') && /*#__PURE__*/React.createElement(WineSection, {title: "White", color: "bg-yellow-300", wines: wines.white}),
-    (activeFilter === 'all' || activeFilter === 'rose') && /*#__PURE__*/React.createElement(WineSection, {title: "Ros\u00e9", color: "bg-pink-300", wines: wines.rose}),
-    (activeFilter === 'all' || activeFilter === 'sparkling') && /*#__PURE__*/React.createElement(WineSection, {title: "Sparkling", color: "bg-amber-200", wines: wines.sparkling}),
-    (activeFilter === 'all' || activeFilter === 'exclusive') && /*#__PURE__*/React.createElement(WineSection, {title: "Exclusive Pours", color: "bg-purple-500", wines: wines.exclusive})
-  );
+  return React.createElement("div",{className:"max-w-2xl mx-auto"},
+    React.createElement("div",{className:"text-center mb-8"},
+      React.createElement("div",{className:"mb-3"},
+        React.createElement("img",{src:"data:image/jpeg;base64,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",alt:"The Northport Hotel",style:{width:'120px',height:'120px',borderRadius:'16px',objectFit:'cover',margin:'0 auto'}})),
+      React.createElement("h1",{className:"text-3xl font-bold text-base-content mb-2"},t(lang,'welcomeTitle')),
+      React.createElement("p",{className:"text-base-content/60 text-lg"},t(lang,'trainingDashboard')),
+      React.createElement("div",{className:"divider"}),
+      React.createElement("div",{className:"bg-base-200 rounded-xl p-5 text-left"},
+        React.createElement("p",{className:"text-base-content/80 leading-relaxed mt-3"},
+          t(lang,'trainingIntro'),
+          React.createElement("strong",null,t(lang,'worldClass')),
+          t(lang,'fromDayOne')))),
+    React.createElement("h2",{className:"text-lg font-semibold mb-4 text-base-content/70"},t(lang,'trainingModules')),
+    React.createElement("div",{className:"flex flex-col gap-3"},
+      modules.map(function(mod){return React.createElement("button",{key:mod.id,onClick:function(){return onNavigate(mod.id)},className:"btn btn-ghost bg-base-200 hover:bg-base-300 h-auto py-4 px-5 justify-start text-left gap-4 rounded-xl"},
+        React.createElement("div",{className:mod.color+" text-white w-12 h-12 rounded-lg flex items-center justify-center text-2xl shrink-0"},mod.icon),
+        React.createElement("div",null,
+          React.createElement("div",{className:"font-semibold text-base"},mod.title),
+          React.createElement("div",{className:"text-sm text-base-content/50 font-normal"},mod.desc)),
+        React.createElement("div",{className:"ml-auto text-base-content/30"},"\u2192"))})),
+    React.createElement("div",{className:"text-center mt-8 text-base-content/40 text-sm"},t(lang,'chefCredit')));
+}
+
+function ForbesStandardsView() {
+  var lang = useContext(LangContext);
+  var _s = useState(0), expanded = _s[0], setExpanded = _s[1];
+  return React.createElement("div",{className:"max-w-2xl mx-auto"},
+    React.createElement("div",{className:"text-center mb-6"},
+      React.createElement("div",{className:"text-4xl mb-2"},"\u2b50"),
+      React.createElement("h1",{className:"text-2xl font-bold"},t(lang,'serviceStandards')),
+      React.createElement("p",{className:"text-base-content/60 mt-1"},t(lang,'eightPillars'))),
+    React.createElement("div",{className:"bg-base-200 rounded-xl p-4 mb-6"},
+      React.createElement("p",{className:"text-sm text-base-content/70 leading-relaxed"},
+        t(lang,'stdIntro'),React.createElement("strong",null,t(lang,'stdHighest')),
+        t(lang,'stdIntro2'),React.createElement("strong",null,t(lang,'stdFeel')),
+        t(lang,'stdIntro3'))),
+    React.createElement("div",{className:"flex flex-col gap-3"},
+      forbesStandards.map(function(standard,idx){
+        var isOpen = expanded === idx;
+        var title = lang==='es' && standard.title_es ? standard.title_es : standard.title;
+        var prins = lang==='es' && standard.principles_es ? standard.principles_es : standard.principles;
+        var behavs = lang==='es' && standard.keyBehaviors_es ? standard.keyBehaviors_es : standard.keyBehaviors;
+        return React.createElement("div",{key:idx,className:"bg-base-200 rounded-xl overflow-hidden"},
+          React.createElement("button",{onClick:function(){return setExpanded(isOpen?null:idx)},className:"w-full flex items-center gap-3 p-4 text-left hover:bg-base-300 transition-colors"},
+            React.createElement("span",{className:"text-2xl"},standard.icon),
+            React.createElement("div",{className:"flex-1"},
+              React.createElement("div",{className:"font-semibold"},title),
+              React.createElement("div",{className:"text-xs text-base-content/50"},prins.length+" "+t(lang,'principles')+" \u00b7 "+behavs.length+" "+t(lang,'keyBehaviors'))),
+            React.createElement("span",{className:"text-base-content/30 transition-transform "+(isOpen?'rotate-90':'')},"\u25b6")),
+          isOpen && React.createElement("div",{className:"px-4 pb-4"},
+            React.createElement("div",{className:"mb-3"},
+              React.createElement("div",{className:"text-xs font-semibold text-amber-600 uppercase tracking-wider mb-2"},t(lang,'corePrinciples')),
+              prins.map(function(p,i){return React.createElement("div",{key:i,className:"flex items-start gap-2 mb-1.5"},
+                React.createElement("span",{className:"text-amber-500 mt-0.5 shrink-0"},"\u2726"),
+                React.createElement("span",{className:"text-sm text-base-content/80"},p))})),
+            React.createElement("div",{className:"divider my-2"}),
+            React.createElement("div",null,
+              React.createElement("div",{className:"text-xs font-semibold text-base-content/50 uppercase tracking-wider mb-2"},t(lang,'keyBehaviors')),
+              behavs.map(function(b,i){return React.createElement("div",{key:i,className:"flex items-start gap-2 mb-1.5"},
+                React.createElement("span",{className:"text-green-500 mt-0.5 shrink-0"},"\u2713"),
+                React.createElement("span",{className:"text-sm text-base-content/70"},b))}))))})));
+}
+
+function Detail(props) {
+  return React.createElement("div",{className:"flex gap-2"},
+    React.createElement("span",{className:"font-semibold text-base-content/50 w-24 shrink-0"},props.label+":"),
+    React.createElement("span",{className:"text-base-content/80"},props.value));
+}
+
+function CocktailCard(props) {
+  var lang = useContext(LangContext);
+  var c = props.cocktail, flipped = props.flipped, onFlip = props.onFlip;
+  var desc = lang==='es' && c.guestDescription_es ? c.guestDescription_es : c.guestDescription;
+  var notes = lang==='es' && c.runnerNotes_es ? c.runnerNotes_es : c.runnerNotes;
+  return React.createElement("div",{onClick:onFlip,className:"cursor-pointer bg-base-200 rounded-xl p-5 hover:bg-base-300 transition-all border-2 border-transparent hover:border-primary/20"},
+    !flipped ? React.createElement("div",null,
+      React.createElement("div",{className:"flex items-center justify-between mb-2"},
+        React.createElement("h3",{className:"font-bold text-lg"},c.name),
+        React.createElement("span",{className:"badge badge-sm "+(c.category==='signature'?'badge-primary':'badge-ghost')},c.category==='signature'?t(lang,'signature'):t(lang,'classic'))),
+      React.createElement("p",{className:"text-sm text-base-content/60 italic mb-3"},desc),
+      React.createElement("p",{className:"text-xs text-primary/60"},t(lang,'tapDetails')))
+    : React.createElement("div",null,
+      React.createElement("div",{className:"flex items-center justify-between mb-3"},
+        React.createElement("h3",{className:"font-bold text-lg"},c.name),
+        React.createElement("span",{className:"text-xs text-base-content/40"},t(lang,'tapClose'))),
+      React.createElement("div",{className:"grid grid-cols-1 gap-2 text-sm"},
+        React.createElement(Detail,{label:t(lang,'ingredients'),value:c.ingredients}),
+        React.createElement(Detail,{label:t(lang,'glassware'),value:c.glassware}),
+        c.ice && React.createElement(Detail,{label:t(lang,'ice'),value:c.ice}),
+        React.createElement(Detail,{label:t(lang,'garnish'),value:c.garnish}),
+        c.rim && React.createElement(Detail,{label:t(lang,'rim'),value:c.rim})),
+      React.createElement("div",{className:"mt-3 bg-warning/10 border border-warning/20 rounded-lg p-3"},
+        React.createElement("div",{className:"text-xs font-semibold text-warning uppercase tracking-wider mb-1"},t(lang,'runnerNotes')),
+        React.createElement("p",{className:"text-sm text-base-content/70"},notes))));
+}
+
+function CocktailGuide() {
+  var lang = useContext(LangContext);
+  var _f = useState('all'), filter = _f[0], setFilter = _f[1];
+  var _fl = useState(null), flipped = _fl[0], setFlipped = _fl[1];
+  var filtered = cocktails.filter(function(c){return filter==='all'||c.category===filter});
+  var classics = cocktails.filter(function(c){return c.category==='classic'});
+  var sigs = cocktails.filter(function(c){return c.category==='signature'});
+  return React.createElement("div",{className:"max-w-2xl mx-auto"},
+    React.createElement("div",{className:"text-center mb-6"},
+      React.createElement("div",{className:"text-4xl mb-2"},"\ud83c\udf78"),
+      React.createElement("h1",{className:"text-2xl font-bold"},t(lang,'cocktailsTitle')),
+      React.createElement("p",{className:"text-base-content/60 mt-1"},cocktails.length+t(lang,'cocktailsTap'))),
+    React.createElement("div",{className:"flex gap-2 mb-5 justify-center"},
+      React.createElement("button",{onClick:function(){return setFilter('all')},className:"btn btn-sm "+(filter==='all'?'btn-primary':'btn-ghost')},t(lang,'all')+" ("+cocktails.length+")"),
+      React.createElement("button",{onClick:function(){return setFilter('classic')},className:"btn btn-sm "+(filter==='classic'?'btn-primary':'btn-ghost')},t(lang,'classics')+" ("+classics.length+")"),
+      React.createElement("button",{onClick:function(){return setFilter('signature')},className:"btn btn-sm "+(filter==='signature'?'btn-primary':'btn-ghost')},t(lang,'signatures')+" ("+sigs.length+")")),
+    React.createElement("div",{className:"flex flex-col gap-3"},
+      filtered.map(function(c){return React.createElement(CocktailCard,{key:c.name,cocktail:c,flipped:flipped===c.name,onFlip:function(){return setFlipped(flipped===c.name?null:c.name)}})})));
+}
+
+function WineCard(props) {
+  var lang = useContext(LangContext);
+  var w = props.wine;
+  var bf = bodyFlavorMap[lang] || bodyFlavorMap.en;
+  return React.createElement("div",{className:"card bg-base-200 shadow-sm"},
+    React.createElement("div",{className:"card-body p-4"},
+      React.createElement("div",{className:"flex justify-between items-start"},
+        React.createElement("div",null,
+          React.createElement("h3",{className:"font-bold text-base"},w.name),
+          React.createElement("p",{className:"text-sm text-base-content/70"},w.producer)),
+        React.createElement("div",{className:"text-right"},
+          React.createElement("p",{className:"text-sm font-medium"},w.vintage),
+          w.note ? React.createElement("span",{className:"badge badge-ghost badge-sm"},w.note) : null)),
+      React.createElement("p",{className:"text-xs text-base-content/60 mt-1"},w.region),
+      w.body ? React.createElement("div",{className:"flex gap-2 mt-2"},
+        React.createElement("span",{className:"badge badge-outline badge-sm"},t(lang,'bodyLbl')+": "+(bf[w.body]||w.body)),
+        React.createElement("span",{className:"badge badge-outline badge-sm"},t(lang,'flavorLbl')+": "+(bf[w.flavor]||w.flavor))
+      ) : null));
+}
+
+function WineSection(props) {
+  return React.createElement("div",{className:"mb-6"},
+    React.createElement("div",{className:"flex items-center gap-2 mb-3"},
+      React.createElement("div",{className:"w-3 h-3 rounded-full "+props.color}),
+      React.createElement("h2",{className:"text-lg font-bold uppercase tracking-wider"},props.title)),
+    React.createElement("div",{className:"grid grid-cols-1 gap-2"},
+      props.wines.map(function(w,i){return React.createElement(WineCard,{key:i,wine:w})})));
+}
+
+function WineGuide() {
+  var lang = useContext(LangContext);
+  var _af = useState('all'), af = _af[0], setAf = _af[1];
+  var filters = [{id:'all',label:t(lang,'all')},{id:'red',label:t(lang,'red')},{id:'white',label:t(lang,'white')},{id:'rose',label:t(lang,'rose')},{id:'sparkling',label:t(lang,'sparkling')},{id:'exclusive',label:t(lang,'exclusive')}];
+  return React.createElement("div",{className:"max-w-2xl mx-auto p-4"},
+    React.createElement("h1",{className:"text-2xl font-bold mb-1"},t(lang,'winesTitle')),
+    React.createElement("p",{className:"text-base-content/60 text-sm mb-4"},t(lang,'winesSub')),
+    React.createElement("div",{className:"flex flex-wrap gap-2 mb-6"},
+      filters.map(function(f){return React.createElement("button",{key:f.id,onClick:function(){return setAf(f.id)},className:"btn btn-sm "+(af===f.id?'btn-primary':'btn-ghost')},f.label)})),
+    (af==='all'||af==='red') && React.createElement(WineSection,{title:t(lang,'redT'),color:"bg-red-700",wines:wines.red}),
+    (af==='all'||af==='white') && React.createElement(WineSection,{title:t(lang,'whiteT'),color:"bg-yellow-300",wines:wines.white}),
+    (af==='all'||af==='rose') && React.createElement(WineSection,{title:t(lang,'roseT'),color:"bg-pink-300",wines:wines.rose}),
+    (af==='all'||af==='sparkling') && React.createElement(WineSection,{title:t(lang,'sparklingT'),color:"bg-amber-200",wines:wines.sparkling}),
+    (af==='all'||af==='exclusive') && React.createElement(WineSection,{title:t(lang,'exclusiveT'),color:"bg-purple-500",wines:wines.exclusive}));
 }
 
 function TerminologyView() {
-  const [revealed, setRevealed] = useState(new Set());
-  const [showAll, setShowAll] = useState(false);
-  const toggleReveal = idx => {
-    setRevealed(prev => {
-      const next = new Set(prev);
-      if (next.has(idx)) next.delete(idx);else next.add(idx);
-      return next;
-    });
-  };
-  const toggleAll = () => {
-    if (showAll) {
-      setRevealed(new Set());
-    } else {
-      setRevealed(new Set(terminology.map((_, i) => i)));
-    }
-    setShowAll(!showAll);
-  };
-  return /*#__PURE__*/React.createElement("div", {
-    className: "max-w-2xl mx-auto"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-center mb-6"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-4xl mb-2"
-  }, "\uD83D\uDCD6"), /*#__PURE__*/React.createElement("h1", {
-    className: "text-2xl font-bold"
-  }, "Bar Terminology"), /*#__PURE__*/React.createElement("p", {
-    className: "text-base-content/60 mt-1"
-  }, "Essential terms every service professional must know")), /*#__PURE__*/React.createElement("div", {
-    className: "bg-base-200 rounded-xl p-4 mb-5"
-  }, /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-base-content/70"
-  }, /*#__PURE__*/React.createElement("strong", null, "Study mode:"), " Tap each term to reveal its definition. Try to recall the meaning before tapping \u2014 this builds recall faster."), /*#__PURE__*/React.createElement("button", {
-    onClick: toggleAll,
-    className: "btn btn-ghost btn-sm mt-2"
-  }, showAll ? '🙈 Hide All' : '👁️ Show All')), /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-col gap-3"
-  }, terminology.map((term, idx) => {
-    const isRevealed = revealed.has(idx);
-    return /*#__PURE__*/React.createElement("div", {
-      key: idx,
-      onClick: () => toggleReveal(idx),
-      className: "bg-base-200 rounded-xl p-4 cursor-pointer hover:bg-base-300 transition-colors"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "flex items-center justify-between"
-    }, /*#__PURE__*/React.createElement("h3", {
-      className: "font-bold text-lg text-primary"
-    }, term.term), !isRevealed && /*#__PURE__*/React.createElement("span", {
-      className: "text-xs text-base-content/40"
-    }, "Tap to reveal")), isRevealed && /*#__PURE__*/React.createElement("div", {
-      className: "mt-2"
-    }, /*#__PURE__*/React.createElement("p", {
-      className: "text-sm text-base-content/80"
-    }, term.definition), term.example && /*#__PURE__*/React.createElement("p", {
-      className: "text-sm text-base-content/50 italic mt-2 bg-base-300 rounded-lg px-3 py-2"
-    }, "\uD83D\uDCAC ", term.example)));
-  })));
+  var lang = useContext(LangContext);
+  var _r = useState(new Set()), revealed = _r[0], setRevealed = _r[1];
+  var _sa = useState(false), showAllState = _sa[0], setShowAllState = _sa[1];
+  var toggleReveal = function(idx){setRevealed(function(prev){var next=new Set(prev);if(next.has(idx))next.delete(idx);else next.add(idx);return next})};
+  var toggleAll = function(){if(showAllState){setRevealed(new Set())}else{setRevealed(new Set(terminology.map(function(_,i){return i})))}setShowAllState(!showAllState)};
+  return React.createElement("div",{className:"max-w-2xl mx-auto"},
+    React.createElement("div",{className:"text-center mb-6"},
+      React.createElement("div",{className:"text-4xl mb-2"},"\ud83d\udcd6"),
+      React.createElement("h1",{className:"text-2xl font-bold"},t(lang,'termTitle')),
+      React.createElement("p",{className:"text-base-content/60 mt-1"},t(lang,'termSub'))),
+    React.createElement("div",{className:"bg-base-200 rounded-xl p-4 mb-5"},
+      React.createElement("p",{className:"text-sm text-base-content/70"},
+        React.createElement("strong",null,t(lang,'studyMode')),t(lang,'studyDesc')),
+      React.createElement("button",{onClick:toggleAll,className:"btn btn-ghost btn-sm mt-2"},showAllState?t(lang,'hideAll'):t(lang,'showAll'))),
+    React.createElement("div",{className:"flex flex-col gap-3"},
+      terminology.map(function(term,idx){
+        var isRevealed = revealed.has(idx);
+        var def = lang==='es' && term.definition_es ? term.definition_es : term.definition;
+        var ex = lang==='es' && term.example_es ? term.example_es : term.example;
+        return React.createElement("div",{key:idx,onClick:function(){return toggleReveal(idx)},className:"bg-base-200 rounded-xl p-4 cursor-pointer hover:bg-base-300 transition-colors"},
+          React.createElement("div",{className:"flex items-center justify-between"},
+            React.createElement("h3",{className:"font-bold text-lg text-primary"},term.term),
+            !isRevealed && React.createElement("span",{className:"text-xs text-base-content/40"},t(lang,'tapReveal'))),
+          isRevealed && React.createElement("div",{className:"mt-2"},
+            React.createElement("p",{className:"text-sm text-base-content/80"},def),
+            ex && React.createElement("p",{className:"text-sm text-base-content/50 italic mt-2 bg-base-300 rounded-lg px-3 py-2"},"\ud83d\udcac "+ex)))})));
 }
-function MenuItemCard({
-  item
-}) {
-  const [expanded, setExpanded] = useState(false);
-  const hasAllergens = item.allergens && item.allergens !== 'No major allergens';
-  const allergenBadges = hasAllergens ? item.allergens.split(',').map(a => a.trim()).filter(Boolean) : [];
-  return /*#__PURE__*/React.createElement("div", {
-    onClick: () => setExpanded(!expanded),
-    className: "bg-base-200 rounded-lg p-3 cursor-pointer hover:bg-base-300 transition-colors"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-start justify-between gap-2"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex-1"
-  }, /*#__PURE__*/React.createElement("h4", {
-    className: "font-semibold text-sm"
-  }, item.name), item.description && /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-base-content/50 mt-0.5"
-  }, item.description)), hasAllergens ? /*#__PURE__*/React.createElement("span", {
-    className: "badge badge-warning badge-xs shrink-0"
-  }, "\u26A0\uFE0F") : /*#__PURE__*/React.createElement("span", {
-    className: "badge badge-success badge-xs shrink-0"
-  }, "\u2713")), expanded && /*#__PURE__*/React.createElement("div", {
-    className: "mt-2 pt-2 border-t border-base-300"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-xs font-semibold text-base-content/50 uppercase tracking-wider mb-1"
-  }, "Allergens"), hasAllergens ? /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-wrap gap-1"
-  }, allergenBadges.map((a, i) => /*#__PURE__*/React.createElement("span", {
-    key: i,
-    className: "badge badge-warning badge-sm"
-  }, a))) : /*#__PURE__*/React.createElement("span", {
-    className: "badge badge-success badge-sm"
-  }, "No major allergens"), item.notes && /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-base-content/50 mt-2 italic"
-  }, item.notes)));
+
+function MenuItemCard(props) {
+  var lang = useContext(LangContext);
+  var item = props.item;
+  var _e = useState(false), expanded = _e[0], setExpanded = _e[1];
+  var allergens = lang==='es' && item.allergens_es ? item.allergens_es : item.allergens;
+  var noA = lang==='es' ? 'Sin al\u00e9rgenos principales' : 'No major allergens';
+  var hasAllergens = allergens && allergens !== 'No major allergens' && allergens !== 'Sin al\u00e9rgenos principales';
+  var badges = hasAllergens ? allergens.split(',').map(function(a){return a.trim()}).filter(Boolean) : [];
+  return React.createElement("div",{onClick:function(){return setExpanded(!expanded)},className:"bg-base-200 rounded-lg p-3 cursor-pointer hover:bg-base-300 transition-colors"},
+    React.createElement("div",{className:"flex items-start justify-between gap-2"},
+      React.createElement("div",{className:"flex-1"},
+        React.createElement("h4",{className:"font-semibold text-sm"},item.name),
+        item.description && React.createElement("p",{className:"text-xs text-base-content/50 mt-0.5"},item.description)),
+      hasAllergens ? React.createElement("span",{className:"badge badge-warning badge-xs shrink-0"},"\u26a0\ufe0f") : React.createElement("span",{className:"badge badge-success badge-xs shrink-0"},"\u2713")),
+    expanded && React.createElement("div",{className:"mt-2 pt-2 border-t border-base-300"},
+      React.createElement("div",{className:"text-xs font-semibold text-base-content/50 uppercase tracking-wider mb-1"},t(lang,'allergens')),
+      hasAllergens ? React.createElement("div",{className:"flex flex-wrap gap-1"},
+        badges.map(function(a,i){return React.createElement("span",{key:i,className:"badge badge-warning badge-sm"},a)}))
+      : React.createElement("span",{className:"badge badge-success badge-sm"},t(lang,'noAllergens')),
+      item.notes && React.createElement("p",{className:"text-xs text-base-content/50 mt-2 italic"},lang==='es'&&item.notes_es?item.notes_es:item.notes)));
 }
+
 function MenuGuide() {
-  const [menu, setMenu] = useState('dinner');
-  const activeMenu = menu === 'brunch' ? brunchMenu : dinnerMenu;
-  const sections = [];
-  activeMenu.forEach(item => {
-    if (!sections.includes(item.section)) sections.push(item.section);
+  var lang = useContext(LangContext);
+  var _m = useState('dinner'), menu = _m[0], setMenu = _m[1];
+  var activeMenu = menu === 'brunch' ? brunchMenu : dinnerMenu;
+  var sections = [];
+  activeMenu.forEach(function(item){
+    var sec = lang==='es' && item.section_es ? item.section_es : item.section;
+    if(!sections.includes(sec)) sections.push(sec);
   });
-  return /*#__PURE__*/React.createElement("div", {
-    className: "max-w-2xl mx-auto"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-center mb-6"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-4xl mb-2"
-  }, "\uD83C\uDF7D\uFE0F"), /*#__PURE__*/React.createElement("h1", {
-    className: "text-2xl font-bold"
-  }, "Menu Knowledge"), /*#__PURE__*/React.createElement("p", {
-    className: "text-base-content/60 mt-1"
-  }, "Know every dish, every allergen, every detail")), /*#__PURE__*/React.createElement("div", {
-    className: "bg-base-200 rounded-xl p-4 mb-5"
-  }, /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-base-content/70"
-  }, /*#__PURE__*/React.createElement("strong", null, "Northport standard:"), " You should be able to describe any dish from memory \u2014 ingredients, preparation, and allergens. Tap any item to see allergen details."), /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-base-content/50 mt-2"
-  }, "\u26A0\uFE0F = Contains allergens \xA0 \u2713 = No major allergens")), /*#__PURE__*/React.createElement("div", {
-    className: "flex gap-2 mb-5 justify-center"
-  }, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setMenu('dinner'),
-    className: `btn btn-sm ${menu === 'dinner' ? 'btn-primary' : 'btn-ghost'}`
-  }, "\uD83C\uDF19 Dinner Menu"), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setMenu('brunch'),
-    className: `btn btn-sm ${menu === 'brunch' ? 'btn-primary' : 'btn-ghost'}`
-  }, "\u2600\uFE0F Brunch Menu")), /*#__PURE__*/React.createElement("div", {
-    className: "text-sm text-base-content/40 mb-4"
-  }, "Executive Chef Michael Ross", menu === 'brunch' ? ' · Sat & Sun 11am – 1:45pm' : ' · Sun–Wed 4:30–9pm · Thu–Sat 4:30–10pm'), sections.map(section => /*#__PURE__*/React.createElement("div", {
-    key: section,
-    className: "mb-6"
-  }, /*#__PURE__*/React.createElement("h3", {
-    className: "font-bold text-base text-base-content/70 uppercase tracking-wider mb-3 border-b border-base-300 pb-1"
-  }, section), /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-col gap-2"
-  }, activeMenu.filter(i => i.section === section).map((item, idx) => /*#__PURE__*/React.createElement(MenuItemCard, {
-    key: `${item.name}-${idx}`,
-    item: item
-  }))))));
+  return React.createElement("div",{className:"max-w-2xl mx-auto"},
+    React.createElement("div",{className:"text-center mb-6"},
+      React.createElement("div",{className:"text-4xl mb-2"},"\ud83c\udf7d\ufe0f"),
+      React.createElement("h1",{className:"text-2xl font-bold"},t(lang,'menuTitle')),
+      React.createElement("p",{className:"text-base-content/60 mt-1"},t(lang,'menuSub'))),
+    React.createElement("div",{className:"bg-base-200 rounded-xl p-4 mb-5"},
+      React.createElement("p",{className:"text-sm text-base-content/70"},
+        React.createElement("strong",null,t(lang,'menuStd')),t(lang,'menuStdDesc')),
+      React.createElement("p",{className:"text-xs text-base-content/50 mt-2"},t(lang,'allergenWarn'))),
+    React.createElement("div",{className:"flex gap-2 mb-5 justify-center"},
+      React.createElement("button",{onClick:function(){return setMenu('dinner')},className:"btn btn-sm "+(menu==='dinner'?'btn-primary':'btn-ghost')},t(lang,'dinner')),
+      React.createElement("button",{onClick:function(){return setMenu('brunch')},className:"btn btn-sm "+(menu==='brunch'?'btn-primary':'btn-ghost')},t(lang,'brunch'))),
+    React.createElement("div",{className:"text-sm text-base-content/40 mb-4"},
+      t(lang,'chefCredit')+(menu==='brunch'?t(lang,'brunchTime'):t(lang,'dinnerTime'))),
+    sections.map(function(section){
+      return React.createElement("div",{key:section,className:"mb-6"},
+        React.createElement("h3",{className:"font-bold text-base text-base-content/70 uppercase tracking-wider mb-3 border-b border-base-300 pb-1"},section),
+        React.createElement("div",{className:"flex flex-col gap-2"},
+          activeMenu.filter(function(i){
+            var sec = lang==='es' && i.section_es ? i.section_es : i.section;
+            return sec === section;
+          }).map(function(item,idx){return React.createElement(MenuItemCard,{key:item.name+'-'+idx,item:item})})))}));
 }
-function generateQuestions() {
-  const questions = [];
 
-  // Cocktail glassware
-  const glassTypes = [...new Set(cocktails.map(c => c.glassware))];
-  cocktails.forEach(c => {
-    const wrong = shuffle(glassTypes.filter(g => g !== c.glassware)).slice(0, 3);
-    if (wrong.length >= 3) {
-      const opts = shuffle([c.glassware, ...wrong]);
-      questions.push({
-        question: `What glassware is used for a ${c.name}?`,
-        options: opts,
-        correctIndex: opts.indexOf(c.glassware),
-        category: 'Cocktails'
-      });
-    }
+function generateQuestions(lang) {
+  var questions = [];
+  var glassTypes = [];
+  cocktails.forEach(function(c){if(glassTypes.indexOf(c.glassware)===-1) glassTypes.push(c.glassware)});
+
+  cocktails.forEach(function(c){
+    var wrong = shuffle(glassTypes.filter(function(g){return g!==c.glassware})).slice(0,3);
+    if(wrong.length>=3){var opts=shuffle([c.glassware].concat(wrong));questions.push({question:t(lang,'qGlass')+" "+c.name+"?",options:opts,correctIndex:opts.indexOf(c.glassware),category:lang==='es'?'C\u00f3cteles':'Cocktails'})}
   });
-
-  // Cocktail garnish
-  cocktails.forEach(c => {
-    const otherGarnishes = shuffle(cocktails.filter(x => x.garnish !== c.garnish).map(x => x.garnish)).slice(0, 3);
-    if (otherGarnishes.length >= 3) {
-      const opts = shuffle([c.garnish, ...otherGarnishes]);
-      questions.push({
-        question: `What is the garnish for a ${c.name}?`,
-        options: opts,
-        correctIndex: opts.indexOf(c.garnish),
-        category: 'Cocktails'
-      });
-    }
+  cocktails.forEach(function(c){
+    var others=shuffle(cocktails.filter(function(x){return x.garnish!==c.garnish}).map(function(x){return x.garnish})).slice(0,3);
+    if(others.length>=3){var opts=shuffle([c.garnish].concat(others));questions.push({question:t(lang,'qGarnish')+" "+c.name+"?",options:opts,correctIndex:opts.indexOf(c.garnish),category:lang==='es'?'C\u00f3cteles':'Cocktails'})}
   });
-
-  // Cocktail ingredients
-  cocktails.forEach(c => {
-    const others = shuffle(cocktails.filter(x => x.name !== c.name).map(x => x.ingredients)).slice(0, 3);
-    if (others.length >= 3) {
-      const opts = shuffle([c.ingredients, ...others]);
-      questions.push({
-        question: `What are the ingredients in a ${c.name}?`,
-        options: opts,
-        correctIndex: opts.indexOf(c.ingredients),
-        category: 'Cocktails'
-      });
-    }
+  cocktails.forEach(function(c){
+    var others=shuffle(cocktails.filter(function(x){return x.name!==c.name}).map(function(x){return x.ingredients})).slice(0,3);
+    if(others.length>=3){var opts=shuffle([c.ingredients].concat(others));questions.push({question:t(lang,'qIngr')+" "+c.name+"?",options:opts,correctIndex:opts.indexOf(c.ingredients),category:lang==='es'?'C\u00f3cteles':'Cocktails'})}
   });
-
-  // Terminology
-  terminology.forEach(t => {
-    const others = shuffle(terminology.filter(x => x.term !== t.term).map(x => x.definition)).slice(0, 3);
-    if (others.length >= 3) {
-      const opts = shuffle([t.definition, ...others]);
-      questions.push({
-        question: `What does "${t.term}" mean?`,
-        options: opts,
-        correctIndex: opts.indexOf(t.definition),
-        category: 'Terminology'
-      });
-    }
+  terminology.forEach(function(tm){
+    var def=lang==='es'&&tm.definition_es?tm.definition_es:tm.definition;
+    var others=shuffle(terminology.filter(function(x){return x.term!==tm.term}).map(function(x){return lang==='es'&&x.definition_es?x.definition_es:x.definition})).slice(0,3);
+    if(others.length>=3){var opts=shuffle([def].concat(others));questions.push({question:t(lang,'qMean')+tm.term+t(lang,'qMean2'),options:opts,correctIndex:opts.indexOf(def),category:lang==='es'?'Terminolog\u00eda':'Terminology'})}
   });
-
-  // Northport standards
-  forbesStandards.forEach(s => {
-    const behavior = s.keyBehaviors[0];
-    const otherBehaviors = shuffle(forbesStandards.filter(x => x.title !== s.title).flatMap(x => x.keyBehaviors)).slice(0, 3);
-    if (otherBehaviors.length >= 3) {
-      const opts = shuffle([behavior, ...otherBehaviors]);
-      questions.push({
-        question: `Which behavior belongs to "${s.title}"?`,
-        options: opts,
-        correctIndex: opts.indexOf(behavior),
-        category: 'Northport Standards'
-      });
-    }
+  forbesStandards.forEach(function(s){
+    var title=lang==='es'&&s.title_es?s.title_es:s.title;
+    var behavs=lang==='es'&&s.keyBehaviors_es?s.keyBehaviors_es:s.keyBehaviors;
+    var behavior=behavs[0];
+    var otherBehavs=shuffle(forbesStandards.filter(function(x){return x.title!==s.title}).flatMap(function(x){return lang==='es'&&x.keyBehaviors_es?x.keyBehaviors_es:x.keyBehaviors})).slice(0,3);
+    if(otherBehavs.length>=3){var opts=shuffle([behavior].concat(otherBehavs));questions.push({question:t(lang,'qBehav')+title+t(lang,'qBehav2'),options:opts,correctIndex:opts.indexOf(behavior),category:lang==='es'?'Est\u00e1ndares Northport':'Northport Standards'})}
   });
-
-  // Allergen questions
-  const allergenItems = dinnerMenu.filter(i => i.allergens && i.allergens !== 'No major allergens');
-  allergenItems.slice(0, 10).forEach(item => {
-    const others = shuffle(allergenItems.filter(x => x.allergens !== item.allergens).map(x => x.allergens)).slice(0, 3);
-    if (others.length >= 3) {
-      const opts = shuffle([item.allergens, ...others]);
-      questions.push({
-        question: `What allergens does the ${item.name} contain?`,
-        options: opts,
-        correctIndex: opts.indexOf(item.allergens),
-        category: 'Menu Knowledge'
-      });
-    }
+  var allergenItems=dinnerMenu.filter(function(i){return i.allergens&&i.allergens!=='No major allergens'});
+  allergenItems.slice(0,10).forEach(function(item){
+    var a=lang==='es'&&item.allergens_es?item.allergens_es:item.allergens;
+    var others=shuffle(allergenItems.filter(function(x){return x.allergens!==item.allergens}).map(function(x){return lang==='es'&&x.allergens_es?x.allergens_es:x.allergens})).slice(0,3);
+    if(others.length>=3){var opts=shuffle([a].concat(others));questions.push({question:t(lang,'qAllerg')+" "+item.name+" "+t(lang,'qAllerg2'),options:opts,correctIndex:opts.indexOf(a),category:lang==='es'?'Conocimiento del Men\u00fa':'Menu Knowledge'})}
   });
   return shuffle(questions);
 }
+
 function Quiz() {
-  const [mode, setMode] = useState('setup');
-  const [category, setCategory] = useState('all');
-  const [questions, setQuestions] = useState([]);
-  const [current, setCurrent] = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [score, setScore] = useState(0);
-  const [answered, setAnswered] = useState(false);
-  const numQuestions = 10;
-  const allQuestions = useMemo(() => generateQuestions(), []);
-  const categories = ['all', ...new Set(allQuestions.map(q => q.category))];
-  const startQuiz = () => {
-    const pool = category === 'all' ? allQuestions : allQuestions.filter(q => q.category === category);
-    setQuestions(shuffle(pool).slice(0, numQuestions));
-    setCurrent(0);
-    setScore(0);
-    setSelected(null);
-    setAnswered(false);
-    setMode('active');
+  var lang = useContext(LangContext);
+  var _mode = useState('setup'), mode = _mode[0], setMode = _mode[1];
+  var _cat = useState('all'), category = _cat[0], setCategory = _cat[1];
+  var _qs = useState([]), questions = _qs[0], setQuestions = _qs[1];
+  var _cur = useState(0), current = _cur[0], setCurrent = _cur[1];
+  var _sel = useState(null), selected = _sel[0], setSelected = _sel[1];
+  var _sc = useState(0), score = _sc[0], setScore = _sc[1];
+  var _ans = useState(false), answered = _ans[0], setAnswered = _ans[1];
+  var numQ = 10;
+  var allQ = useMemo(function(){return generateQuestions(lang)},[lang]);
+  var cats = ['all'];
+  allQ.forEach(function(q){if(cats.indexOf(q.category)===-1)cats.push(q.category)});
+  var startQuiz = function(){
+    var pool = category==='all'?allQ:allQ.filter(function(q){return q.category===category});
+    setQuestions(shuffle(pool).slice(0,numQ));setCurrent(0);setScore(0);setSelected(null);setAnswered(false);setMode('active');
   };
-  const handleSelect = idx => {
-    if (answered) return;
-    setSelected(idx);
-    setAnswered(true);
-    if (idx === questions[current].correctIndex) {
-      setScore(s => s + 1);
-    }
-  };
-  const nextQuestion = () => {
-    if (current + 1 >= questions.length) {
-      setMode('results');
-    } else {
-      setCurrent(c => c + 1);
-      setSelected(null);
-      setAnswered(false);
-    }
-  };
-  if (mode === 'setup') {
-    return /*#__PURE__*/React.createElement("div", {
-      className: "max-w-2xl mx-auto"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "text-center mb-6"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "text-4xl mb-2"
-    }, "\u2705"), /*#__PURE__*/React.createElement("h1", {
-      className: "text-2xl font-bold"
-    }, "Test Your Knowledge"), /*#__PURE__*/React.createElement("p", {
-      className: "text-base-content/60 mt-1"
-    }, numQuestions, " questions from your training")), /*#__PURE__*/React.createElement("div", {
-      className: "bg-base-200 rounded-xl p-5"
-    }, /*#__PURE__*/React.createElement("label", {
-      className: "text-sm font-semibold text-base-content/70 mb-3 block"
-    }, "Choose a category:"), /*#__PURE__*/React.createElement("div", {
-      className: "flex flex-wrap gap-2 mb-5"
-    }, categories.map(cat => /*#__PURE__*/React.createElement("button", {
-      key: cat,
-      onClick: () => setCategory(cat),
-      className: `btn btn-sm ${category === cat ? 'btn-primary' : 'btn-ghost'}`
-    }, cat === 'all' ? '🎯 All Topics' : cat))), /*#__PURE__*/React.createElement("button", {
-      onClick: startQuiz,
-      className: "btn btn-primary w-full"
-    }, "Start Quiz \u2192")));
+  var handleSelect = function(idx){if(answered)return;setSelected(idx);setAnswered(true);if(idx===questions[current].correctIndex)setScore(function(s){return s+1})};
+  var nextQuestion = function(){if(current+1>=questions.length)setMode('results');else{setCurrent(function(c){return c+1});setSelected(null);setAnswered(false)}};
+
+  if(mode==='setup'){
+    return React.createElement("div",{className:"max-w-2xl mx-auto"},
+      React.createElement("div",{className:"text-center mb-6"},
+        React.createElement("div",{className:"text-4xl mb-2"},"\u2705"),
+        React.createElement("h1",{className:"text-2xl font-bold"},t(lang,'quizTitle')),
+        React.createElement("p",{className:"text-base-content/60 mt-1"},numQ+t(lang,'quizSub'))),
+      React.createElement("div",{className:"bg-base-200 rounded-xl p-5"},
+        React.createElement("label",{className:"text-sm font-semibold text-base-content/70 mb-3 block"},t(lang,'chooseCat')),
+        React.createElement("div",{className:"flex flex-wrap gap-2 mb-5"},
+          cats.map(function(cat){return React.createElement("button",{key:cat,onClick:function(){return setCategory(cat)},className:"btn btn-sm "+(category===cat?'btn-primary':'btn-ghost')},cat==='all'?t(lang,'allTopics'):cat)})),
+        React.createElement("button",{onClick:startQuiz,className:"btn btn-primary w-full"},t(lang,'startQuiz'))));
   }
-  if (mode === 'results') {
-    const pct = Math.round(score / questions.length * 100);
-    const emoji = pct >= 90 ? '🌟' : pct >= 70 ? '👏' : pct >= 50 ? '📚' : '💪';
-    const message = pct >= 90 ? 'Outstanding! True Northport material.' : pct >= 70 ? 'Great work! A little more study and you\'re there.' : pct >= 50 ? 'Good start! Review the modules and try again.' : 'Keep studying — you\'ll get there! Review the training modules.';
-    return /*#__PURE__*/React.createElement("div", {
-      className: "max-w-2xl mx-auto text-center"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "text-6xl mb-4"
-    }, emoji), /*#__PURE__*/React.createElement("h1", {
-      className: "text-2xl font-bold mb-2"
-    }, "Quiz Complete!"), /*#__PURE__*/React.createElement("div", {
-      className: "text-5xl font-bold text-primary mb-2"
-    }, pct, "%"), /*#__PURE__*/React.createElement("p", {
-      className: "text-base-content/60 mb-2"
-    }, score, " of ", questions.length, " correct"), /*#__PURE__*/React.createElement("p", {
-      className: "text-base-content/70 mb-6"
-    }, message), /*#__PURE__*/React.createElement("div", {
-      className: "flex gap-3 justify-center"
-    }, /*#__PURE__*/React.createElement("button", {
-      onClick: () => setMode('setup'),
-      className: "btn btn-primary"
-    }, "Try Again")));
+  if(mode==='results'){
+    var pct=Math.round(score/questions.length*100);
+    var emoji=pct>=90?'\ud83c\udf1f':pct>=70?'\ud83d\udc4f':pct>=50?'\ud83d\udcda':'\ud83d\udcaa';
+    var msg=pct>=90?t(lang,'msg90'):pct>=70?t(lang,'msg70'):pct>=50?t(lang,'msg50'):t(lang,'msg0');
+    return React.createElement("div",{className:"max-w-2xl mx-auto text-center"},
+      React.createElement("div",{className:"text-6xl mb-4"},emoji),
+      React.createElement("h1",{className:"text-2xl font-bold mb-2"},t(lang,'quizDone')),
+      React.createElement("div",{className:"text-5xl font-bold text-primary mb-2"},pct+"%"),
+      React.createElement("p",{className:"text-base-content/60 mb-2"},score+" "+t(lang,'of')+" "+questions.length+" "+t(lang,'correct')),
+      React.createElement("p",{className:"text-base-content/70 mb-6"},msg),
+      React.createElement("div",{className:"flex gap-3 justify-center"},
+        React.createElement("button",{onClick:function(){return setMode('setup')},className:"btn btn-primary"},t(lang,'tryAgain'))));
   }
-  const q = questions[current];
-  return /*#__PURE__*/React.createElement("div", {
-    className: "max-w-2xl mx-auto"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between mb-4"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "text-sm text-base-content/50"
-  }, "Question ", current + 1, " of ", questions.length), /*#__PURE__*/React.createElement("span", {
-    className: "badge badge-primary badge-sm"
-  }, q.category)), /*#__PURE__*/React.createElement("progress", {
-    className: "progress progress-primary w-full mb-5",
-    value: current + 1,
-    max: questions.length
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "bg-base-200 rounded-xl p-5 mb-5"
-  }, /*#__PURE__*/React.createElement("h2", {
-    className: "text-lg font-semibold mb-4"
-  }, q.question), /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-col gap-2"
-  }, q.options.map((opt, idx) => {
-    let cls = 'btn btn-ghost bg-base-100 h-auto py-3 px-4 text-left justify-start font-normal';
-    if (answered) {
-      if (idx === q.correctIndex) cls = 'btn btn-success h-auto py-3 px-4 text-left justify-start font-normal text-white';else if (idx === selected && idx !== q.correctIndex) cls = 'btn btn-error h-auto py-3 px-4 text-left justify-start font-normal text-white';
-    } else if (idx === selected) {
-      cls = 'btn btn-primary h-auto py-3 px-4 text-left justify-start font-normal';
-    }
-    return /*#__PURE__*/React.createElement("button", {
-      key: idx,
-      className: cls,
-      onClick: () => handleSelect(idx)
-    }, /*#__PURE__*/React.createElement("span", {
-      className: "text-sm leading-relaxed",
-      style: {
-        whiteSpace: 'normal'
-      }
-    }, opt));
-  }))), answered && /*#__PURE__*/React.createElement("div", {
-    className: "flex justify-between items-center"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: `text-sm font-semibold ${selected === q.correctIndex ? 'text-success' : 'text-error'}`
-  }, selected === q.correctIndex ? '✓ Correct!' : '✗ Incorrect'), /*#__PURE__*/React.createElement("button", {
-    onClick: nextQuestion,
-    className: "btn btn-primary btn-sm"
-  }, current + 1 >= questions.length ? 'See Results' : 'Next Question →')), /*#__PURE__*/React.createElement("div", {
-    className: "text-center mt-4"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "text-sm text-base-content/40"
-  }, "Score: ", score, "/", current + (answered ? 1 : 0))));
+  var q=questions[current];
+  return React.createElement("div",{className:"max-w-2xl mx-auto"},
+    React.createElement("div",{className:"flex items-center justify-between mb-4"},
+      React.createElement("span",{className:"text-sm text-base-content/50"},t(lang,'qOf')+" "+(current+1)+" "+t(lang,'of')+" "+questions.length),
+      React.createElement("span",{className:"badge badge-primary badge-sm"},q.category)),
+    React.createElement("progress",{className:"progress progress-primary w-full mb-5",value:current+1,max:questions.length}),
+    React.createElement("div",{className:"bg-base-200 rounded-xl p-5 mb-5"},
+      React.createElement("h2",{className:"text-lg font-semibold mb-4"},q.question),
+      React.createElement("div",{className:"flex flex-col gap-2"},
+        q.options.map(function(opt,idx){
+          var cls='btn btn-ghost bg-base-100 h-auto py-3 px-4 text-left justify-start font-normal';
+          if(answered){if(idx===q.correctIndex)cls='btn btn-success h-auto py-3 px-4 text-left justify-start font-normal text-white';else if(idx===selected&&idx!==q.correctIndex)cls='btn btn-error h-auto py-3 px-4 text-left justify-start font-normal text-white'}
+          else if(idx===selected)cls='btn btn-primary h-auto py-3 px-4 text-left justify-start font-normal';
+          return React.createElement("button",{key:idx,className:cls,onClick:function(){return handleSelect(idx)}},
+            React.createElement("span",{className:"text-sm leading-relaxed",style:{whiteSpace:'normal'}},opt))}))),
+    answered && React.createElement("div",{className:"flex justify-between items-center"},
+      React.createElement("span",{className:"text-sm font-semibold "+(selected===q.correctIndex?'text-success':'text-error')},selected===q.correctIndex?t(lang,'correctA'):t(lang,'incorrectA')),
+      React.createElement("button",{onClick:nextQuestion,className:"btn btn-primary btn-sm"},current+1>=questions.length?t(lang,'seeResults'):t(lang,'nextQ'))),
+    React.createElement("div",{className:"text-center mt-4"},
+      React.createElement("span",{className:"text-sm text-base-content/40"},t(lang,'score')+": "+score+"/"+(current+(answered?1:0)))));
 }
 
 // ============ MAIN APP ============
-
-const navItems = [{
-  id: 'home',
-  icon: '🏠',
-  label: 'Home'
-}, {
-  id: 'forbes',
-  icon: '⭐',
-  label: 'Northport Standards'
-}, {
-  id: 'cocktails',
-  icon: '🍸',
-  label: 'Cocktails'
-}, {
-  id: 'wines',
-  icon: '🍷',
-  label: 'Wines'
-}, {
-  id: 'menus',
-  icon: '🍽️',
-  label: 'Menu'
-}, {
-  id: 'terminology',
-  icon: '📖',
-  label: 'Terms'
-}, {
-  id: 'quiz',
-  icon: '✅',
-  label: 'Quiz'
-}];
 function App() {
-  const [section, setSection] = useState('home');
-  const navigate = id => {
-    setSection(id);
-    window.scrollTo(0, 0);
-  };
-  return /*#__PURE__*/React.createElement("div", {
-    className: "min-h-screen bg-base-100 flex flex-col"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "sticky top-0 z-50 bg-base-100 border-b border-base-300"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex gap-1 p-2 overflow-x-auto scrollbar-none"
-  }, navItems.map(item => /*#__PURE__*/React.createElement("button", {
-    key: item.id,
-    onClick: () => navigate(item.id),
-    className: `btn btn-sm shrink-0 gap-1 ${section === item.id ? 'btn-primary' : 'btn-ghost'}`
-  }, /*#__PURE__*/React.createElement("span", null, item.icon), /*#__PURE__*/React.createElement("span", {
-    className: "hidden sm:inline"
-  }, item.label))))), /*#__PURE__*/React.createElement("div", {
-    className: "flex-1 p-4 pb-8"
-  }, section === 'home' && /*#__PURE__*/React.createElement(Welcome, {
-    onNavigate: navigate
-  }), section === 'forbes' && /*#__PURE__*/React.createElement(ForbesStandardsView, null), section === 'cocktails' && /*#__PURE__*/React.createElement(CocktailGuide, null), section === 'wines' && /*#__PURE__*/React.createElement(WineGuide, null), section === 'menus' && /*#__PURE__*/React.createElement(MenuGuide, null), section === 'terminology' && /*#__PURE__*/React.createElement(TerminologyView, null), section === 'quiz' && /*#__PURE__*/React.createElement(Quiz, null)));
+  var _s = useState('home'), section = _s[0], setSection = _s[1];
+  var _l = useState('en'), lang = _l[0], setLang = _l[1];
+  var navigate = function(id){setSection(id);window.scrollTo(0,0)};
+  var navItems = [
+    {id:'home',icon:'\ud83c\udfe0',label:t(lang,'navHome')},
+    {id:'forbes',icon:'\u2b50',label:t(lang,'navStd')},
+    {id:'cocktails',icon:'\ud83c\udf78',label:t(lang,'navCocktails')},
+    {id:'wines',icon:'\ud83c\udf77',label:t(lang,'navWines')},
+    {id:'menus',icon:'\ud83c\udf7d\ufe0f',label:t(lang,'navMenu')},
+    {id:'terminology',icon:'\ud83d\udcd6',label:t(lang,'navTerms')},
+    {id:'quiz',icon:'\u2705',label:t(lang,'navQuiz')}
+  ];
+  return React.createElement(LangContext.Provider,{value:lang},
+    React.createElement("div",{className:"min-h-screen bg-base-100 flex flex-col"},
+      React.createElement("div",{className:"sticky top-0 z-50 bg-base-100 border-b border-base-300"},
+        React.createElement("div",{className:"flex gap-1 p-2 overflow-x-auto scrollbar-none items-center"},
+          React.createElement("button",{onClick:function(){setLang(lang==='en'?'es':'en')},className:"btn btn-sm btn-outline shrink-0 gap-1 mr-1",title:lang==='en'?'Cambiar a Espa\u00f1ol':'Switch to English'},
+            lang==='en'?'\ud83c\uddea\ud83c\uddf8':'\ud83c\uddfa\ud83c\uddf8'),
+          navItems.map(function(item){return React.createElement("button",{key:item.id,onClick:function(){return navigate(item.id)},className:"btn btn-sm shrink-0 gap-1 "+(section===item.id?'btn-primary':'btn-ghost')},
+            React.createElement("span",null,item.icon),
+            React.createElement("span",{className:"hidden sm:inline"},item.label))}))),
+      React.createElement("div",{className:"flex-1 p-4 pb-8"},
+        section==='home' && React.createElement(Welcome,{onNavigate:navigate}),
+        section==='forbes' && React.createElement(ForbesStandardsView,null),
+        section==='cocktails' && React.createElement(CocktailGuide,null),
+        section==='wines' && React.createElement(WineGuide,null),
+        section==='menus' && React.createElement(MenuGuide,null),
+        section==='terminology' && React.createElement(TerminologyView,null),
+        section==='quiz' && React.createElement(Quiz,null))));
 }
-ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App,null));
 })();
 </script>
 </body>
