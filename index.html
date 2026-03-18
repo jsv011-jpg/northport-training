@@ -1457,6 +1457,8 @@ function App() {
   var _l = useState('en'), lang = _l[0], setLang = _l[1];
   var _ts = useState(null), touchStart = _ts[0], setTouchStart = _ts[1];
   var _te = useState(null), touchEnd = _te[0], setTouchEnd = _te[1];
+  var _tsy = useState(null), touchStartY = _tsy[0], setTouchStartY = _tsy[1];
+  var _tey = useState(null), touchEndY = _tey[0], setTouchEndY = _tey[1];
   
   // Auth state
   var _user = useState(function(){
@@ -1532,22 +1534,29 @@ function App() {
   // Swipe section order
   var sectionOrder = ['cocktails','wines','menus','terminology','quiz','forbes'];
   
-  var minSwipeDistance = 50;
+  var minSwipeDistance = 70;
   
   var onTouchStart = function(e) {
     setTouchEnd(null);
+    setTouchEndY(null);
     setTouchStart(e.targetTouches[0].clientX);
+    setTouchStartY(e.targetTouches[0].clientY);
   };
   
   var onTouchMove = function(e) {
     setTouchEnd(e.targetTouches[0].clientX);
+    setTouchEndY(e.targetTouches[0].clientY);
   };
   
   var onTouchEnd = function() {
-    if (!touchStart || !touchEnd) return;
-    var distance = touchStart - touchEnd;
-    var isSwipe = Math.abs(distance) > minSwipeDistance;
-    if (!isSwipe) return;
+    if (!touchStart || !touchEnd || touchStartY === null || touchEndY === null) return;
+    var distanceX = touchStart - touchEnd;
+    var distanceY = touchStartY - touchEndY;
+    var absX = Math.abs(distanceX);
+    var absY = Math.abs(distanceY);
+    /* Only swipe if horizontal movement is dominant and exceeds threshold */
+    if (absX < minSwipeDistance || absY > absX * 0.6) return;
+    var distance = distanceX;
     
     var currentIdx = sectionOrder.indexOf(section);
     if (currentIdx === -1) return;
