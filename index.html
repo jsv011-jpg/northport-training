@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>The Northport Hotel — Training Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/lib/cdn.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js" crossorigin></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js" crossorigin></script>
 <style>
   .scrollbar-none::-webkit-scrollbar { display: none; }
   .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
@@ -16,6 +16,18 @@
     .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }
   }
   body { margin: 0; font-family: system-ui, -apple-system, sans-serif; }
+  @keyframes pulseLevel { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+  @keyframes fadeSlideUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes spinIn { from{transform:rotate(-10deg) scale(0.8);opacity:0} to{transform:rotate(0) scale(1);opacity:1} }
+  @keyframes progressFill { from{width:0} }
+  .pv-pulse { animation: pulseLevel 2.5s ease-in-out infinite; }
+  .pv-fadeUp { animation: fadeSlideUp 0.5s ease-out both; }
+  .pv-spinIn { animation: spinIn 0.6s ease-out both; }
+  .pv-bar-fill { animation: progressFill 1s ease-out both; }
+  .pv-card { transition: transform 0.2s, box-shadow 0.2s; }
+  .pv-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+  .pv-ring { transition: stroke-dashoffset 1.2s ease-out; }
+  .pv-badge-locked { filter: grayscale(1) opacity(0.4); }
 </style>
 </head>
 <body>
@@ -110,7 +122,49 @@ const T = {
     navWines: "Wines", navMenu: "Menu", navTerms: "Terms", navQuiz: "Quiz",
     brunchTime: " \u00b7 Sat & Sun 11am \u2013 1:45pm",
     dinnerTime: " \u00b7 Sun\u2013Wed 4:30\u20139pm \u00b7 Thu\u2013Sat 4:30\u201310pm",
-    ingredients: "Ingredients", glassware: "Glassware", ice: "Ice", garnish: "Garnish", rim: "Rim"
+    ingredients: "Ingredients", glassware: "Glassware", ice: "Ice", garnish: "Garnish", rim: "Rim",
+    loginTitle: "Staff Login",
+    loginSub: "Enter your name and a 4-digit PIN to start training",
+    loginName: "Your Name",
+    loginPin: "4-Digit PIN",
+    loginBtn: "Start Training",
+    loginError: "Please enter your name and a 4-digit PIN",
+    loggedInAs: "Logged in as",
+    logout: "Log Out",
+    progressTitle: "My Progress",
+    progressSub: "Track your training journey",
+    totalQuizzes: "Quizzes Taken",
+    avgScore: "Average Score",
+    bestScore: "Best Score",
+    streak: "Day Streak",
+    byTopic: "Score by Topic",
+    recentHistory: "Recent Quizzes",
+    noQuizzes: "No quizzes taken yet. Head to the Quiz section to get started!",
+    weakAreas: "Areas to Review",
+    managerMode: "Manager Dashboard",
+    managerPin: "Enter Manager PIN",
+    managerEnter: "Enter",
+    managerWrongPin: "Incorrect PIN",
+    managerStaff: "Staff Overview",
+    managerName: "Name",
+    managerQuizzes: "Quizzes",
+    managerAvg: "Avg Score",
+    managerLast: "Last Active",
+    managerBack: "Back to Training",
+    managerNoData: "No staff data yet",
+    managerDetail: "Quiz History for",
+    days: "days",
+    today: "today",
+    progressViewBtn: "View My Progress",
+    levelTrainee: "New Hire", levelRising: "Team Member", levelPro: "Certified Server", levelCaptain: "Senior Server", levelMaster: "Service Lead",
+    nextLevel: "to next level", overallScore: "Overall Score",
+    achFirstQuiz: "First Quiz", achOnFire: "On Fire", achPerfect: "Perfect Score", achDedicated: "Dedicated", achExpert: "Expert", achWellRounded: "Well Rounded",
+    achFirstQuizDesc: "Complete your first quiz", achOnFireDesc: "3+ day streak", achPerfectDesc: "Score 100% on a quiz", achDedicatedDesc: "Take 10+ quizzes", achExpertDesc: "Average above 90%", achWellRoundedDesc: "Quiz on 3+ topics",
+    achievements: "Achievements", locked: "Locked",
+    areasPractice: "Areas to Practice",
+    practiceEncourage: "Keep practicing — you'll master this!",
+    emptyHero: "Your adventure begins here!",
+    emptyStart: "Start Your First Quiz"
   },
   es: {
     welcomeTitle: "Bienvenido al The Northport Hotel",
@@ -188,7 +242,49 @@ const T = {
     navWines: "Vinos", navMenu: "Men\u00fa", navTerms: "T\u00e9rminos", navQuiz: "Quiz",
     brunchTime: " \u00b7 S\u00e1b y Dom 11am \u2013 1:45pm",
     dinnerTime: " \u00b7 Dom\u2013Mi\u00e9 4:30\u20139pm \u00b7 Jue\u2013S\u00e1b 4:30\u201310pm",
-    ingredients: "Ingredientes", glassware: "Cristaler\u00eda", ice: "Hielo", garnish: "Guarnici\u00f3n", rim: "Borde"
+    ingredients: "Ingredientes", glassware: "Cristaler\u00eda", ice: "Hielo", garnish: "Guarnici\u00f3n", rim: "Borde",
+    loginTitle: "Inicio de Sesi\u00f3n",
+    loginSub: "Ingresa tu nombre y un PIN de 4 d\u00edgitos para comenzar",
+    loginName: "Tu Nombre",
+    loginPin: "PIN de 4 D\u00edgitos",
+    loginBtn: "Comenzar Capacitaci\u00f3n",
+    loginError: "Por favor ingresa tu nombre y un PIN de 4 d\u00edgitos",
+    loggedInAs: "Conectado como",
+    logout: "Cerrar Sesi\u00f3n",
+    progressTitle: "Mi Progreso",
+    progressSub: "Sigue tu camino de capacitaci\u00f3n",
+    totalQuizzes: "Cuestionarios Realizados",
+    avgScore: "Puntuaci\u00f3n Promedio",
+    bestScore: "Mejor Puntuaci\u00f3n",
+    streak: "Racha de D\u00edas",
+    byTopic: "Puntuaci\u00f3n por Tema",
+    recentHistory: "Cuestionarios Recientes",
+    noQuizzes: "A\u00fan no has tomado cuestionarios. \u00a1Ve a la secci\u00f3n de Quiz para comenzar!",
+    weakAreas: "\u00c1reas para Repasar",
+    managerMode: "Panel del Gerente",
+    managerPin: "Ingresa PIN del Gerente",
+    managerEnter: "Entrar",
+    managerWrongPin: "PIN Incorrecto",
+    managerStaff: "Resumen del Personal",
+    managerName: "Nombre",
+    managerQuizzes: "Cuestionarios",
+    managerAvg: "Puntuaci\u00f3n Prom.",
+    managerLast: "\u00daltima Actividad",
+    managerBack: "Volver a Capacitaci\u00f3n",
+    managerNoData: "Sin datos del personal a\u00fan",
+    managerDetail: "Historial de Quiz para",
+    days: "d\u00edas",
+    today: "hoy",
+    progressViewBtn: "Ver Mi Progreso",
+    levelTrainee: "Nuevo Empleado", levelRising: "Miembro del Equipo", levelPro: "Servidor Certificado", levelCaptain: "Servidor Senior", levelMaster: "Líder de Servicio",
+    nextLevel: "para el siguiente nivel", overallScore: "Puntuación General",
+    achFirstQuiz: "Primer Quiz", achOnFire: "En Llamas", achPerfect: "Puntuación Perfecta", achDedicated: "Dedicado", achExpert: "Experto", achWellRounded: "Completo",
+    achFirstQuizDesc: "Completa tu primer quiz", achOnFireDesc: "Racha de 3+ días", achPerfectDesc: "Obtén 100% en un quiz", achDedicatedDesc: "Toma 10+ quizzes", achExpertDesc: "Promedio arriba de 90%", achWellRoundedDesc: "Quiz en 3+ temas",
+    achievements: "Logros", locked: "Bloqueado",
+    areasPractice: "Áreas para Practicar",
+    practiceEncourage: "¡Sigue practicando — lo dominarás!",
+    emptyHero: "¡Tu aventura comienza aquí!",
+    emptyStart: "Comienza Tu Primer Quiz"
   }
 };
 
@@ -354,7 +450,7 @@ const dinnerMenu = [
   {name:"Burrata",description:"Smoked Mediterranean White Bean & Roasted Tomato Dip + Olives + Sweet Peppers + Parsley + Almonds + Pomegranate + Flat Bread",allergens:"Gluten, dairy, tree nuts",allergens_es:"Gluten, l\u00e1cteos, frutos secos",section:"Appetizers",section_es:"Aperitivos"},
   {name:"Tuna Tartare",description:"Scallion + Chives + Sesame Seeds + Cucumber + Lemon-Truffle Dressing + Dashi Aioli + Chips",allergens:"Gluten, egg, soy, sesame; raw fish",allergens_es:"Gluten, huevo, soya, s\u00e9samo; pescado crudo",section:"Appetizers",section_es:"Aperitivos"},
   {name:"Eggs & Bacon Deviled Eggs",description:"Andouille-Scallion Filling + Baby Spinach + House Bacon Vinaigrette + Soy Syrup",allergens:"Egg, soy",allergens_es:"Huevo, soya",section:"Appetizers",section_es:"Aperitivos"},
-  {name:"Braised Octopus",description:"Flash Finished + Chickpeas + Olives + Red Pepper Hummus + Sweet Peppers + Tomatoes + Herbs",allergens:"Shellfish; hummus may contain sesame",allergens_es:"Mariscos; el hummus puede contener s\u00e9samo",section:"Appetizers",section_es:"Aperitivos"},
+  {name:"Braised Octopus",description:"Flash Finished + Chickpeas + Olives + Red Pepper Hummus + Sweet Peppers + Tomatoes + Herbs",allergens:"Gluten (flour-dusted); Shellfish; hummus may contain sesame",allergens_es:"Gluten (enharinado); Mariscos; el hummus puede contener s\u00e9samo",section:"Appetizers",section_es:"Aperitivos"},
   {name:"Crispy Brussels Sprouts",description:"Shallots + Dried Cranberries + Pumpkin Seeds + Apples + Maple-Cider Dressing",allergens:"Possible gluten cross-contact",allergens_es:"Posible contacto cruzado con gluten",section:"Appetizers",section_es:"Aperitivos"},
   {name:"Mussels",description:"Green Thai Curry Sauce + Cilantro + Lime + Charred Bread",allergens:"Shellfish, gluten; curry may contain dairy",allergens_es:"Mariscos, gluten; el curry puede contener l\u00e1cteos",section:"Appetizers",section_es:"Aperitivos"},
   {name:"Salt & Pepper Calamari",description:"Gigante Beans + Cherry Peppers + Spicy Japanese Mayo",allergens:"Gluten, egg, shellfish",allergens_es:"Gluten, huevo, mariscos",section:"Appetizers",section_es:"Aperitivos"},
@@ -494,8 +590,29 @@ function shuffle(arr) {
   return a;
 }
 
+
+// ============ SHEETS INTEGRATION ============
+var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxGhu1uHDL19BK6Gi10WBhtWFYqAp9_ZigNNq9Lu_BzoFNXiSxtWvKbnz5kYnoCOSWBsQ/exec';
+
+function postToSheets(data) {
+  try {
+    fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    }).catch(function(e) { console.log('Sheet post error:', e); });
+  } catch(e) { console.log('Sheet post error:', e); }
+}
+
+function fetchFromSheets() {
+  return fetch(SHEETS_URL)
+    .then(function(r){ return r.json(); })
+    .catch(function(e){ console.log('Sheet fetch error:', e); return []; });
+}
+
 // ============ COMPONENTS ============
-const {useState, useMemo, useContext} = React;
+const {useState, useMemo, useContext, useEffect, useCallback} = React;
 
 function Welcome({onNavigate}) {
   const lang = useContext(LangContext);
@@ -519,6 +636,13 @@ function Welcome({onNavigate}) {
           t(lang,'trainingIntro'),
           React.createElement("strong",null,t(lang,'worldClass')),
           t(lang,'fromDayOne')))),
+    React.createElement("button",{onClick:function(){onNavigate('progress')},className:"w-full bg-gradient-to-r from-primary/20 to-secondary/20 rounded-xl p-5 mb-6 text-left hover:from-primary/30 hover:to-secondary/30 transition-all border border-primary/10"},
+      React.createElement("div",{className:"flex items-center gap-4"},
+        React.createElement("div",{className:"text-3xl"},"������"),
+        React.createElement("div",{className:"flex-1"},
+          React.createElement("div",{className:"font-semibold text-base"},t(lang,'progressTitle')),
+          React.createElement("div",{className:"text-sm text-base-content/60"},t(lang,'progressSub'))),
+        React.createElement("div",{className:"text-base-content/30"},"→"))),
     React.createElement("h2",{className:"text-lg font-semibold mb-4 text-base-content/70"},t(lang,'trainingModules')),
     React.createElement("div",{className:"flex flex-col gap-3"},
       modules.map(function(mod){return React.createElement("button",{key:mod.id,onClick:function(){return onNavigate(mod.id)},className:"btn btn-ghost bg-base-200 hover:bg-base-300 h-auto py-4 px-5 justify-start text-left gap-4 rounded-xl"},
@@ -803,6 +927,20 @@ function Quiz() {
   var allQ = useMemo(function(){return generateQuestions(lang)},[lang]);
   var cats = ['all'];
   allQ.forEach(function(q){if(cats.indexOf(q.category)===-1)cats.push(q.category)});
+
+  // Track quiz results when mode becomes 'results'
+  useEffect(function(){
+    if(mode === 'results' && questions.length > 0){
+      var user = JSON.parse(localStorage.getItem('tnh_user') || 'null');
+      if(user){
+        var history = JSON.parse(localStorage.getItem('tnh_quiz_history') || '[]');
+        history.push({date: new Date().toISOString(), topic: category, score: score, total: questions.length});
+        localStorage.setItem('tnh_quiz_history', JSON.stringify(history));
+        postToSheets({action:'quiz', name:user.name, pin:user.pin, topic:category, score:score, total:questions.length});
+      }
+    }
+  }, [mode]);
+
   var startQuiz = function(){
     var pool = category==='all'?allQ:allQ.filter(function(q){return q.category===category});
     setQuestions(shuffle(pool).slice(0,numQ));setCurrent(0);setScore(0);setSelected(null);setAnswered(false);setMode('active');
@@ -857,6 +995,462 @@ function Quiz() {
       React.createElement("span",{className:"text-sm text-base-content/40"},t(lang,'score')+": "+score+"/"+(current+(answered?1:0)))));
 }
 
+
+// ============ LOGIN COMPONENT ============
+function LoginScreen(props) {
+  var lang = props.lang;
+  var setLang = props.setLang;
+  var onLogin = props.onLogin;
+  var _n = useState(''), name = _n[0], setName = _n[1];
+  var _p = useState(''), pin = _p[0], setPin = _p[1];
+  var _e = useState(''), error = _e[0], setError = _e[1];
+  var _loading = useState(false), loading = _loading[0], setLoading = _loading[1];
+
+  var handleSubmit = function() {
+    var trimName = name.trim();
+    if(!trimName || pin.length !== 4 || !/^\d{4}$/.test(pin)) {
+      setError(t(lang,'loginError'));
+      return;
+    }
+    setLoading(true);
+    setError('');
+    var userData = {name: trimName, pin: pin};
+    localStorage.setItem('tnh_user', JSON.stringify(userData));
+    postToSheets({action:'register', name:trimName, pin:pin});
+    setTimeout(function(){ onLogin(userData); }, 300);
+  };
+
+  return React.createElement("div",{className:"min-h-screen bg-base-100 flex flex-col"},
+    React.createElement("div",{className:"flex justify-end p-3"},
+      React.createElement("button",{
+        onClick:function(){setLang(lang==='en'?'es':'en')},
+        className:"btn btn-sm btn-ghost text-lg"
+      }, lang==='en'?'\ud83c\uddea\ud83c\uddf8':'\ud83c\uddfa\ud83c\uddf8')
+    ),
+    React.createElement("div",{className:"flex-1 flex items-center justify-center px-4"},
+      React.createElement("div",{className:"w-full max-w-sm"},
+        React.createElement("div",{className:"text-center mb-8"},
+          React.createElement("div",{className:"text-5xl mb-3"},"\ud83c\udfe8"),
+          React.createElement("h1",{className:"text-2xl font-bold text-base-content"},t(lang,'loginTitle')),
+          React.createElement("p",{className:"text-base-content/60 mt-2 text-sm"},t(lang,'loginSub'))
+        ),
+        React.createElement("div",{className:"bg-base-200 rounded-xl p-6"},
+          React.createElement("div",{className:"form-control mb-4"},
+            React.createElement("label",{className:"label"},
+              React.createElement("span",{className:"label-text font-semibold"},t(lang,'loginName'))
+            ),
+            React.createElement("input",{
+              type:"text",
+              placeholder:t(lang,'loginName'),
+              className:"input input-bordered w-full",
+              value:name,
+              onChange:function(e){setName(e.target.value)}
+            })
+          ),
+          React.createElement("div",{className:"form-control mb-4"},
+            React.createElement("label",{className:"label"},
+              React.createElement("span",{className:"label-text font-semibold"},t(lang,'loginPin'))
+            ),
+            React.createElement("input",{
+              type:"number",
+              inputMode:"numeric",
+              pattern:"[0-9]*",
+              maxLength:4,
+              placeholder:"0000",
+              className:"input input-bordered w-full text-center text-2xl tracking-widest",
+              value:pin,
+              onChange:function(e){var v=e.target.value.replace(/\D/g,'').slice(0,4);setPin(v)}
+            })
+          ),
+          error && React.createElement("div",{className:"alert alert-error mb-4 py-2"},
+            React.createElement("span",{className:"text-sm"},error)
+          ),
+          React.createElement("button",{
+            onClick:handleSubmit,
+            className:"btn btn-primary w-full " + (loading?'loading':''),
+            disabled:loading
+          },loading?'...':t(lang,'loginBtn'))
+        ),
+        React.createElement("div",{className:"text-center mt-6 text-base-content/40 text-xs"},"The Northport Hotel \u00b7 Staff Training")
+      )
+    )
+  );
+}
+
+// ============ PROGRESS COMPONENT ============
+function ProgressView(props) {
+  var lang = props.lang;
+  var onBack = props.onBack;
+  var history = JSON.parse(localStorage.getItem('tnh_quiz_history') || '[]');
+
+  var totalQuizzes = history.length;
+  var avgScore = totalQuizzes > 0 ? Math.round(history.reduce(function(sum,h){return sum + (h.score/h.total*100)},0) / totalQuizzes) : 0;
+  var bestScore = totalQuizzes > 0 ? Math.round(Math.max.apply(null, history.map(function(h){return h.score/h.total*100}))) : 0;
+
+  // Calculate streak
+  var streak = 0;
+  if(totalQuizzes > 0) {
+    var today = new Date();
+    today.setHours(0,0,0,0);
+    var dates = {};
+    history.forEach(function(h){
+      var d = new Date(h.date);
+      d.setHours(0,0,0,0);
+      dates[d.getTime()] = true;
+    });
+    var checkDate = new Date(today);
+    if(!dates[checkDate.getTime()]) {
+      checkDate.setDate(checkDate.getDate() - 1);
+    }
+    while(dates[checkDate.getTime()]) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    }
+  }
+
+  // Score by topic
+  var topicScores = {};
+  history.forEach(function(h){
+    if(!topicScores[h.topic]) topicScores[h.topic] = {total:0, correct:0, count:0};
+    topicScores[h.topic].total += h.total;
+    topicScores[h.topic].correct += h.score;
+    topicScores[h.topic].count += 1;
+  });
+
+  var topicList = Object.keys(topicScores).map(function(topic){
+    var d = topicScores[topic];
+    return {topic:topic, avg:Math.round(d.correct/d.total*100), count:d.count};
+  }).sort(function(a,b){return b.avg - a.avg});
+
+  // Weak areas (topics below 70%)
+  var weakAreas = topicList.filter(function(tp){return tp.avg < 70});
+
+  // Recent history (last 10)
+  var recent = history.slice(-10).reverse();
+
+  // Level system
+  var levelData;
+  if(totalQuizzes >= 20) { levelData = {key:"levelMaster",min:20,max:20,tier:"V"}; }
+  else if(totalQuizzes >= 10) { levelData = {key:"levelCaptain",min:10,max:20,tier:"IV"}; }
+  else if(totalQuizzes >= 5) { levelData = {key:"levelPro",min:5,max:10,tier:"III"}; }
+  else if(totalQuizzes >= 1) { levelData = {key:"levelRising",min:1,max:5,tier:"II"}; }
+  else { levelData = {key:"levelTrainee",min:0,max:1,tier:"I"}; }
+  var levelProgress = levelData.max === levelData.min ? 100 : Math.min(100,Math.round((totalQuizzes - levelData.min)/(levelData.max - levelData.min)*100));
+  var quizzesToNext = Math.max(0, levelData.max - totalQuizzes);
+
+  // Achievements
+  var hasPerfect = history.some(function(h){return h.score === h.total});
+  var uniqueTopics = Object.keys(topicScores).length;
+  var achievements = [
+    {id:"first", name:t(lang,"achFirstQuiz"), desc:t(lang,"achFirstQuizDesc"), unlocked: totalQuizzes >= 1},
+    {id:"fire", name:t(lang,"achOnFire"), desc:t(lang,"achOnFireDesc"), unlocked: streak >= 3},
+    {id:"perfect", name:t(lang,"achPerfect"), desc:t(lang,"achPerfectDesc"), unlocked: hasPerfect},
+    {id:"dedicated", name:t(lang,"achDedicated"), desc:t(lang,"achDedicatedDesc"), unlocked: totalQuizzes >= 10},
+    {id:"expert", name:t(lang,"achExpert"), desc:t(lang,"achExpertDesc"), unlocked: totalQuizzes > 0 && avgScore > 90},
+    {id:"rounded", name:t(lang,"achWellRounded"), desc:t(lang,"achWellRoundedDesc"), unlocked: uniqueTopics >= 3}
+  ];
+
+  // === EMPTY STATE ===
+  if(totalQuizzes === 0) {
+    return React.createElement("div",{className:"max-w-2xl mx-auto text-center py-12 px-4"},
+      React.createElement("div",{className:"text-6xl mb-6 font-light text-base-content/20"},"—"),
+      React.createElement("h1",{className:"text-3xl font-extrabold mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"},t(lang,"progressTitle")),
+      React.createElement("p",{className:"text-lg text-base-content/60 mb-2"},t(lang,"noQuizzes")),
+      React.createElement("p",{className:"text-xl font-semibold mb-8"},t(lang,"emptyHero")),
+      onBack && React.createElement("button",{onClick:onBack,className:"btn btn-primary btn-lg gap-2 shadow-lg shadow-primary/30"},t(lang,"emptyStart"))
+    );
+  }
+
+  // === HELPER: SVG circular ring ===
+  var ringSize = 140;
+  var ringStroke = 12;
+  var ringRadius = (ringSize - ringStroke) / 2;
+  var ringCircum = 2 * Math.PI * ringRadius;
+  var ringOffset = ringCircum - (avgScore / 100) * ringCircum;
+  var ringColor = avgScore >= 80 ? "#22c55e" : avgScore >= 60 ? "#eab308" : "#ef4444";
+
+  // h = React.createElement shorthand
+  var h = React.createElement;
+
+  return h("div",{className:"max-w-2xl mx-auto pb-8 px-1"},
+
+    // --- LEVEL CARD ---
+    h("div",{className:"pv-fadeUp rounded-2xl p-5 mb-6 text-center relative overflow-hidden",style:{background:"linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%)"}},
+      h("div",{className:"text-sm font-semibold uppercase tracking-widest text-white/60 mb-1"},"Level " + levelData.tier),
+      h("div",{className:"text-2xl font-extrabold text-white"},t(lang,levelData.key)),
+      h("div",{className:"mt-3 mx-auto max-w-xs"},
+        h("div",{className:"w-full bg-white/20 rounded-full h-3 overflow-hidden"},
+          h("div",{className:"h-3 rounded-full pv-bar-fill",style:{width:levelProgress+"%",background:"linear-gradient(90deg,#fbbf24,#f59e0b)"}})
+        ),
+        quizzesToNext > 0 && h("div",{className:"text-xs text-white/70 mt-1"},quizzesToNext + " " + t(lang,"nextLevel"))
+      )
+    ),
+
+    // --- SCORE RING + TITLE ---
+    h("div",{className:"text-center mb-6 pv-fadeUp",style:{animationDelay:"0.1s"}},
+      h("h1",{className:"text-2xl font-bold mb-4"},t(lang,"progressTitle")),
+      h("div",{className:"inline-block relative"},
+        h("svg",{width:ringSize,height:ringSize,className:"pv-spinIn"},
+          h("circle",{cx:ringSize/2,cy:ringSize/2,r:ringRadius,fill:"none",stroke:"oklch(var(--b3))",strokeWidth:ringStroke}),
+          h("circle",{cx:ringSize/2,cy:ringSize/2,r:ringRadius,fill:"none",stroke:ringColor,strokeWidth:ringStroke,strokeLinecap:"round",strokeDasharray:ringCircum,strokeDashoffset:ringOffset,className:"pv-ring",style:{transform:"rotate(-90deg)",transformOrigin:"center"}})
+        ),
+        h("div",{className:"absolute inset-0 flex flex-col items-center justify-center"},
+          h("div",{className:"text-3xl font-extrabold",style:{color:ringColor}},avgScore+"%"),
+          h("div",{className:"text-xs text-base-content/50"},t(lang,"overallScore"))
+        )
+      )
+    ),
+
+    // --- STATS CARDS 2x2 ---
+    h("div",{className:"grid grid-cols-2 gap-3 mb-6"},
+      // Total quizzes
+      h("div",{className:"pv-card pv-fadeUp rounded-2xl p-4 text-center shadow-lg",style:{background:"linear-gradient(135deg,#3b82f6,#2563eb)",animationDelay:"0.15s"}},
+        h("div",{className:"text-3xl font-extrabold text-white"},totalQuizzes),
+        h("div",{className:"text-xs text-white/70 mt-1 uppercase tracking-wide"},t(lang,"totalQuizzes"))
+      ),
+      // Avg score
+      h("div",{className:"pv-card pv-fadeUp rounded-2xl p-4 text-center shadow-lg",style:{background:"linear-gradient(135deg,#8b5cf6,#7c3aed)",animationDelay:"0.2s"}},
+        h("div",{className:"text-3xl font-extrabold text-white"},avgScore+"%"),
+        h("div",{className:"text-xs text-white/70 mt-1 uppercase tracking-wide"},t(lang,"avgScore"))
+      ),
+      // Best score
+      h("div",{className:"pv-card pv-fadeUp rounded-2xl p-4 text-center shadow-lg",style:{background:"linear-gradient(135deg,#f59e0b,#d97706)",animationDelay:"0.25s"}},
+        h("div",{className:"text-3xl font-extrabold text-white"},bestScore+"%"),
+        h("div",{className:"text-xs text-white/70 mt-1 uppercase tracking-wide"},t(lang,"bestScore"))
+      ),
+      // Streak
+      h("div",{className:"pv-card pv-fadeUp rounded-2xl p-4 text-center shadow-lg",style:{background:"linear-gradient(135deg,#ef4444,#dc2626)",animationDelay:"0.3s"}},
+        h("div",{className:"text-3xl font-extrabold text-white"},streak),
+        h("div",{className:"text-xs text-white/70 mt-1 uppercase tracking-wide"},t(lang,"streak") + " " + (streak===1?"":t(lang,"days")))
+      )
+    ),
+
+    // --- ACHIEVEMENTS ---
+    h("div",{className:"mb-6 pv-fadeUp",style:{animationDelay:"0.35s"}},
+      h("h3",{className:"font-bold text-lg mb-3"},t(lang,"achievements")),
+      h("div",{className:"grid grid-cols-3 gap-2"},
+        achievements.map(function(ach){
+          return h("div",{key:ach.id,className:"pv-card rounded-xl p-3 text-center " + (ach.unlocked ? "" : "pv-badge-locked"),style:{background:ach.unlocked ? "linear-gradient(135deg, oklch(var(--b2)), oklch(var(--b3)))" : "oklch(var(--b2))"}},
+            h("div",{className:"text-2xl mb-1"},ach.unlocked ? "\u2713" : "\u2014"),
+            h("div",{className:"text-xs font-bold leading-tight"},ach.name),
+            h("div",{className:"text-[10px] text-base-content/50 mt-0.5 leading-tight"},ach.desc)
+          );
+        })
+      )
+    ),
+
+    // --- TOPIC BREAKDOWN ---
+    h("div",{className:"bg-base-200 rounded-2xl p-4 mb-4 pv-fadeUp",style:{animationDelay:"0.4s"}},
+      h("h3",{className:"font-bold text-lg mb-3"},t(lang,"byTopic")),
+      topicList.map(function(tp){
+        var grad = tp.avg >= 80 ? "linear-gradient(90deg,#22c55e,#16a34a)" : tp.avg >= 60 ? "linear-gradient(90deg,#eab308,#ca8a04)" : "linear-gradient(90deg,#ef4444,#dc2626)";
+        return h("div",{key:tp.topic,className:"mb-3"},
+          h("div",{className:"flex justify-between text-sm mb-1"},
+            h("span",{className:"text-base-content/80"},tp.topic),
+            h("span",{className:"font-bold"},tp.avg+"% (" + tp.count + ")")
+          ),
+          h("div",{className:"w-full bg-base-300 rounded-full h-4 overflow-hidden"},
+            h("div",{className:"h-4 rounded-full pv-bar-fill",style:{width:tp.avg+"%",background:grad}})
+          )
+        );
+      })
+    ),
+
+    // --- WEAK AREAS ---
+    weakAreas.length > 0 && h("div",{className:"rounded-2xl p-4 mb-4 pv-fadeUp",style:{background:"linear-gradient(135deg, rgba(251,146,60,0.15), rgba(249,115,22,0.1))",border:"1px solid rgba(251,146,60,0.3)",animationDelay:"0.45s"}},
+      h("h3",{className:"font-bold text-orange-400 mb-2"},t(lang,"areasPractice")),
+      weakAreas.map(function(w){
+        return h("div",{key:w.topic,className:"pv-card bg-base-200/50 rounded-xl p-3 mb-2 flex justify-between items-center"},
+          h("div",null,
+            h("div",{className:"text-sm font-semibold"},w.topic),
+            h("div",{className:"text-xs text-base-content/50"},t(lang,"practiceEncourage"))
+          ),
+          h("div",{className:"text-lg font-extrabold text-orange-400"},w.avg+"%")
+        );
+      })
+    ),
+
+    // --- RECENT HISTORY ---
+    h("div",{className:"mb-4 pv-fadeUp",style:{animationDelay:"0.5s"}},
+      h("h3",{className:"font-bold text-lg mb-3"},t(lang,"recentHistory")),
+      recent.map(function(r,i){
+        var d = new Date(r.date);
+        var dateStr = d.toLocaleDateString() + " " + d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+        var pct = Math.round(r.score/r.total*100);
+        var borderCol = pct >= 80 ? "rgba(34,197,94,0.4)" : pct >= 60 ? "rgba(234,179,8,0.4)" : "rgba(239,68,68,0.4)";
+        var badgeBg = pct >= 80 ? "#22c55e" : pct >= 60 ? "#eab308" : "#ef4444";
+        return h("div",{key:i,className:"pv-card bg-base-200 rounded-xl p-3 mb-2 flex justify-between items-center",style:{borderLeft:"4px solid " + borderCol}},
+          h("div",null,
+            h("div",{className:"text-sm font-semibold"},r.topic),
+            h("div",{className:"text-xs text-base-content/50"},dateStr)
+          ),
+          h("div",{className:"flex items-center gap-2"},
+            h("div",{className:"text-xs text-base-content/50"},r.score+"/"+r.total),
+            h("div",{className:"px-2 py-0.5 rounded-full text-sm font-bold text-white",style:{background:badgeBg}},pct+"%")
+          )
+        );
+      })
+    ),
+
+    // --- BACK BUTTON ---
+    onBack && h("div",{className:"text-center mb-6"},
+      h("button",{onClick:onBack,className:"btn btn-ghost btn-sm"},"\u2190 " + t(lang,"navHome"))
+    )
+  );
+}
+
+// ============ MANAGER VIEW COMPONENT ============
+function ManagerView(props) {
+  var lang = props.lang;
+  var onBack = props.onBack;
+  var _data = useState(null), data = _data[0], setData = _data[1];
+  var _loading = useState(true), loading = _loading[0], setLoading = _loading[1];
+  var _detail = useState(null), detail = _detail[0], setDetail = _detail[1];
+  var _sort = useState('name'), sortBy = _sort[0], setSortBy = _sort[1];
+
+  useEffect(function(){
+    fetchFromSheets().then(function(rows){
+      setData(rows);
+      setLoading(false);
+    }).catch(function(){
+      setData([]);
+      setLoading(false);
+    });
+  },[]);
+
+  if(loading) {
+    return React.createElement("div",{className:"max-w-2xl mx-auto text-center py-12"},
+      React.createElement("span",{className:"loading loading-spinner loading-lg"})
+    );
+  }
+
+  // Parse sheet data. First row is headers.
+  // Expected columns: timestamp, action, name, pin, topic, score, total
+  var rows = data || [];
+  if(rows.length < 2) {
+    return React.createElement("div",{className:"max-w-2xl mx-auto text-center py-12"},
+      React.createElement("div",{className:"text-5xl mb-4"},"\ud83d\udcca"),
+      React.createElement("h1",{className:"text-2xl font-bold mb-2"},t(lang,'managerMode')),
+      React.createElement("p",{className:"text-base-content/60 mb-6"},t(lang,'managerNoData')),
+      React.createElement("button",{onClick:onBack,className:"btn btn-primary"},t(lang,'managerBack'))
+    );
+  }
+
+  var headers = rows[0];
+  var dataRows = rows.slice(1);
+
+  // Find column indices
+  var colIdx = {};
+  headers.forEach(function(h, i){ colIdx[String(h).toLowerCase().trim()] = i; });
+
+  // Build staff data
+  var staffMap = {};
+  dataRows.forEach(function(row){
+    var action = row[colIdx['action']] || row[colIdx['type']] || '';
+    var name = row[colIdx['name']] || '';
+    var timestamp = row[colIdx['timestamp']] || row[0] || '';
+    if(!name) return;
+    if(!staffMap[name]) staffMap[name] = {name:name, quizzes:[], registered: null, lastActive:null};
+
+    if(String(action).toLowerCase() === 'register') {
+      staffMap[name].registered = timestamp;
+    }
+    if(String(action).toLowerCase() === 'quiz') {
+      var topic = row[colIdx['topic']] || row[colIdx['category']] || '';
+      var score = parseInt(row[colIdx['score']] || 0);
+      var total = parseInt(row[colIdx['total']] || 10);
+      staffMap[name].quizzes.push({date:timestamp, topic:topic, score:score, total:total});
+    }
+    staffMap[name].lastActive = timestamp;
+  });
+
+  var staffList = Object.keys(staffMap).map(function(name){ return staffMap[name]; });
+
+  // Add computed fields
+  staffList.forEach(function(s){
+    s.quizCount = s.quizzes.length;
+    s.avgScore = s.quizCount > 0 ? Math.round(s.quizzes.reduce(function(sum,q){return sum+(q.score/q.total*100)},0)/s.quizCount) : 0;
+  });
+
+  // Sort
+  if(sortBy === 'name') staffList.sort(function(a,b){return a.name.localeCompare(b.name)});
+  else if(sortBy === 'score') staffList.sort(function(a,b){return b.avgScore - a.avgScore});
+  else if(sortBy === 'activity') staffList.sort(function(a,b){return (b.lastActive||'').localeCompare(a.lastActive||'')});
+  else if(sortBy === 'quizzes') staffList.sort(function(a,b){return b.quizCount - a.quizCount});
+
+  // Detail view for a staff member
+  if(detail) {
+    var member = staffMap[detail];
+    if(!member) { setDetail(null); return null; }
+    return React.createElement("div",{className:"max-w-2xl mx-auto"},
+      React.createElement("button",{onClick:function(){setDetail(null)},className:"btn btn-ghost btn-sm mb-4"},"\u2190 " + t(lang,'managerStaff')),
+      React.createElement("h2",{className:"text-xl font-bold mb-4"},t(lang,'managerDetail') + " " + detail),
+      React.createElement("div",{className:"grid grid-cols-2 gap-3 mb-4"},
+        React.createElement("div",{className:"bg-base-200 rounded-xl p-4 text-center"},
+          React.createElement("div",{className:"text-2xl font-bold text-primary"},member.quizCount),
+          React.createElement("div",{className:"text-xs text-base-content/60"},t(lang,'managerQuizzes'))
+        ),
+        React.createElement("div",{className:"bg-base-200 rounded-xl p-4 text-center"},
+          React.createElement("div",{className:"text-2xl font-bold text-secondary"},member.avgScore+"%"),
+          React.createElement("div",{className:"text-xs text-base-content/60"},t(lang,'managerAvg'))
+        )
+      ),
+      React.createElement("div",{className:"bg-base-200 rounded-xl p-4"},
+        member.quizzes.length === 0
+          ? React.createElement("p",{className:"text-center text-base-content/50"},"No quizzes yet")
+          : member.quizzes.slice().reverse().map(function(q,i){
+              var pct = Math.round(q.score/q.total*100);
+              var color = pct >= 80 ? 'text-success' : pct >= 60 ? 'text-warning' : 'text-error';
+              return React.createElement("div",{key:i,className:"flex justify-between items-center py-2 border-b border-base-300 last:border-0"},
+                React.createElement("div",null,
+                  React.createElement("div",{className:"text-sm font-medium"},q.topic || 'Quiz'),
+                  React.createElement("div",{className:"text-xs text-base-content/50"},q.date)
+                ),
+                React.createElement("div",{className:"text-right"},
+                  React.createElement("div",{className:"font-bold "+color},pct+"%"),
+                  React.createElement("div",{className:"text-xs text-base-content/50"},q.score+"/"+q.total)
+                )
+              );
+            })
+      )
+    );
+  }
+
+  return React.createElement("div",{className:"max-w-2xl mx-auto"},
+    React.createElement("div",{className:"text-center mb-6"},
+      React.createElement("div",{className:"text-4xl mb-2"},"\ud83d\udcca"),
+      React.createElement("h1",{className:"text-2xl font-bold"},t(lang,'managerMode')),
+      React.createElement("p",{className:"text-base-content/60 mt-1"},t(lang,'managerStaff'))
+    ),
+    // Sort buttons
+    React.createElement("div",{className:"flex gap-2 mb-4 flex-wrap"},
+      [['name',t(lang,'managerName')],['score',t(lang,'managerAvg')],['quizzes',t(lang,'managerQuizzes')],['activity',t(lang,'managerLast')]].map(function(s){
+        return React.createElement("button",{key:s[0],onClick:function(){setSortBy(s[0])},className:"btn btn-xs "+(sortBy===s[0]?'btn-primary':'btn-ghost')},s[1]);
+      })
+    ),
+    // Staff list
+    React.createElement("div",{className:"flex flex-col gap-2"},
+      staffList.map(function(s){
+        return React.createElement("button",{key:s.name,onClick:function(){setDetail(s.name)},className:"bg-base-200 rounded-xl p-4 text-left hover:bg-base-300 transition-colors"},
+          React.createElement("div",{className:"flex justify-between items-center"},
+            React.createElement("div",null,
+              React.createElement("div",{className:"font-semibold"},s.name),
+              React.createElement("div",{className:"text-xs text-base-content/50"},s.quizCount+" "+t(lang,'managerQuizzes')+" \u00b7 "+t(lang,'managerLast')+": "+(s.lastActive||'N/A'))
+            ),
+            React.createElement("div",{className:"text-right"},
+              React.createElement("div",{className:"text-lg font-bold "+(s.avgScore>=80?'text-success':s.avgScore>=60?'text-warning':'text-error')},s.avgScore+"%"),
+              React.createElement("div",{className:"text-xs text-base-content/50"},t(lang,'managerAvg'))
+            )
+          )
+        );
+      })
+    ),
+    React.createElement("div",{className:"text-center mt-6"},
+      React.createElement("button",{onClick:onBack,className:"btn btn-primary"},t(lang,'managerBack'))
+    )
+  );
+}
+
 // ============ MAIN APP ============
 function App() {
   var _s = useState('home'), section = _s[0], setSection = _s[1];
@@ -864,7 +1458,67 @@ function App() {
   var _ts = useState(null), touchStart = _ts[0], setTouchStart = _ts[1];
   var _te = useState(null), touchEnd = _te[0], setTouchEnd = _te[1];
   
+  // Auth state
+  var _user = useState(function(){
+    try { return JSON.parse(localStorage.getItem('tnh_user')); } catch(e){ return null; }
+  }), user = _user[0], setUser = _user[1];
+  var _mgr = useState(function(){
+    return sessionStorage.getItem('tnh_manager') === 'true';
+  }), managerAuth = _mgr[0], setManagerAuth = _mgr[1];
+  var _showMgrLogin = useState(false), showMgrLogin = _showMgrLogin[0], setShowMgrLogin = _showMgrLogin[1];
+  var _mgrPin = useState(''), mgrPin = _mgrPin[0], setMgrPin = _mgrPin[1];
+  var _mgrError = useState(false), mgrError = _mgrError[0], setMgrError = _mgrError[1];
+  var _showManager = useState(false), showManager = _showManager[0], setShowManager = _showManager[1];
+  
   var navigate = function(id){setSection(id);window.scrollTo(0,0)};
+  
+  var handleLogin = function(userData) {
+    setUser(userData);
+  };
+  
+  var handleLogout = function() {
+    localStorage.removeItem('tnh_user');
+    setUser(null);
+  };
+
+  var handleManagerPinSubmit = function() {
+    if(mgrPin === '7777') {
+      sessionStorage.setItem('tnh_manager', 'true');
+      setManagerAuth(true);
+      setShowMgrLogin(false);
+      setShowManager(true);
+      setMgrPin('');
+      setMgrError(false);
+    } else {
+      setMgrError(true);
+    }
+  };
+  
+  // If not logged in, show login screen
+  if(!user) {
+    return React.createElement(LoginScreen, {lang:lang, setLang:setLang, onLogin:handleLogin});
+  }
+
+  // If manager mode active
+  if(showManager && managerAuth) {
+    return React.createElement(LangContext.Provider,{value:lang},
+      React.createElement("div",{className:"min-h-screen bg-base-100"},
+        React.createElement("div",{className:"sticky top-0 z-50 bg-base-100 border-b border-base-300"},
+          React.createElement("div",{className:"flex items-center justify-between px-3 py-2"},
+            React.createElement("button",{onClick:function(){setShowManager(false)},className:"btn btn-sm btn-ghost"},"\u2190 " + t(lang,'managerBack')),
+            React.createElement("h1",{className:"text-sm font-bold"},t(lang,'managerMode')),
+            React.createElement("button",{
+              onClick:function(){setLang(lang==='en'?'es':'en')},
+              className:"btn btn-sm btn-ghost text-lg"
+            }, lang==='en'?'\ud83c\uddea\ud83c\uddf8':'\ud83c\uddfa\ud83c\uddf8')
+          )
+        ),
+        React.createElement("div",{className:"p-4"},
+          React.createElement(ManagerView,{lang:lang, onBack:function(){setShowManager(false)}})
+        )
+      )
+    );
+  }
   
   // Bottom nav items (5 main sections)
   var bottomNavItems = [
@@ -914,7 +1568,8 @@ function App() {
       wines: t(lang,'navWines'),
       menus: t(lang,'navMenu'),
       terminology: t(lang,'navTerms'),
-      quiz: t(lang,'navQuiz')
+      quiz: t(lang,'navQuiz'),
+      progress: t(lang,'progressTitle')
     };
     return titles[section] || '';
   };
@@ -938,14 +1593,50 @@ function App() {
           React.createElement("h1",{className:"text-sm font-bold text-center flex-1 truncate mx-2"},
             getSectionTitle()
           ),
-          /* Language toggle (right) */
-          React.createElement("button",{
-            onClick:function(){setLang(lang==='en'?'es':'en')},
-            className:"btn btn-sm btn-ghost text-lg",
-            title:lang==='en'?'Cambiar a Espa\u00f1ol':'Switch to English'
-          },
-            lang==='en'?'\ud83c\uddea\ud83c\uddf8':'\ud83c\uddfa\ud83c\uddf8'
+          /* Right side: manager icon + language toggle */
+          React.createElement("div",{className:"flex items-center gap-1"},
+            /* Manager lock icon */
+            React.createElement("button",{
+              onClick:function(){
+                if(managerAuth){setShowManager(true)}
+                else{setShowMgrLogin(!showMgrLogin);setMgrPin('');setMgrError(false)}
+              },
+              className:"btn btn-sm btn-ghost text-lg",
+              title:t(lang,'managerMode')
+            }, "\ud83d\udd10"),
+            /* Language toggle */
+            React.createElement("button",{
+              onClick:function(){setLang(lang==='en'?'es':'en')},
+              className:"btn btn-sm btn-ghost text-lg",
+              title:lang==='en'?'Cambiar a Espa\u00f1ol':'Switch to English'
+            },
+              lang==='en'?'\ud83c\uddea\ud83c\uddf8':'\ud83c\uddfa\ud83c\uddf8'
+            )
           )
+        ),
+        /* Logged in indicator */
+        React.createElement("div",{className:"flex items-center justify-between px-3 pb-1"},
+          React.createElement("span",{className:"text-xs text-base-content/50"},t(lang,'loggedInAs') + " " + user.name),
+          React.createElement("button",{onClick:handleLogout,className:"btn btn-xs btn-ghost text-base-content/40"},t(lang,'logout'))
+        ),
+        /* Manager PIN popup */
+        showMgrLogin && React.createElement("div",{className:"absolute right-2 top-full mt-1 bg-base-200 border border-base-300 rounded-xl p-3 shadow-lg z-[60] w-56"},
+          React.createElement("div",{className:"text-sm font-semibold mb-2"},t(lang,'managerPin')),
+          React.createElement("div",{className:"flex gap-2"},
+            React.createElement("input",{
+              type:"password",
+              inputMode:"numeric",
+              maxLength:4,
+              className:"input input-bordered input-sm flex-1 text-center tracking-widest",
+              value:mgrPin,
+              onChange:function(e){setMgrPin(e.target.value.replace(/\D/g,'').slice(0,4));setMgrError(false)},
+              onKeyDown:function(e){if(e.key==='Enter')handleManagerPinSubmit()},
+              placeholder:"****",
+              autoFocus:true
+            }),
+            React.createElement("button",{onClick:handleManagerPinSubmit,className:"btn btn-sm btn-primary"},t(lang,'managerEnter'))
+          ),
+          mgrError && React.createElement("div",{className:"text-error text-xs mt-1"},t(lang,'managerWrongPin'))
         )
       ),
       
@@ -954,7 +1645,8 @@ function App() {
         className:"flex-1 p-4 " + (section !== 'home' ? 'pb-24' : 'pb-8'),
         onTouchStart: onTouchStart,
         onTouchMove: onTouchMove,
-        onTouchEnd: onTouchEnd
+        onTouchEnd: onTouchEnd,
+        onClick: function(){if(showMgrLogin)setShowMgrLogin(false)}
       },
         section==='home' && React.createElement(Welcome,{onNavigate:navigate}),
         section==='forbes' && React.createElement(ForbesStandardsView,null),
@@ -962,11 +1654,12 @@ function App() {
         section==='wines' && React.createElement(WineGuide,null),
         section==='menus' && React.createElement(MenuGuide,null),
         section==='terminology' && React.createElement(TerminologyView,null),
-        section==='quiz' && React.createElement(Quiz,null)
+        section==='quiz' && React.createElement(Quiz,null),
+        section==='progress' && React.createElement(ProgressView,{lang:lang, onBack:function(){navigate('home')}})
       ),
       
-      /* Bottom navigation bar - only show when not on home/forbes */
-      (section !== 'home' && section !== 'forbes') && React.createElement("div",{
+      /* Bottom navigation bar - only show when not on home/forbes/progress */
+      (section !== 'home' && section !== 'forbes' && section !== 'progress') && React.createElement("div",{
         className:"fixed bottom-0 left-0 right-0 z-50 bg-base-100 border-t border-base-300 safe-area-bottom"
       },
         React.createElement("div",{className:"flex justify-around items-center py-1 px-1 max-w-lg mx-auto"},
