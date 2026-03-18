@@ -1446,6 +1446,8 @@ function LeaderboardView(props) {
       if(String(row[actionCol]).toLowerCase().trim() !== 'quiz') return;
       var name = String(row[nameCol] || '').trim();
       if(!name) return;
+      var excludeNames = ['javier','nik','david'];
+      if(excludeNames.indexOf(name.split(' ')[0].toLowerCase()) !== -1) return;
       var score = parseFloat(row[scoreCol]) || 0;
       var total = parseFloat(row[totalCol]) || 1;
       if(!grouped[name]) grouped[name] = {name:name, scores:[]};
