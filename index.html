@@ -185,7 +185,15 @@ const T = {
     areasPractice: "Areas to Practice",
     practiceEncourage: "Keep practicing — you'll master this!",
     emptyHero: "Your adventure begins here!",
-    emptyStart: "Start Your First Quiz"
+    emptyStart: "Start Your First Quiz",
+    leaderboard: "Leaderboard",
+    leaderboardSub: "See where you rank among the team",
+    leaderboardTitle: "Leaderboard",
+    leaderboardNoData: "No quiz results yet. Complete a quiz to join the leaderboard!",
+    leaderboardQuizzes: "quizzes",
+    leaderboardAvg: "avg",
+    leaderboardYou: "You",
+    leaderboardRank: "Rank"
   },
   es: {
     welcomeTitle: "Bienvenido al The Northport Hotel",
@@ -307,7 +315,15 @@ const T = {
     areasPractice: "Áreas para Practicar",
     practiceEncourage: "¡Sigue practicando — lo dominarás!",
     emptyHero: "¡Tu aventura comienza aquí!",
-    emptyStart: "Comienza Tu Primer Quiz"
+    emptyStart: "Comienza Tu Primer Quiz",
+    leaderboard: "Clasificaci\u00f3n",
+    leaderboardSub: "Mira tu posici\u00f3n en el equipo",
+    leaderboardTitle: "Clasificaci\u00f3n",
+    leaderboardNoData: "No hay resultados a\u00fan. \u00a1Completa un quiz para unirte!",
+    leaderboardQuizzes: "quizzes",
+    leaderboardAvg: "prom",
+    leaderboardYou: "T\u00fa",
+    leaderboardRank: "Posici\u00f3n"
   }
 };
 
@@ -668,6 +684,20 @@ function Welcome({onNavigate}) {
           React.createElement("div",{className:"font-bold text-base text-white"},t(lang,'watchTutorial')),
           React.createElement("div",{className:"text-sm",style:{color:"rgba(255,255,255,0.6)"}},t(lang,'watchTutorialSub'))),
         React.createElement("div",{style:{color:"#e74c3c",fontSize:"1.25rem"}},"→"))),
+    React.createElement("button",{onClick:function(){onNavigate('leaderboard')},className:"w-full rounded-2xl p-5 mb-4 text-left transition-all border border-white/10 shadow-lg hover:shadow-xl hover:scale-[1.01]",style:{background:"linear-gradient(135deg, #0B2F5B 0%, #134e5e 60%, #0B2F5B 100%)"}},
+      React.createElement("div",{className:"flex items-center gap-4"},
+        React.createElement("div",{className:"w-12 h-12 rounded-xl flex items-center justify-center",style:{background:"linear-gradient(135deg, #d49341, #f9ad4d)"}},
+          React.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",width:"22",height:"22",viewBox:"0 0 24 24",fill:"none",stroke:"white",strokeWidth:"2",strokeLinecap:"round",strokeLinejoin:"round"},
+            React.createElement("path",{d:"M6 9H4.5a2.5 2.5 0 0 1 0-5H6"}),
+            React.createElement("path",{d:"M18 9h1.5a2.5 2.5 0 0 0 0-5H18"}),
+            React.createElement("path",{d:"M4 22h16"}),
+            React.createElement("path",{d:"M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"}),
+            React.createElement("path",{d:"M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"}),
+            React.createElement("path",{d:"M18 2H6v7a6 6 0 0 0 12 0V2Z"}))),
+        React.createElement("div",{className:"flex-1"},
+          React.createElement("div",{className:"font-bold text-base text-white"},t(lang,'leaderboard')),
+          React.createElement("div",{className:"text-sm",style:{color:"rgba(255,255,255,0.6)"}},t(lang,'leaderboardSub'))),
+        React.createElement("div",{style:{color:"#d49341",fontSize:"1.25rem"}},"→"))),
     React.createElement("button",{onClick:function(){onNavigate('progress')},className:"w-full rounded-2xl p-5 mb-6 text-left transition-all border border-white/10 shadow-lg hover:shadow-xl hover:scale-[1.01]",style:{background:"linear-gradient(135deg, #0B2F5B 0%, #0F2C4D 60%, #1a3a5c 100%)"}},
       React.createElement("div",{className:"flex items-center gap-4"},
         React.createElement("div",{className:"w-12 h-12 rounded-xl flex items-center justify-center",style:{background:"linear-gradient(135deg, #d49341, #f9ad4d)"}},
@@ -1376,6 +1406,179 @@ function ProgressView(props) {
 }
 
 // ============ MANAGER VIEW COMPONENT ============
+function LeaderboardView(props) {
+  var lang = props.lang;
+  var onBack = props.onBack;
+  var _data = useState(null), data = _data[0], setData = _data[1];
+  var _loading = useState(true), loading = _loading[0], setLoading = _loading[1];
+  var currentUser = localStorage.getItem('tnh_user_name') || '';
+
+  useEffect(function(){
+    fetchFromSheets().then(function(rows){
+      setData(rows);
+      setLoading(false);
+    }).catch(function(){
+      setData([]);
+      setLoading(false);
+    });
+  },[]);
+
+  if(loading) {
+    return React.createElement("div",{className:"max-w-2xl mx-auto text-center py-12"},
+      React.createElement("span",{className:"loading loading-spinner loading-lg"})
+    );
+  }
+
+  var rows = data || [];
+  var leaderboardData = [];
+  if(rows.length >= 2) {
+    var headers = rows[0];
+    var dataRows = rows.slice(1);
+    var colIdx = {};
+    headers.forEach(function(h, i){ colIdx[String(h).toLowerCase().trim()] = i; });
+    var actionCol = colIdx['action'] !== undefined ? colIdx['action'] : 1;
+    var nameCol = colIdx['name'] !== undefined ? colIdx['name'] : 2;
+    var scoreCol = colIdx['score'] !== undefined ? colIdx['score'] : 5;
+    var totalCol = colIdx['total'] !== undefined ? colIdx['total'] : 6;
+
+    var grouped = {};
+    dataRows.forEach(function(row){
+      if(String(row[actionCol]).toLowerCase().trim() !== 'quiz') return;
+      var name = String(row[nameCol] || '').trim();
+      if(!name) return;
+      var score = parseFloat(row[scoreCol]) || 0;
+      var total = parseFloat(row[totalCol]) || 1;
+      if(!grouped[name]) grouped[name] = {name:name, scores:[]};
+      grouped[name].scores.push({score:score, total:total, pct: total > 0 ? (score/total*100) : 0});
+    });
+
+    Object.keys(grouped).forEach(function(name){
+      var g = grouped[name];
+      var totalQuizzes = g.scores.length;
+      var avgPct = Math.round(g.scores.reduce(function(s,x){return s+x.pct},0) / totalQuizzes);
+      var bestPct = Math.round(Math.max.apply(null, g.scores.map(function(x){return x.pct})));
+      leaderboardData.push({name:name, quizzes:totalQuizzes, avg:avgPct, best:bestPct});
+    });
+
+    leaderboardData.sort(function(a,b){
+      if(b.avg !== a.avg) return b.avg - a.avg;
+      return b.quizzes - a.quizzes;
+    });
+  }
+
+  var firstName = function(n){ return n ? n.split(' ')[0] : ''; };
+  var isCurrentUser = function(n){ return n.toLowerCase().trim() === currentUser.toLowerCase().trim(); };
+
+  // No data state
+  if(leaderboardData.length === 0) {
+    return React.createElement("div",{className:"max-w-2xl mx-auto text-center py-12"},
+      React.createElement("button",{onClick:onBack,className:"btn btn-ghost btn-sm mb-6",style:{color:'#d49341'}},"\u2190 " + t(lang,'navHome')),
+      React.createElement("div",{className:"text-5xl mb-4"},"\ud83c\udfc6"),
+      React.createElement("h1",{className:"text-2xl font-bold mb-2"},t(lang,'leaderboardTitle')),
+      React.createElement("p",{className:"text-base-content/60 mb-6"},t(lang,'leaderboardNoData'))
+    );
+  }
+
+  var medalColors = ['#d49341','#C0C0C0','#CD7F32'];
+  var top3 = leaderboardData.slice(0,3);
+  var podiumOrder = top3.length >= 3 ? [top3[1],top3[0],top3[2]] : top3;
+  var podiumRanks = top3.length >= 3 ? [2,1,3] : top3.map(function(_,i){return i+1});
+
+  return React.createElement("div",{className:"max-w-2xl mx-auto"},
+    // Header
+    React.createElement("div",{className:"flex items-center mb-6"},
+      React.createElement("button",{onClick:onBack,className:"btn btn-ghost btn-sm mr-3",style:{color:'#d49341'}},"\u2190"),
+      React.createElement("h1",{className:"text-2xl font-bold",style:{fontFamily:"'Syne',sans-serif"}},t(lang,'leaderboardTitle'))
+    ),
+
+    // Podium top 3
+    top3.length > 0 && React.createElement("div",{className:"flex justify-center items-end gap-3 mb-8 px-2"},
+      podiumOrder.map(function(entry, idx){
+        var rank = podiumRanks[idx];
+        var isCenter = rank === 1;
+        var color = medalColors[rank-1];
+        var isCurrent = isCurrentUser(entry.name);
+        return React.createElement("div",{
+          key:entry.name,
+          className:"flex flex-col items-center flex-1",
+          style:{
+            transform: isCenter ? 'translateY(-8px)' : 'none',
+            maxWidth:'140px'
+          }
+        },
+          React.createElement("div",{
+            className:"w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold mb-2",
+            style:{
+              background: 'linear-gradient(135deg, '+color+', '+color+'cc)',
+              color:'#fff',
+              border: isCurrent ? '3px solid #d49341' : '3px solid transparent',
+              boxShadow: isCurrent ? '0 0 12px rgba(212,147,65,0.5)' : (isCenter ? '0 4px 16px rgba(212,147,65,0.3)' : 'none')
+            }
+          }, rank),
+          React.createElement("div",{
+            className:"text-sm font-semibold text-center truncate w-full",
+            style:{color: isCurrent ? '#d49341' : '#e8dcc8'}
+          }, firstName(entry.name) + (isCurrent ? ' \u2022' : '')),
+          React.createElement("div",{className:"text-xs mt-1",style:{color:'rgba(232,220,200,0.6)'}}, entry.avg + '% ' + t(lang,'leaderboardAvg')),
+          React.createElement("div",{className:"text-xs",style:{color:'rgba(232,220,200,0.4)'}}, entry.quizzes + ' ' + t(lang,'leaderboardQuizzes'))
+        );
+      })
+    ),
+
+    // Full ranked list
+    React.createElement("div",{className:"space-y-2"},
+      leaderboardData.map(function(entry,idx){
+        var rank = idx + 1;
+        var isCurrent = isCurrentUser(entry.name);
+        var barColor = entry.avg > 80 ? '#22c55e' : (entry.avg >= 60 ? '#d49341' : '#ef4444');
+        return React.createElement("div",{
+          key:entry.name,
+          className:"rounded-xl p-4 flex items-center gap-3",
+          style:{
+            background: 'rgba(11,47,91,0.4)',
+            border: isCurrent ? '1.5px solid rgba(212,147,65,0.6)' : '1px solid rgba(255,255,255,0.06)',
+            boxShadow: isCurrent ? '0 0 12px rgba(212,147,65,0.15)' : 'none'
+          }
+        },
+          // Rank
+          React.createElement("div",{
+            className:"w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0",
+            style:{
+              background: rank <= 3 ? medalColors[rank-1] : 'rgba(255,255,255,0.08)',
+              color: rank <= 3 ? '#fff' : 'rgba(232,220,200,0.5)'
+            }
+          }, rank),
+          // Name & bar
+          React.createElement("div",{className:"flex-1 min-w-0"},
+            React.createElement("div",{className:"flex items-center gap-2 mb-1"},
+              React.createElement("span",{
+                className:"text-sm font-semibold truncate",
+                style:{color: isCurrent ? '#d49341' : '#e8dcc8'}
+              }, firstName(entry.name)),
+              isCurrent && React.createElement("span",{
+                className:"text-xs px-1.5 py-0.5 rounded-full font-medium",
+                style:{background:'rgba(212,147,65,0.2)',color:'#d49341',fontSize:'10px'}
+              }, t(lang,'leaderboardYou'))
+            ),
+            // Score bar
+            React.createElement("div",{className:"w-full h-2 rounded-full overflow-hidden",style:{background:'rgba(255,255,255,0.08)'}},
+              React.createElement("div",{
+                className:"h-full rounded-full pv-bar-fill",
+                style:{width: entry.avg + '%', background: barColor}
+              })
+            )
+          ),
+          // Stats
+          React.createElement("div",{className:"text-right shrink-0"},
+            React.createElement("div",{className:"text-sm font-bold",style:{color:'#e8dcc8'}}, entry.avg + '%'),
+            React.createElement("div",{className:"text-xs",style:{color:'rgba(232,220,200,0.4)'}}, entry.quizzes + ' ' + t(lang,'leaderboardQuizzes'))
+          )
+        );
+      })
+    )
+  );
+}
+
 function ManagerView(props) {
   var lang = props.lang;
   var onBack = props.onBack;
@@ -1740,11 +1943,12 @@ function App() {
         section==='menus' && React.createElement(MenuGuide,null),
         section==='terminology' && React.createElement(TerminologyView,null),
         section==='quiz' && React.createElement(Quiz,null),
-        section==='progress' && React.createElement(ProgressView,{lang:lang, onBack:function(){navigate('home')}})
+        section==='progress' && React.createElement(ProgressView,{lang:lang, onBack:function(){navigate('home')}}),
+        section==='leaderboard' && React.createElement(LeaderboardView,{lang:lang, onBack:function(){navigate('home')}})
       ),
       
       /* Bottom navigation bar - only show when not on home/forbes/progress */
-      (section !== 'home' && section !== 'forbes' && section !== 'progress') && React.createElement("div",{
+      (section !== 'home' && section !== 'forbes' && section !== 'progress' && section !== 'leaderboard') && React.createElement("div",{
         className:"fixed bottom-0 left-0 right-0 z-50 bg-base-100 border-t border-base-300 safe-area-bottom"
       },
         React.createElement("div",{className:"flex justify-around items-center py-1 px-1 max-w-lg mx-auto"},
