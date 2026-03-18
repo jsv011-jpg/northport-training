@@ -940,6 +940,18 @@ function generateQuestions(lang) {
 function Quiz() {
   var lang = useContext(LangContext);
   var _mode = useState('setup'), mode = _mode[0], setMode = _mode[1];
+  var COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+  var getCooldownInfo = function(cat){
+    var cooldowns = JSON.parse(localStorage.getItem('tnh_quiz_cooldowns') || '{}');
+    var taken = cooldowns[cat];
+    if(!taken) return {locked: false};
+    var elapsed = Date.now() - taken;
+    if(elapsed >= COOLDOWN_MS) return {locked: false};
+    var remaining = COOLDOWN_MS - elapsed;
+    var days = Math.floor(remaining / (24*60*60*1000));
+    var hours = Math.floor((remaining % (24*60*60*1000)) / (60*60*1000));
+    return {locked: true, days: days, hours: hours};
+  };
   var _cat = useState('all'), category = _cat[0], setCategory = _cat[1];
   var _qs = useState([]), questions = _qs[0], setQuestions = _qs[1];
   var _cur = useState(0), current = _cur[0], setCurrent = _cur[1];
@@ -960,6 +972,10 @@ function Quiz() {
         history.push({date: new Date().toISOString(), topic: category, score: score, total: questions.length});
         localStorage.setItem('tnh_quiz_history', JSON.stringify(history));
         postToSheets({action:'quiz', name:user.name, pin:user.pin, topic:category, score:score, total:questions.length});
+        // Save 7-day cooldown for this topic
+        var cooldowns = JSON.parse(localStorage.getItem('tnh_quiz_cooldowns') || '{}');
+        cooldowns[category] = Date.now();
+        localStorage.setItem('tnh_quiz_cooldowns', JSON.stringify(cooldowns));
       }
     }
   }, [mode]);
@@ -980,8 +996,32 @@ function Quiz() {
       React.createElement("div",{className:"bg-base-200 rounded-xl p-5"},
         React.createElement("label",{className:"text-sm font-semibold text-base-content/70 mb-3 block"},t(lang,'chooseCat')),
         React.createElement("div",{className:"flex flex-wrap gap-2 mb-5"},
-          cats.map(function(cat){return React.createElement("button",{key:cat,onClick:function(){return setCategory(cat)},className:"btn btn-sm "+(category===cat?'btn-primary':'btn-ghost')},cat==='all'?t(lang,'allTopics'):cat)})),
-        React.createElement("button",{onClick:startQuiz,className:"btn btn-primary w-full"},t(lang,'startQuiz'))));
+          cats.map(function(cat){
+            var cd = getCooldownInfo(cat);
+            var isSelected = category===cat;
+            return React.createElement("div",{key:cat,className:"relative flex flex-col items-center"},
+              React.createElement("button",{
+                onClick:function(){if(!cd.locked) setCategory(cat)},
+                disabled:cd.locked,
+                className:"btn btn-sm "+(isSelected?'btn-primary':cd.locked?'btn-ghost opacity-40 cursor-not-allowed':'btn-ghost'),
+                title:cd.locked?'Unlocks in '+cd.days+'d '+cd.hours+'h':''
+              },
+                cat==='all'?t(lang,'allTopics'):cat,
+                cd.locked?React.createElement("span",{className:"ml-1 text-xs"},"\uD83D\uDD12"):null
+              ),
+              cd.locked?React.createElement("span",{className:"text-xs mt-0.5",style:{color:"#d49341"}},cd.days+"d "+cd.hours+"h"):null
+            );
+          })),
+        (function(){
+          var cd = getCooldownInfo(category);
+          return cd.locked
+            ? React.createElement("div",{className:"rounded-xl p-4 text-center",style:{background:"rgba(11,47,91,0.5)",border:"1px solid rgba(212,147,65,0.3)"}},
+                React.createElement("div",{className:"text-2xl mb-2"},"\uD83D\uDD12"),
+                React.createElement("p",{className:"font-semibold text-white mb-1"},"Quiz on cooldown"),
+                React.createElement("p",{className:"text-sm",style:{color:"rgba(255,255,255,0.6)"}},"This topic unlocks in "+cd.days+" days, "+cd.hours+" hrs"),
+                React.createElement("p",{className:"text-xs mt-2",style:{color:"#d49341"}},"Come back when it refreshes to keep sharpening your skills."))
+            : React.createElement("button",{onClick:startQuiz,className:"btn btn-primary w-full"},t(lang,'startQuiz'));
+        })()));
   }
   if(mode==='results'){
     var pct=Math.round(score/questions.length*100);
