@@ -135,7 +135,8 @@ const T = {
     msg0: "Keep studying \u2014 you'll get there! Review the training modules.",
     qGlass: "What glassware is used for a", qGarnish: "What is the garnish for a",
     qIngr: "What are the ingredients in a", qMean: 'What does "', qMean2: '" mean?',
-    qBehav: 'Which behavior belongs to "', qBehav2: '"?',
+    qBehav: 'Which of the following is a key behavior of "', qBehav2: '"?',
+    qWineRegion: "What region is", qWineRegion2: "from?", qWineBody: "What is the body of", qWineBody2: "?", qWineFlavor: "What flavor profile does", qWineFlavor2: "have?",
     qAllerg: "What allergens does the", qAllerg2: "contain?",
     navHome: "Home", navStd: "Northport Standards", navCocktails: "Cocktails",
     navWines: "Wines", navMenu: "Menu", navTerms: "Terms", navQuiz: "Quiz",
@@ -265,7 +266,8 @@ const T = {
     msg0: "\u00a1Sigue estudiando! Revisa los m\u00f3dulos de capacitaci\u00f3n.",
     qGlass: "\u00bfQu\u00e9 cristaler\u00eda se usa para un", qGarnish: "\u00bfCu\u00e1l es la guarnici\u00f3n de un",
     qIngr: "\u00bfCu\u00e1les son los ingredientes de un", qMean: '\u00bfQu\u00e9 significa "', qMean2: '"?',
-    qBehav: '\u00bfQu\u00e9 comportamiento pertenece a "', qBehav2: '"?',
+    qBehav: '\u00bfCu\u00e1l de los siguientes es un comportamiento clave de "', qBehav2: '"?',
+    qWineRegion: "\u00bfDe qu\u00e9 regi\u00f3n es", qWineRegion2: "?", qWineBody: "\u00bfCu\u00e1l es el cuerpo de", qWineBody2: "?", qWineFlavor: "\u00bfCu\u00e1l es el perfil de sabor de", qWineFlavor2: "?",
     qAllerg: "\u00bfQu\u00e9 al\u00e9rgenos contiene", qAllerg2: "?",
     navHome: "Inicio", navStd: "Est\u00e1ndares Northport", navCocktails: "C\u00f3cteles",
     navWines: "Vinos", navMenu: "Men\u00fa", navTerms: "T\u00e9rminos", navQuiz: "Quiz",
@@ -970,6 +972,60 @@ function generateQuestions(lang) {
     var behavior=behavs[0];
     var otherBehavs=shuffle(forbesStandards.filter(function(x){return x.title!==s.title}).flatMap(function(x){return lang==='es'&&x.keyBehaviors_es?x.keyBehaviors_es:x.keyBehaviors})).slice(0,3);
     if(otherBehavs.length>=3){var opts=shuffle([behavior].concat(otherBehavs));questions.push({question:t(lang,'qBehav')+title+t(lang,'qBehav2'),options:opts,correctIndex:opts.indexOf(behavior),category:lang==='es'?'Est\u00e1ndares Northport':'Northport Standards'})}
+  });
+  // Wine questions
+  var allWines = (wines.red||[]).concat(wines.white||[]).concat(wines.sparkling||[]).concat(wines.rose||[]);
+  allWines.forEach(function(w){
+    var category = lang==='es' ? 'Vinos' : 'Wines';
+    // Region question
+    var otherRegions = shuffle(allWines.filter(function(x){return x.region!==w.region}).map(function(x){return x.region})).slice(0,3);
+    if(otherRegions.length>=3){var opts=shuffle([w.region].concat(otherRegions));questions.push({question:t(lang,'qWineRegion')+" "+w.name+" "+t(lang,'qWineRegion2'),options:opts,correctIndex:opts.indexOf(w.region),category:category})}
+    // Body question
+    var otherBodies = shuffle(['Light','Medium','Full','Bold'].filter(function(x){return x!==w.body})).slice(0,3);
+    if(otherBodies.length>=3){var opts=shuffle([w.body].concat(otherBodies));questions.push({question:t(lang,'qWineBody')+" "+w.name+t(lang,'qWineBody2'),options:opts,correctIndex:opts.indexOf(w.body),category:category})}
+  });
+  // Scenario questions - real life service situations
+  var scenarioQuestions = [
+    // Cocktail scenarios
+    {question:"A guest orders a Margarita — what must you always confirm?",options:["Salt or no salt on the rim","Which tequila brand","Whether they want a lime","Whether it's for the table"],correctIndex:0,category:lang==='es'?'C\u00f3cteles':'Cocktails',
+     question_es:"Un invitado pide una Margarita — \u00bfqu\u00e9 siempre debes confirmar?",options_es:["Sal o sin sal en el borde","Qu\u00e9 marca de tequila","Si quieren lima","Si es para la mesa"],correctIndex_es:0},
+    {question:"A guest orders a Classic Martini — what garnish do you confirm?",options:["Olive or lemon twist","Cherry or orange","Lime or mint","Sugar rim or no rim"],correctIndex:0,category:lang==='es'?'C\u00f3cteles':'Cocktails',
+     question_es:"Un invitado pide un Martini Cl\u00e1sico — \u00bfqu\u00e9 guarnici\u00f3n confirmas?",options_es:["Aceituna o twist de lim\u00f3n","Cereza o naranja","Lima o menta","Borde azucarado o sin borde"],correctIndex_es:0},
+    {question:"You're carrying the Moscow Mule to the table. What makes its presentation distinctive?",options:["It's served in a copper mug","It has a sugar rim","It comes with a straw","It's served in a highball glass"],correctIndex:0,category:lang==='es'?'C\u00f3cteles':'Cocktails',
+     question_es:"Llevas el Moscow Mule a la mesa. \u00bfQu\u00e9 hace su presentaci\u00f3n distintiva?",options_es:["Se sirve en taza de cobre","Tiene borde azucarado","Viene con pajilla","Se sirve en vaso highball"],correctIndex_es:0},
+    {question:"A guest orders a Whiskey Sour and it arrives with foam on top. What do you do?",options:["Handle it gently and deliver with confidence — foam is correct","Remake it, foam is a mistake","Warn the guest the drink may be off","Ask the bartender to redo it"],correctIndex:0,category:lang==='es'?'C\u00f3cteles':'Cocktails',
+     question_es:"Un invitado pide un Whiskey Sour y llega con espuma encima. \u00bfQu\u00e9 haces?",options_es:["Man\u00e9jalo con cuidado — la espuma es correcta","Reh\u00e1celo, la espuma es un error","Avisa al invitado","Pide al bartender que lo rehaga"],correctIndex_es:0},
+    {question:"A guest asks for a 'dirty martini' — what do you add?",options:["Olive brine","More vermouth","Lemon juice","Simple syrup"],correctIndex:0,category:lang==='es'?'Terminolog\u00eda':'Terminology',
+     question_es:"Un invitado pide un 'dirty martini' — \u00bfqu\u00e9 se a\u00f1ade?",options_es:["Salmuera de aceituna","M\u00e1s vermut","Jugo de lim\u00f3n","Jarabe simple"],correctIndex_es:0},
+    {question:"A guest asks for their bourbon 'neat.' What does this mean?",options:["No ice, room temperature, in a rocks glass","Over ice in a rocks glass","Chilled and strained, no ice in glass","With a splash of water"],correctIndex:0,category:lang==='es'?'Terminolog\u00eda':'Terminology',
+     question_es:"Un invitado pide su bourbon 'neat.' \u00bfQu\u00e9 significa esto?",options_es:["Sin hielo, temperatura ambiente, en vaso rocks","Con hielo en vaso rocks","Fr\u00edo y colado, sin hielo en el vaso","Con un splash de agua"],correctIndex_es:0},
+    // Service scenario questions
+    {question:"When should you refill a guest's water glass?",options:["When it reaches 1/3 full — before they ask","Only when completely empty","When the guest signals you","At the start of each new course only"],correctIndex:0,category:lang==='es'?'Est\u00e1ndares Northport':'Northport Standards',
+     question_es:"\u00bfCu\u00e1ndo debes rellenar el vaso de agua de un invitado?",options_es:["Cuando llega a 1/3 — antes de que pida","Solo cuando est\u00e1 completamente vac\u00edo","Cuando el invitado te llama","Solo al inicio de cada curso"],correctIndex_es:0},
+    {question:"From which side do you serve food to a guest?",options:["Left","Right","Either side is fine","Whichever is most convenient"],correctIndex:0,category:lang==='es'?'Est\u00e1ndares Northport':'Northport Standards',
+     question_es:"\u00bfPor qu\u00e9 lado sirves la comida a un invitado?",options_es:["Izquierda","Derecha","Cualquier lado est\u00e1 bien","El m\u00e1s conveniente"],correctIndex_es:0},
+    {question:"From which side do you clear plates from a guest?",options:["Right","Left","Either side is fine","Whichever is most convenient"],correctIndex:0,category:lang==='es'?'Est\u00e1ndares Northport':'Northport Standards',
+     question_es:"\u00bfPor qu\u00e9 lado retiras los platos de un invitado?",options_es:["Derecha","Izquierda","Cualquier lado est\u00e1 bien","El m\u00e1s conveniente"],correctIndex_es:0},
+    {question:"How soon should you greet guests after they are seated?",options:["Within 30 seconds","Within 2 minutes","Within 5 minutes","As soon as you finish your current table"],correctIndex:0,category:lang==='es'?'Est\u00e1ndares Northport':'Northport Standards',
+     question_es:"\u00bfCu\u00e1nto tiempo tienes para saludar a los invitados despu\u00e9s de sentarse?",options_es:["En 30 segundos","En 2 minutos","En 5 minutos","En cuanto termines con tu mesa actual"],correctIndex_es:0},
+    {question:"A guest's food is wrong. What is the correct first response?",options:["Acknowledge immediately with genuine concern and fix it right away","Get a manager first before acting","Apologize and say the kitchen made a mistake","Ask the guest to wait while you check with the kitchen"],correctIndex:0,category:lang==='es'?'Est\u00e1ndares Northport':'Northport Standards',
+     question_es:"La comida de un invitado est\u00e1 incorrecta. \u00bfCu\u00e1l es la primera respuesta correcta?",options_es:["Reconoce el problema inmediatamente y resu\u00e9lvelo de inmediato","Busca al gerente antes de actuar","Disc\u00falpate y di que la cocina se equivoc\u00f3","Pide al invitado que espere"],correctIndex_es:0},
+    {question:"Within how many minutes should you clear finished plates after the last guest at the table finishes?",options:["2 minutes","5 minutes","10 minutes","When the guest asks"],correctIndex:0,category:lang==='es'?'Est\u00e1ndares Northport':'Northport Standards',
+     question_es:"\u00bfEn cu\u00e1ntos minutos debes retirar los platos terminados despu\u00e9s del \u00faltimo invitado?",options_es:["2 minutos","5 minutos","10 minutos","Cuando el invitado lo pida"],correctIndex_es:0},
+    // Menu knowledge scenarios
+    {question:"A guest mentions they have a shellfish allergy. Which dinner entr\u00e9e is safe to recommend?",options:["Roasted Hudson Valley Farms Chicken","Mafaldine","Pan Roasted Halibut","Mardi Gras Pasta"],correctIndex:0,category:lang==='es'?'Conocimiento del Men\u00fa':'Menu Knowledge',
+     question_es:"Un invitado menciona alergia a mariscos. \u00bfQu\u00e9 plato principal es seguro recomendar?",options_es:["Roasted Hudson Valley Farms Chicken","Mafaldine","Pan Roasted Halibut","Mardi Gras Pasta"],correctIndex_es:0},
+    {question:"A guest has a nut allergy. Which dinner appetizer should you steer them away from?",options:["Burrata (contains almonds)","Crispy Brussels Sprouts","Braised Octopus","Eggs & Bacon Deviled Eggs"],correctIndex:0,category:lang==='es'?'Conocimiento del Men\u00fa':'Menu Knowledge',
+     question_es:"Un invitado tiene alergia a frutos secos. \u00bfQu\u00e9 aperitivo de cena debes evitar?",options_es:["Burrata (contiene almendras)","Crispy Brussels Sprouts","Braised Octopus","Eggs & Bacon Deviled Eggs"],correctIndex_es:0},
+    {question:"A guest asks what comes with the Prime Steaks. What do you tell them?",options:["Asparagus, Roasted Yukon Gold Duck Fat Potatoes, and TNH Steak Sauce","French fries and a salad","Roasted vegetables and mashed potatoes","The guest chooses two sides"],correctIndex:0,category:lang==='es'?'Conocimiento del Men\u00fa':'Menu Knowledge',
+     question_es:"Un invitado pregunta qu\u00e9 incluyen los Prime Steaks. \u00bfQu\u00e9 le dices?",options_es:["Esp\u00e1rragos, Papas Duck Fat y TNH Steak Sauce","Papas fritas y ensalada","Vegetales asados y pur\u00e9","El invitado elige dos acompa\u00f1amientos"],correctIndex_es:0}
+  ];
+  // Add scenario questions, using lang-appropriate versions
+  scenarioQuestions.forEach(function(sq){
+    var q = lang==='es' ? (sq.question_es||sq.question) : sq.question;
+    var opts = lang==='es' ? (sq.options_es||sq.options) : sq.options;
+    var ci = lang==='es' ? (sq.correctIndex_es!==undefined?sq.correctIndex_es:sq.correctIndex) : sq.correctIndex;
+    questions.push({question:q, options:opts, correctIndex:ci, category:sq.category});
   });
   var allergenItems=dinnerMenu.filter(function(i){return i.allergens&&i.allergens!=='No major allergens'});
   allergenItems.slice(0,10).forEach(function(item){
