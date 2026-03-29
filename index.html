@@ -1482,42 +1482,34 @@ function LeaderboardView(props) {
 
   var rows = data || [];
   var leaderboardData = [];
-  if(rows.length >= 2) {
-    var headers = rows[0];
-    var dataRows = rows.slice(1);
-    var colIdx = {};
-    headers.forEach(function(h, i){ colIdx[String(h).toLowerCase().trim()] = i; });
-    var actionCol = colIdx['action'] !== undefined ? colIdx['action'] : 1;
-    var nameCol = colIdx['name'] !== undefined ? colIdx['name'] : 2;
-    var scoreCol = colIdx['score'] !== undefined ? colIdx['score'] : 5;
-    var totalCol = colIdx['total'] !== undefined ? colIdx['total'] : 6;
+  // Data format (no headers): [timestamp, name, pin, topic, score, total, pct]
+  var grouped = {};
+  rows.forEach(function(row){
+    var topic = String(row[3] || '').trim();
+    if(!topic || topic.toUpperCase() === 'REGISTERED') return;
+    var score = parseFloat(row[4]);
+    var total = parseFloat(row[5]);
+    if(isNaN(score) || isNaN(total) || total === 0) return;
+    var name = String(row[1] || '').trim();
+    if(!name) return;
+    var excludeNames = ['javier','nik','david'];
+    if(excludeNames.indexOf(name.split(' ')[0].toLowerCase()) !== -1) return;
+    if(!grouped[name]) grouped[name] = {name:name, scores:[]};
+    grouped[name].scores.push({score:score, total:total, pct: score/total*100});
+  });
 
-    var grouped = {};
-    dataRows.forEach(function(row){
-      if(String(row[actionCol]).toLowerCase().trim() !== 'quiz') return;
-      var name = String(row[nameCol] || '').trim();
-      if(!name) return;
-      var excludeNames = ['javier','nik','david'];
-      if(excludeNames.indexOf(name.split(' ')[0].toLowerCase()) !== -1) return;
-      var score = parseFloat(row[scoreCol]) || 0;
-      var total = parseFloat(row[totalCol]) || 1;
-      if(!grouped[name]) grouped[name] = {name:name, scores:[]};
-      grouped[name].scores.push({score:score, total:total, pct: total > 0 ? (score/total*100) : 0});
-    });
+  Object.keys(grouped).forEach(function(name){
+    var g = grouped[name];
+    var totalQuizzes = g.scores.length;
+    var avgPct = Math.round(g.scores.reduce(function(s,x){return s+x.pct},0) / totalQuizzes);
+    var bestPct = Math.round(Math.max.apply(null, g.scores.map(function(x){return x.pct})));
+    leaderboardData.push({name:name, quizzes:totalQuizzes, avg:avgPct, best:bestPct});
+  });
 
-    Object.keys(grouped).forEach(function(name){
-      var g = grouped[name];
-      var totalQuizzes = g.scores.length;
-      var avgPct = Math.round(g.scores.reduce(function(s,x){return s+x.pct},0) / totalQuizzes);
-      var bestPct = Math.round(Math.max.apply(null, g.scores.map(function(x){return x.pct})));
-      leaderboardData.push({name:name, quizzes:totalQuizzes, avg:avgPct, best:bestPct});
-    });
-
-    leaderboardData.sort(function(a,b){
-      if(b.avg !== a.avg) return b.avg - a.avg;
-      return b.quizzes - a.quizzes;
-    });
-  }
+  leaderboardData.sort(function(a,b){
+    if(b.avg !== a.avg) return b.avg - a.avg;
+    return b.quizzes - a.quizzes;
+  });
 
   var firstName = function(n){ return n ? n.split(' ')[0] : ''; };
   var isCurrentUser = function(n){ return n.toLowerCase().trim() === currentUser.toLowerCase().trim(); };
@@ -1657,9 +1649,9 @@ function ManagerView(props) {
   }
 
   // Parse sheet data. First row is headers.
-  // Expected columns: timestamp, action, name, pin, topic, score, total
+  // Data format (no headers): [timestamp, name, pin, topic, score, total, pct]
   var rows = data || [];
-  if(rows.length < 2) {
+  if(rows.length < 1) {
     return React.createElement("div",{className:"max-w-2xl mx-auto text-center py-12"},
       React.createElement("div",{className:"text-5xl mb-4"},"\ud83d\udcca"),
       React.createElement("h1",{className:"text-2xl font-bold mb-2"},t(lang,'managerMode')),
@@ -1668,30 +1660,23 @@ function ManagerView(props) {
     );
   }
 
-  var headers = rows[0];
-  var dataRows = rows.slice(1);
-
-  // Find column indices
-  var colIdx = {};
-  headers.forEach(function(h, i){ colIdx[String(h).toLowerCase().trim()] = i; });
-
   // Build staff data
   var staffMap = {};
-  dataRows.forEach(function(row){
-    var action = row[colIdx['action']] || row[colIdx['type']] || '';
-    var name = row[colIdx['name']] || '';
-    var timestamp = row[colIdx['timestamp']] || row[0] || '';
+  rows.forEach(function(row){
+    var timestamp = row[0] || '';
+    var name = String(row[1] || '').trim();
+    var topic = String(row[3] || '').trim();
     if(!name) return;
     if(!staffMap[name]) staffMap[name] = {name:name, quizzes:[], registered: null, lastActive:null};
 
-    if(String(action).toLowerCase() === 'register') {
-      staffMap[name].registered = timestamp;
-    }
-    if(String(action).toLowerCase() === 'quiz') {
-      var topic = row[colIdx['topic']] || row[colIdx['category']] || '';
-      var score = parseInt(row[colIdx['score']] || 0);
-      var total = parseInt(row[colIdx['total']] || 10);
-      staffMap[name].quizzes.push({date:timestamp, topic:topic, score:score, total:total});
+    if(topic.toUpperCase() === 'REGISTERED') {
+      if(!staffMap[name].registered) staffMap[name].registered = timestamp;
+    } else {
+      var score = parseInt(row[4] || 0);
+      var total = parseInt(row[5] || 10);
+      if(!isNaN(score) && total > 0) {
+        staffMap[name].quizzes.push({date:timestamp, topic:topic, score:score, total:total});
+      }
     }
     staffMap[name].lastActive = timestamp;
   });
