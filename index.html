@@ -194,7 +194,12 @@ const T = {
     leaderboardQuizzes: "quizzes",
     leaderboardAvg: "avg",
     leaderboardYou: "You",
-    leaderboardRank: "Rank"
+    leaderboardRank: "Rank",
+    leaderboardMonthly: "This Month",
+    leaderboardAllTime: "All Time",
+    leaderboardPts: "pts",
+    leaderboardDays: "days active",
+    leaderboardCompositeInfo: "Score = 50% avg + 30% volume + 20% consistency"
   },
   es: {
     welcomeTitle: "Bienvenido al The Northport Hotel",
@@ -325,7 +330,12 @@ const T = {
     leaderboardQuizzes: "quizzes",
     leaderboardAvg: "prom",
     leaderboardYou: "T\u00fa",
-    leaderboardRank: "Posici\u00f3n"
+    leaderboardRank: "Posici\u00f3n",
+    leaderboardMonthly: "Este Mes",
+    leaderboardAllTime: "Todo el Tiempo",
+    leaderboardPts: "pts",
+    leaderboardDays: "d\u00edas activos",
+    leaderboardCompositeInfo: "Puntaje = 50% prom + 30% volumen + 20% constancia"
   }
 };
 
@@ -1462,6 +1472,7 @@ function LeaderboardView(props) {
   var onBack = props.onBack;
   var _data = useState(null), data = _data[0], setData = _data[1];
   var _loading = useState(true), loading = _loading[0], setLoading = _loading[1];
+  var _view = useState('monthly'), view = _view[0], setView = _view[1];
   var currentUser = localStorage.getItem('tnh_user_name') || '';
 
   useEffect(function(){
@@ -1480,61 +1491,126 @@ function LeaderboardView(props) {
     );
   }
 
+  var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var now = new Date();
+  var currentMonthLabel = monthNames[now.getMonth()] + ' ' + now.getFullYear();
+  var excludeNames = ['javier','nik','david'];
+
+  function buildLeaderboard(rows, monthOnly) {
+    var grouped = {};
+    rows.forEach(function(row){
+      var topic = String(row[3] || '').trim();
+      if(!topic || topic.toUpperCase() === 'REGISTERED') return;
+      var score = parseFloat(row[4]);
+      var total = parseFloat(row[5]);
+      if(isNaN(score) || isNaN(total) || total === 0) return;
+      var name = String(row[1] || '').trim();
+      if(!name) return;
+      if(excludeNames.indexOf(name.split(' ')[0].toLowerCase()) !== -1) return;
+      // Monthly filter
+      if(monthOnly) {
+        var ts = new Date(row[0]);
+        if(isNaN(ts.getTime())) return;
+        if(ts.getMonth() !== now.getMonth() || ts.getFullYear() !== now.getFullYear()) return;
+      }
+      if(!grouped[name]) grouped[name] = {name:name, scores:[], days:{}};
+      var pct = score/total*100;
+      grouped[name].scores.push({score:score, total:total, pct:pct});
+      // Track unique days for consistency
+      var ts2 = new Date(row[0]);
+      if(!isNaN(ts2.getTime())) {
+        var dayKey = ts2.getFullYear()+'-'+(ts2.getMonth()+1)+'-'+ts2.getDate();
+        grouped[name].days[dayKey] = true;
+      }
+    });
+
+    var result = [];
+    var maxQuizzes = 1, maxDays = 1;
+    Object.keys(grouped).forEach(function(name){
+      var g = grouped[name];
+      if(g.scores.length > maxQuizzes) maxQuizzes = g.scores.length;
+      var dCount = Object.keys(g.days).length;
+      if(dCount > maxDays) maxDays = dCount;
+    });
+
+    Object.keys(grouped).forEach(function(name){
+      var g = grouped[name];
+      var totalQuizzes = g.scores.length;
+      var avgPct = Math.round(g.scores.reduce(function(s,x){return s+x.pct;},0) / totalQuizzes);
+      var bestPct = Math.round(Math.max.apply(null, g.scores.map(function(x){return x.pct;})));
+      var uniqueDays = Object.keys(g.days).length;
+      var volumeScore = (totalQuizzes / maxQuizzes) * 100;
+      var consistencyScore = (uniqueDays / maxDays) * 100;
+      var composite = Math.round(avgPct * 0.5 + volumeScore * 0.3 + consistencyScore * 0.2);
+      result.push({name:name, quizzes:totalQuizzes, avg:avgPct, best:bestPct, composite:composite, uniqueDays:uniqueDays});
+    });
+
+    result.sort(function(a,b){
+      if(b.composite !== a.composite) return b.composite - a.composite;
+      return b.quizzes - a.quizzes;
+    });
+    return result;
+  }
+
   var rows = data || [];
-  var leaderboardData = [];
-  // Data format (no headers): [timestamp, name, pin, topic, score, total, pct]
-  var grouped = {};
-  rows.forEach(function(row){
-    var topic = String(row[3] || '').trim();
-    if(!topic || topic.toUpperCase() === 'REGISTERED') return;
-    var score = parseFloat(row[4]);
-    var total = parseFloat(row[5]);
-    if(isNaN(score) || isNaN(total) || total === 0) return;
-    var name = String(row[1] || '').trim();
-    if(!name) return;
-    var excludeNames = ['javier','nik','david'];
-    if(excludeNames.indexOf(name.split(' ')[0].toLowerCase()) !== -1) return;
-    if(!grouped[name]) grouped[name] = {name:name, scores:[]};
-    grouped[name].scores.push({score:score, total:total, pct: score/total*100});
-  });
-
-  Object.keys(grouped).forEach(function(name){
-    var g = grouped[name];
-    var totalQuizzes = g.scores.length;
-    var avgPct = Math.round(g.scores.reduce(function(s,x){return s+x.pct},0) / totalQuizzes);
-    var bestPct = Math.round(Math.max.apply(null, g.scores.map(function(x){return x.pct})));
-    leaderboardData.push({name:name, quizzes:totalQuizzes, avg:avgPct, best:bestPct});
-  });
-
-  leaderboardData.sort(function(a,b){
-    if(b.avg !== a.avg) return b.avg - a.avg;
-    return b.quizzes - a.quizzes;
-  });
-
+  var leaderboardData = buildLeaderboard(rows, view === 'monthly');
   var firstName = function(n){ return n ? n.split(' ')[0] : ''; };
   var isCurrentUser = function(n){ return n.toLowerCase().trim() === currentUser.toLowerCase().trim(); };
+  var medalColors = ['#d49341','#C0C0C0','#CD7F32'];
 
-  // No data state
+  var headerLabel = view === 'monthly' ? currentMonthLabel : t(lang,'leaderboardAllTime');
+
   if(leaderboardData.length === 0) {
     return React.createElement("div",{className:"max-w-2xl mx-auto text-center py-12"},
-      React.createElement("button",{onClick:onBack,className:"btn btn-ghost btn-sm mb-6",style:{color:'#d49341'}},"\u2190 " + t(lang,'navHome')),
-      React.createElement("div",{className:"text-5xl mb-4"},"\ud83c\udfc6"),
+      React.createElement("button",{onClick:onBack,className:"btn btn-ghost btn-sm mb-6",style:{color:'#d49341'}},"← " + t(lang,'navHome')),
       React.createElement("h1",{className:"text-2xl font-bold mb-2"},t(lang,'leaderboardTitle')),
-      React.createElement("p",{className:"text-base-content/60 mb-6"},t(lang,'leaderboardNoData'))
+      React.createElement("p",{className:"text-base-content/60 mb-6"},
+        view === 'monthly' ? "No quizzes completed yet this month. Be the first!" : t(lang,'leaderboardNoData')
+      )
     );
   }
 
-  var medalColors = ['#d49341','#C0C0C0','#CD7F32'];
   var top3 = leaderboardData.slice(0,3);
   var podiumOrder = top3.length >= 3 ? [top3[1],top3[0],top3[2]] : top3;
-  var podiumRanks = top3.length >= 3 ? [2,1,3] : top3.map(function(_,i){return i+1});
+  var podiumRanks = top3.length >= 3 ? [2,1,3] : top3.map(function(_,i){return i+1;});
 
-  return React.createElement("div",{className:"max-w-2xl mx-auto"},
+  return React.createElement("div",{className:"max-w-2xl mx-auto pb-8"},
     // Header
-    React.createElement("div",{className:"flex items-center mb-6"},
-      React.createElement("button",{onClick:onBack,className:"btn btn-ghost btn-sm mr-3",style:{color:'#d49341'}},"\u2190"),
-      React.createElement("h1",{className:"text-2xl font-bold",style:{fontFamily:"'Syne',sans-serif"}},t(lang,'leaderboardTitle'))
+    React.createElement("div",{className:"flex items-center mb-4"},
+      React.createElement("button",{onClick:onBack,className:"btn btn-ghost btn-sm mr-3",style:{color:'#d49341'}},"←"),
+      React.createElement("div",{className:"flex-1"},
+        React.createElement("h1",{className:"text-2xl font-bold",style:{fontFamily:"'Syne',sans-serif"}},t(lang,'leaderboardTitle')),
+        React.createElement("p",{className:"text-xs",style:{color:'rgba(232,220,200,0.5)'}}, headerLabel)
+      )
     ),
+
+    // Monthly / All-Time toggle
+    React.createElement("div",{className:"flex gap-2 mb-6 p-1 rounded-xl",style:{background:'rgba(255,255,255,0.06)'}},
+      React.createElement("button",{
+        onClick:function(){setView('monthly');},
+        className:"flex-1 py-2 px-4 rounded-lg text-sm font-semibold transition-all",
+        style:{
+          background: view==='monthly' ? 'linear-gradient(135deg,#0B2F5B,#1a4a7a)' : 'transparent',
+          color: view==='monthly' ? '#d49341' : 'rgba(232,220,200,0.5)',
+          border: view==='monthly' ? '1px solid rgba(212,147,65,0.3)' : '1px solid transparent'
+        }
+      }, t(lang,'leaderboardMonthly')),
+      React.createElement("button",{
+        onClick:function(){setView('alltime');},
+        className:"flex-1 py-2 px-4 rounded-lg text-sm font-semibold transition-all",
+        style:{
+          background: view==='alltime' ? 'linear-gradient(135deg,#0B2F5B,#1a4a7a)' : 'transparent',
+          color: view==='alltime' ? '#d49341' : 'rgba(232,220,200,0.5)',
+          border: view==='alltime' ? '1px solid rgba(212,147,65,0.3)' : '1px solid transparent'
+        }
+      }, t(lang,'leaderboardAllTime'))
+    ),
+
+    // Composite score info pill
+    React.createElement("div",{
+      className:"text-center text-xs mb-5 px-3 py-1.5 rounded-full mx-auto inline-block",
+      style:{background:'rgba(212,147,65,0.1)',color:'rgba(212,147,65,0.7)',display:'block',maxWidth:'fit-content',margin:'0 auto 20px'}
+    }, t(lang,'leaderboardCompositeInfo')),
 
     // Podium top 3
     top3.length > 0 && React.createElement("div",{className:"flex justify-center items-end gap-3 mb-8 px-2"},
@@ -1546,15 +1622,12 @@ function LeaderboardView(props) {
         return React.createElement("div",{
           key:entry.name,
           className:"flex flex-col items-center flex-1",
-          style:{
-            transform: isCenter ? 'translateY(-8px)' : 'none',
-            maxWidth:'140px'
-          }
+          style:{transform: isCenter ? 'translateY(-8px)' : 'none', maxWidth:'140px'}
         },
           React.createElement("div",{
             className:"w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold mb-2",
             style:{
-              background: 'linear-gradient(135deg, '+color+', '+color+'cc)',
+              background:'linear-gradient(135deg,'+color+','+color+'cc)',
               color:'#fff',
               border: isCurrent ? '3px solid #d49341' : '3px solid transparent',
               boxShadow: isCurrent ? '0 0 12px rgba(212,147,65,0.5)' : (isCenter ? '0 4px 16px rgba(212,147,65,0.3)' : 'none')
@@ -1563,9 +1636,9 @@ function LeaderboardView(props) {
           React.createElement("div",{
             className:"text-sm font-semibold text-center truncate w-full",
             style:{color: isCurrent ? '#d49341' : '#e8dcc8'}
-          }, firstName(entry.name) + (isCurrent ? ' \u2022' : '')),
-          React.createElement("div",{className:"text-xs mt-1",style:{color:'rgba(232,220,200,0.6)'}}, entry.avg + '% ' + t(lang,'leaderboardAvg')),
-          React.createElement("div",{className:"text-xs",style:{color:'rgba(232,220,200,0.4)'}}, entry.quizzes + ' ' + t(lang,'leaderboardQuizzes'))
+          }, firstName(entry.name) + (isCurrent ? ' •' : '')),
+          React.createElement("div",{className:"text-base font-bold mt-1",style:{color:'#d49341'}}, entry.composite + ' ' + t(lang,'leaderboardPts')),
+          React.createElement("div",{className:"text-xs",style:{color:'rgba(232,220,200,0.5)'}}, entry.avg + '% ' + t(lang,'leaderboardAvg') + ' · ' + entry.quizzes + ' ' + t(lang,'leaderboardQuizzes'))
         );
       })
     ),
@@ -1575,7 +1648,7 @@ function LeaderboardView(props) {
       leaderboardData.map(function(entry,idx){
         var rank = idx + 1;
         var isCurrent = isCurrentUser(entry.name);
-        var barColor = entry.avg > 80 ? '#22c55e' : (entry.avg >= 60 ? '#d49341' : '#ef4444');
+        var barColor = entry.composite > 80 ? '#22c55e' : (entry.composite >= 60 ? '#d49341' : '#ef4444');
         return React.createElement("div",{
           key:entry.name,
           className:"rounded-xl p-4 flex items-center gap-3",
@@ -1585,7 +1658,6 @@ function LeaderboardView(props) {
             boxShadow: isCurrent ? '0 0 12px rgba(212,147,65,0.15)' : 'none'
           }
         },
-          // Rank
           React.createElement("div",{
             className:"w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0",
             style:{
@@ -1593,7 +1665,6 @@ function LeaderboardView(props) {
               color: rank <= 3 ? '#fff' : 'rgba(232,220,200,0.5)'
             }
           }, rank),
-          // Name & bar
           React.createElement("div",{className:"flex-1 min-w-0"},
             React.createElement("div",{className:"flex items-center gap-2 mb-1"},
               React.createElement("span",{
@@ -1605,24 +1676,26 @@ function LeaderboardView(props) {
                 style:{background:'rgba(212,147,65,0.2)',color:'#d49341',fontSize:'10px'}
               }, t(lang,'leaderboardYou'))
             ),
-            // Score bar
             React.createElement("div",{className:"w-full h-2 rounded-full overflow-hidden",style:{background:'rgba(255,255,255,0.08)'}},
               React.createElement("div",{
-                className:"h-full rounded-full pv-bar-fill",
-                style:{width: entry.avg + '%', background: barColor}
+                className:"h-full rounded-full",
+                style:{width:entry.composite+'%',background:barColor,transition:'width 0.6s ease'}
               })
+            ),
+            React.createElement("div",{className:"text-xs mt-1",style:{color:'rgba(232,220,200,0.4)'}},
+              entry.avg + '% ' + t(lang,'leaderboardAvg') + ' · ' + entry.quizzes + ' ' + t(lang,'leaderboardQuizzes') + ' · ' + entry.uniqueDays + ' ' + t(lang,'leaderboardDays')
             )
           ),
-          // Stats
           React.createElement("div",{className:"text-right shrink-0"},
-            React.createElement("div",{className:"text-sm font-bold",style:{color:'#e8dcc8'}}, entry.avg + '%'),
-            React.createElement("div",{className:"text-xs",style:{color:'rgba(232,220,200,0.4)'}}, entry.quizzes + ' ' + t(lang,'leaderboardQuizzes'))
+            React.createElement("div",{className:"text-sm font-bold",style:{color:'#d49341'}}, entry.composite),
+            React.createElement("div",{className:"text-xs",style:{color:'rgba(232,220,200,0.4)'}}, t(lang,'leaderboardPts'))
           )
         );
       })
     )
   );
 }
+
 
 function ManagerView(props) {
   var lang = props.lang;
